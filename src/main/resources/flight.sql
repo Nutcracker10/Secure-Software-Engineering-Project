@@ -4,5 +4,6 @@ CREATE TABLE flights (
   arrival DATETIME NOT NULL,
   depAirport varchar(100) NOT NULL,
   arrAirport varchar(100) NOT NULL,
+  capacity INT NOT NULL,
   price DOUBLE NOT NULL
 );

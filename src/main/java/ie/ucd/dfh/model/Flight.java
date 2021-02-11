@@ -8,7 +8,7 @@ import java.util.List;
 @Entity
 @Table(name = "flights")
 public class Flight {
-    @Id@GeneratedValue(strategy = GeneratedValue.IDENTITY)
+    @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long flightId;
 
     @NotBlank
@@ -26,7 +26,7 @@ public class Flight {
     @NotBlank
     private double price;
 
-    public Flight(@NotBlank flightId,  @NotBlank departure, @NotBlank String arrival, @NotBlank String depAirport, @NotBlank String arrAirport, @NotBlank double price) {
+    public Flight(@NotBlank Long flightId,  @NotBlank String departure, @NotBlank String arrival, @NotBlank String depAirport, @NotBlank String arrAirport, @NotBlank double price) {
         this.flightId = flightId;
         this.departure = departure;
         this.arrival = arrival;
