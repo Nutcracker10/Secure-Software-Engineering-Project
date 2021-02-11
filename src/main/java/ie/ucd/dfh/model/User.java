@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -21,8 +22,8 @@ public class User {
     @Email
     private String email;
 
-/*    @OneToMany(mappedBy = "user")
-    private List<Reservation> reservations;*/
+    @OneToMany(mappedBy = "user")
+    private Set<Reservation> reservations;
 
     @NotBlank
     private String role;
@@ -72,5 +73,13 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Set<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(Set<Reservation> reservations) {
+        this.reservations = reservations;
     }
 }
