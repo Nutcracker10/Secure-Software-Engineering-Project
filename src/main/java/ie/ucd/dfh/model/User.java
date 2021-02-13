@@ -19,6 +19,9 @@ public class User {
     @NotBlank
     private String lastName;
 
+    @NotBlank
+    private String password;
+
     @Email
     private String email;
 
@@ -28,10 +31,12 @@ public class User {
     @NotBlank
     private String role;
 
-    public User(@NotBlank String firstName, @NotBlank String lastName, @Email String email, @NotBlank String role) {
+    public User(@NotBlank String firstName, @NotBlank String lastName, @NotBlank String password, @Email String email, Set<Reservation> reservations, @NotBlank String role) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.password = password;
         this.email = email;
+        this.reservations = reservations;
         this.role = role;
     }
 
@@ -81,5 +86,13 @@ public class User {
 
     public void setReservations(Set<Reservation> reservations) {
         this.reservations = reservations;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
