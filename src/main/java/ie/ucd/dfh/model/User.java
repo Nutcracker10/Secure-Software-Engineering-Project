@@ -1,5 +1,7 @@
 package ie.ucd.dfh.model;
 
+import org.hibernate.validator.constraints.br.CPF;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -7,36 +9,44 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User {
 
+    @Column(name="user_id")
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
     @NotBlank
+    @Column(name="first_name")
     private String firstName;
 
     @NotBlank
+    @Column(name="last_name")
     private String lastName;
 
     @NotBlank
+    @Column(name="password")
     private String password;
 
-    @Email
-    private String email;
+    @NotBlank
+    @Column(name="email")
+    private String email; //TODO CHECK WHY @EMAIL VALIDATOR DETECT VALID EMAILS AS NOT VALID
 
     @OneToMany(mappedBy = "user")
     private Set<Reservation> reservations;
 
     @NotBlank
+    @Column(name="role")
     private String role;
 
-    public User(@NotBlank String firstName, @NotBlank String lastName, @NotBlank String password, @Email String email, Set<Reservation> reservations, @NotBlank String role) {
+    public User() {
+    }
+
+    public User(@NotBlank String firstName, @NotBlank String lastName, @NotBlank String password, @NotBlank String email, @NotBlank String role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.email = email;
-        this.reservations = reservations;
         this.role = role;
     }
 

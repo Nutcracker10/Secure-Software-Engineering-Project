@@ -1,13 +1,9 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <title></title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head>
+<div th:replace="common_head.html"></div>
 <body>
+    <nav th:replace="common_navbar.html"></nav>
     <div class="container-fluid">
         <div class="container">
             <div class="row">
@@ -17,21 +13,26 @@
                         <p class="text-uppercase pull-center">Create an Account</p>
                         <div class="form-group">
                             <label for="first-name">First Name:</label>
-                            <input type="text" class="form-control" id="first-name" name="first-name" placeholder="First Name">
+                            <input type="text" class="form-control" id="first-name" name="firstName" placeholder="First Name" pattern=".{1,}" required title="Can't be blank">
                         </div>
                         <div class="form-group">
                             <label for="surname">Surname:</label>
-                            <input type="text" class="form-control" id="surname" name="email" placeholder="Surname">
+                            <input type="text" class="form-control" id="surname" name="surname" placeholder="Surname" pattern=".{1,}" required title="Can't be blank">
                         </div>
                         <div class="form-group">
                             <label for="email-reg">Email Address:</label>
-                            <input type="email" class="form-control" id="email-reg" name="email" placeholder="Enter your email address" autocomplete="off">
+                            <input type="email" class="form-control" id="email-reg" name="email" placeholder="Enter your email address" autocomplete="off" pattern=".{1,}" required title="Can't be blank">
                         </div>
                         <div class="form-group">
                             <label for="password-reg">Password:</label>
-                            <input type="password" class="form-control" id="password-reg" name="password" placeholder="Password" autocomplete="off">
+                            <input type="password" class="form-control" id="password-reg" name="password" placeholder="Password" autocomplete="off" pattern=".{1,}" required title="Can't be blank">
                         </div>
-                        <button type="submit" class="btn btn-primary">Create Account</button>
+                        <span th:if="emailTaken != null" >
+                            <label style="color:red;" th:text="${emailTaken}"></label>
+                        </span>
+                        <div>
+                            <button type="submit" class="btn btn-primary">Create Account</button>
+                        </div>
                     </form>
                 </div>
 
@@ -54,7 +55,13 @@
                             <input type="checkbox" class="form-check-input" id="remember-me" name="remember-me">
                             <label class="form-check-label" for="remember-me">Remember me</label>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <span th:if="error != null">
+                            <label style="color:red;" th:text="${error}"></label>
+                        </span>
+                        <div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+
                     </form>
                 </div>
             </div>

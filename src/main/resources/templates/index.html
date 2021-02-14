@@ -34,8 +34,14 @@
                     <h4 class="card-title">Executive Club Members</h4>
                     <p>Executive Club Members enjoy a range of benefits up to and including:
                     Make multiple reservations, visualize your history and more!</p>
-                    <a class="btn btn-secondary btn-lg" href="#" role="button">Sign up</a>
-                    <a class="btn btn-primary btn-lg" href="#" role="button">Login</a>
+                    <div th:if="${user == null}">
+                        <a class="btn btn-secondary btn-lg" href="/login" role="button">Sign up</a>
+                        <a class="btn btn-primary btn-lg" href="/login" role="button">Login</a>
+                    </div>
+                    <div th:if="${user != null}">
+                        <a class="btn btn-primary btn-lg" href="/logout" role="button">Logout</a>
+                    </div>
+
                 </div>
         </div>
     </div>
