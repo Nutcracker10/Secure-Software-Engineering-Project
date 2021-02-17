@@ -12,18 +12,23 @@ public class Flight {
     private Long flightId;
 
     @NotBlank
+    @Column(name="departure")
     private String departure;
 
     @NotBlank
+    @Column(name="arrival")
     private String arrival;
 
     @NotBlank
+    @Column(name="depAirport")
     private String depAirport;
 
     @NotBlank
+    @Column(name="arrAirpot")
     private String arrAirport;
 
-
+    @NotBlank
+    @Column(name="price")
     private double price;
 
     public Flight(@NotBlank Long flightId,  @NotBlank String departure, @NotBlank String arrival, @NotBlank String depAirport, @NotBlank String arrAirport,  double price) {
