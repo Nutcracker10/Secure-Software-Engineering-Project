@@ -14,16 +14,16 @@ public class Reservation {
     private long reservationId;
 
     @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
-    private User user;
+    @JoinColumn(name = "user_id", nullable = false)
+    private Long userId;
 
     @Column(name="flight_id")
     @NotBlank
     private Long flightId;
 
     
-    public Reservation(User user, Long flightId) {
-        this.user = user;
+    public Reservation(@NotBlank Long userId, @NotBlank Long flightId) {
+        this.userId = userId;
         this.flightId = flightId;
     }
 
@@ -35,12 +35,12 @@ public class Reservation {
         this.reservationId = reservationId;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUser() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(Long userId) {
+        this.userId = userId;
     }
 
     public Long getFlightId() {

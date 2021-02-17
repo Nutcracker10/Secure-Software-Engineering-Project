@@ -3,6 +3,8 @@ package ie.ucd.dfh.model;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+
+import java.util.Calendar;
 import java.util.List;
 
 @Entity
@@ -13,11 +15,11 @@ public class Flight {
 
     @NotBlank
     @Column(name="departure")
-    private String departure;
+    private Calendar departure;
 
     @NotBlank
     @Column(name="arrival")
-    private String arrival;
+    private Calendar arrival;
 
     @NotBlank
     @Column(name="depAirport")
@@ -31,7 +33,7 @@ public class Flight {
     @Column(name="price")
     private double price;
 
-    public Flight(@NotBlank Long flightId,  @NotBlank String departure, @NotBlank String arrival, @NotBlank String depAirport, @NotBlank String arrAirport,  double price) {
+    public Flight(@NotBlank Long flightId,  @NotBlank Calendar departure, @NotBlank Calendar arrival, @NotBlank String depAirport, @NotBlank String arrAirport,  double price) {
         this.flightId = flightId;
         this.departure = departure;
         this.arrival = arrival;
@@ -44,13 +46,13 @@ public class Flight {
 
     public Long getFlightId() {return this.flightId; }
 
-    public void setDeparture(String departure) { this.departure = departure; }
+    public void setDeparture(Calendar departure) { this.departure = departure; }
 
-    public String getDeparture() { return this.departure; }
+    public Calendar getDeparture() { return this.departure; }
 
-    public void setArrival(String arrival) { this.arrival = arrival;}
+    public void setArrival(Calendar arrival) { this.arrival = arrival;}
 
-    public String getArrival() { return this.arrival; }
+    public Calendar getArrival() { return this.arrival; }
 
     public void setDepAirport(String depAirport) { this.depAirport = depAirport; }
 

@@ -33,9 +33,9 @@ CREATE TABLE flights (
 
 CREATE TABLE Reservation() (
     reservationId AUTO_INCREMENT NOT NULL,
-    userId INT NOT NULL,
+    user_id INT NOT NULL,
     flight_id INT NOT NULL,
     PRIMARY KEY (reservationId),
-    FOREIGN KEY (userId) REFERENCES User (userId),
+    FOREIGN KEY (user_id) REFERENCES users (user_id),
     FOREIGN KEY (flight_id) REFERENCES flights (flight_id)
 )
