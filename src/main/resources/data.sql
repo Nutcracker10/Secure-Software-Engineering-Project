@@ -17,16 +17,6 @@ INSERT INTO users(first_name, last_name, email, password, role) VALUES
     ('test', 'test', 't@t', 'password', 'guest'),
     ('first', 'last', 'test@test', '$2a$10$ifQGrQZoHbTJzSQa0HSXwOM5AT3vKf6zGnXMHSixuyFHmVu.5/afy', 'user'); /*pass = pass */
 
--- RESERVATION DETAILS ------------------------
-
-CREATE TABLE Reservation() (
-    reservationId AUTO_INCREMENT NOT NULL,
-    userId INT NOT NULL,
-    flight_id INT NOT NULL,
-    PRIMARY KEY (reservationId),
-    FOREIGN KEY (userId) REFERENCES User (userId)
-)
-
 -- FLIGHT DETAILS -----------------------------
 
 CREATE TABLE flights (
@@ -39,3 +29,13 @@ CREATE TABLE flights (
   price DOUBLE NOT NULL
 );
 
+-- RESERVATION DETAILS ------------------------
+
+CREATE TABLE Reservation() (
+    reservationId AUTO_INCREMENT NOT NULL,
+    userId INT NOT NULL,
+    flight_id INT NOT NULL,
+    PRIMARY KEY (reservationId),
+    FOREIGN KEY (userId) REFERENCES User (userId),
+    FOREIGN KEY (flight_id) REFERENCES flights (flight_id)
+)

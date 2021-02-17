@@ -2,25 +2,29 @@ package ie.ucd.dfh.model;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+
 import java.util.Calendar;
 
 @Entity
 public class Reservation {
-    @Id
-    @GeneratedValue
+    
+    @Column(name="reservationId")
+    @Id @GeneratedValue
     private long reservationId;
 
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
-    private String flightCode;
-    private Calendar dayOfFlight;
+    @Column(name="flight_id")
+    @NotBlank
+    private Long flightId;
 
-    public Reservation(User user, String flightCode, Calendar dayOfFlight) {
+    
+    public Reservation(User user, Long flightId) {
         this.user = user;
-        this.flightCode = flightCode;
-        this.dayOfFlight = dayOfFlight;
+        this.flightId = flightId;
     }
 
     public long getReservationId() {
@@ -39,19 +43,11 @@ public class Reservation {
         this.user = user;
     }
 
-    public String getFlightCode() {
-        return flightCode;
+    public Long getFlightId() {
+        return flightId;
     }
 
-    public void setFlightCode(String flightCode) {
-        this.flightCode = flightCode;
-    }
-
-    public Calendar getDayOfFlight() {
-        return dayOfFlight;
-    }
-
-    public void setDayOfFlight(Calendar dayOfFlight) {
-        this.dayOfFlight = dayOfFlight;
+    public void setFlightCode(Long flightId) {
+        this.flightId = flightId;
     }
 }
