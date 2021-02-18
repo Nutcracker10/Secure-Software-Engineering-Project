@@ -29,13 +29,19 @@ CREATE TABLE flights (
   price DOUBLE NOT NULL
 );
 
+INSERT INTO flights( departure, arrival, depAirport, arrAirport, capacity, price) VALUES
+    ('2008-11-11', '2008-11-11', 'Gatwick', 'Dublin', 200, 25.0 );
+
 -- RESERVATION DETAILS ------------------------
 
-CREATE TABLE Reservation() (
-    reservationId AUTO_INCREMENT NOT NULL,
+CREATE TABLE Reservation (
+    reservation_id INT AUTO_INCREMENT NOT NULL,
     user_id INT NOT NULL,
     flight_id INT NOT NULL,
-    PRIMARY KEY (reservationId),
+    PRIMARY KEY (reservation_id),
     FOREIGN KEY (user_id) REFERENCES users (user_id),
     FOREIGN KEY (flight_id) REFERENCES flights (flight_id)
-)
+);
+
+INSERT INTO Reservation(user_id, flight_id) VALUES
+    ( 1, 1);

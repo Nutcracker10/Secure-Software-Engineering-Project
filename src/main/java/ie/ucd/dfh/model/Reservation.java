@@ -9,25 +9,25 @@ import java.util.Calendar;
 @Entity
 public class Reservation {
     
-    @Column(name="reservationId")
-    @Id @GeneratedValue
-    private long reservationId;
+    @Column(name="reservation_id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long reservationId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private Long userId;
+    @JoinColumn(name = "userId", nullable = false)
+    private User user;
 
-    @Column(name="flight_id")
-    @NotBlank
-    private Long flightId;
+    @OneToOne    
+    @JoinColumn(name="flightId", nullable = false)
+    private Flight flight;
 
     
-    public Reservation(@NotBlank Long userId, @NotBlank Long flightId) {
-        this.userId = userId;
-        this.flightId = flightId;
+    public Reservation(@NotBlank User user, @NotBlank Flight flight) {
+        this.user = user;
+        this.flight = flight;
     }
 
-    public long getReservationId() {
+    public Long getReservationId() {
         return reservationId;
     }
 
@@ -35,19 +35,19 @@ public class Reservation {
         this.reservationId = reservationId;
     }
 
-    public Long getUser() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUser(Long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public Long getFlightId() {
-        return flightId;
+    public Flight getFlightId() {
+        return flight;
     }
 
-    public void setFlightCode(Long flightId) {
-        this.flightId = flightId;
+    public void setFlightCode(Flight flight) {
+        this.flight = flight;
     }
 }
