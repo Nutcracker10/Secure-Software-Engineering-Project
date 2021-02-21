@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<div th:replace="common_head.html"></div>
+<body>
+    <nav th:replace="common_navbar.html"></nav>
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row" id="content">
+                <div  class="col-lg-6" style="display: block;">
+                    <h2 class="text-uppercase pull-center">User Profile</h2>
+                    <div class="page-box my-4 px-5 py-3 shadow-lg">
+                        <table class="table table-borderless text-table">
+                            <tbody>
+                                <tr>
+                                    <td>First Name: </td>
+                                    <td th:text="${firstName}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Last Name: </td>
+                                    <td th:text="${lastName}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Email: </td>
+                                    <td th:text="${email}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <span th:include="modals/edit_profile.html"></span>
+
+                        <button class="btn btn-danger">Delete</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

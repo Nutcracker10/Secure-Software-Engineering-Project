@@ -2,6 +2,7 @@ package ie.ucd.dfh.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 import java.util.Calendar;
@@ -13,11 +14,11 @@ public class Flight {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long flightId;
 
-    @NotBlank
+ //   @NotBlank
     @Column(name="departure")
     private Calendar departure;
 
-    @NotBlank
+ //   @NotBlank
     @Column(name="arrival")
     private Calendar arrival;
 
@@ -29,11 +30,11 @@ public class Flight {
     @Column(name="arrAirpot")
     private String arrAirport;
 
-    @NotBlank
+    @Min(0)
     @Column(name="price")
     private double price;
 
-    public Flight(@NotBlank Long flightId,  @NotBlank Calendar departure, @NotBlank Calendar arrival, @NotBlank String depAirport, @NotBlank String arrAirport,  double price) {
+    public Flight(@NotBlank Long flightId,  Calendar departure, Calendar arrival, @NotBlank String depAirport, @NotBlank String arrAirport,  double price) {
         this.flightId = flightId;
         this.departure = departure;
         this.arrival = arrival;

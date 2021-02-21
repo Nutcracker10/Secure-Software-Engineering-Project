@@ -15,7 +15,7 @@ CREATE TABLE users(
 
 INSERT INTO users(first_name, last_name, email, password, role) VALUES
     ('test', 'test', 't@t', 'password', 'guest'),
-    ('first', 'last', 'test@test', '$2a$10$ifQGrQZoHbTJzSQa0HSXwOM5AT3vKf6zGnXMHSixuyFHmVu.5/afy', 'user'); /*pass = pass */
+    ('first', 'last', 'test@test', '$2a$10$ifQGrQZoHbTJzSQa0HSXwOM5AT3vKf6zGnXMHSixuyFHmVu.5/afy', 'member'); /*pass = pass */
 
 -- FLIGHT DETAILS -----------------------------
 
