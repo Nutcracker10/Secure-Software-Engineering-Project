@@ -1,5 +1,8 @@
 package ie.ucd.dfh.model;
 
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
@@ -9,25 +12,30 @@ import java.util.Calendar;
 import java.util.List;
 
 @Entity
+@Indexed
 @Table(name = "flights")
 public class Flight {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long flightId;
 
  //   @NotBlank
+    @Field
     @Column(name="departure")
     private Calendar departure;
 
  //   @NotBlank
+    @Field
     @Column(name="arrival")
     private Calendar arrival;
 
     @NotBlank
+    @Field
     @Column(name="depAirport")
     private String depAirport;
 
     @NotBlank
-    @Column(name="arrAirpot")
+    @Field
+    @Column(name="arrAirport")
     private String arrAirport;
 
     @Min(0)

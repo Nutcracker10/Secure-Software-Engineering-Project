@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<div th:replace="common_head.html"></div>
+<body>
+<nav th:replace="common_navbar.html"></nav>
+<div class="container">
+<table style="margin-top: 10%">
+    <thead>
+        <th>Flights</th>
+    </thead>
+    <tbody>
+        <tr th:each="flight : ${flights}">
+            <th scope="row" th:text="${flight.departure}"></th>
+            <td th:text="${flight.arrival}"></td>
+            <td th:text="${flight.depAirport}"></td>
+            <td th:text="${flight.arrAirport}"></td>
+            <td th:text="${flight.price}"></td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+</body>
+</html>
