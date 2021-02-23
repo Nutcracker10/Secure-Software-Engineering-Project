@@ -36,7 +36,7 @@ public class HibernateSearchDao {
 
     public List<Flight> fuzzySearchFlight(String searchTerm) throws InterruptedException {
         Query fuzzyQuery = getQueryBuilderArtifact().keyword().fuzzy()
-                .withEditDistanceUpTo(2).withPrefixLength(0).onFields("departure", "arrival","depAirport","arrAirport")
+                .withEditDistanceUpTo(2).withPrefixLength(0).onFields("dep_airport","arr_airport")
                 .matching(searchTerm).createQuery();
 
 

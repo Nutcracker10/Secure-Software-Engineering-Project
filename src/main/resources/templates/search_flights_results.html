@@ -4,16 +4,20 @@
 <body>
 <nav th:replace="common_navbar.html"></nav>
 <div class="container">
-<table style="margin-top: 10%">
+<table class="table table-hover" style="margin-top: 10%">
     <thead>
-        <th>Flights</th>
+        <th>Departure Time</th>
+        <th>Departure</th>
+        <th>Arrival Time</th>
+        <th>Arrivals</th>
+        <th>Price</th>
     </thead>
     <tbody>
         <tr th:each="flight : ${flights}">
-            <th scope="row" th:text="${flight.departure}"></th>
-            <td th:text="${flight.arrival}"></td>
-            <td th:text="${flight.depAirport}"></td>
-            <td th:text="${flight.arrAirport}"></td>
+            <td th:text="${#dates.format(flight.departure, 'MM/dd/yyyy H:mm z')}"></td>
+            <td th:text="${flight.dep_airport}"></td>
+            <td th:text="${#dates.format(flight.arrival, 'MM/dd/yyyy H:mm z')}"></td>
+            <td th:text="${flight.arr_airport}"></td>
             <td th:text="${flight.price}"></td>
         </tr>
     </tbody>

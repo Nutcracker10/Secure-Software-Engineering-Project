@@ -21,16 +21,20 @@ INSERT INTO users(first_name, last_name, email, password, role) VALUES
 
 CREATE TABLE flights (
   flight_id INT AUTO_INCREMENT PRIMARY KEY,
-  departure DATETIME NOT NULL,
-  arrival DATETIME NOT NULL,
-  depAirport varchar(100) NOT NULL,
-  arrAirport varchar(100) NOT NULL,
+  departure TIMESTAMP NOT NULL,
+  arrival TIMESTAMP NOT NULL,
+  dep_airport varchar(100) NOT NULL,
+  arr_airport varchar(100) NOT NULL,
   capacity INT NOT NULL,
   price DOUBLE NOT NULL
 );
 
-INSERT INTO flights( departure, arrival, depAirport, arrAirport, capacity, price) VALUES
-    ('2008-11-11', '2008-11-11', 'Gatwick', 'Dublin', 200, 25.0 );
+INSERT INTO flights( departure, arrival, dep_airport, arr_airport, capacity, price) VALUES
+    ('2008-11-11 10:00:00', '2008-11-11 11:00:00', 'Gatwick', 'Dublin', 200, 25.0 );
+
+INSERT INTO flights(departure, arrival, dep_airport, arr_airport, capacity, price) VALUES
+    ('2008-11-13 12:30:00', '2008-11-13 14:30:00', 'Madrid', 'Dublin', 200, 30.0  );
+
 
 -- RESERVATION DETAILS ------------------------
 

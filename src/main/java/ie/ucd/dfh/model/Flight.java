@@ -4,12 +4,10 @@ import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 import java.util.Calendar;
-import java.util.List;
 
 @Entity
 @Indexed
@@ -20,34 +18,40 @@ public class Flight {
 
  //   @NotBlank
     @Field
+    @Basic
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="departure")
     private Calendar departure;
 
  //   @NotBlank
     @Field
+    @Basic
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="arrival")
     private Calendar arrival;
 
     @NotBlank
     @Field
-    @Column(name="depAirport")
-    private String depAirport;
+    @Column(name="dep_airport")
+    private String dep_airport;
 
     @NotBlank
     @Field
-    @Column(name="arrAirport")
-    private String arrAirport;
+    @Column(name="arr_airport")
+    private String arr_airport;
 
     @Min(0)
     @Column(name="price")
     private double price;
 
-    public Flight(@NotBlank Long flightId,  Calendar departure, Calendar arrival, @NotBlank String depAirport, @NotBlank String arrAirport,  double price) {
+    public Flight(){}
+
+    public Flight(@NotBlank Long flightId, Calendar departure, Calendar arrival, @NotBlank String dep_airport, @NotBlank String arr_airport, double price) {
         this.flightId = flightId;
         this.departure = departure;
         this.arrival = arrival;
-        this.depAirport = depAirport;
-        this.arrAirport = arrAirport;
+        this.dep_airport = dep_airport;
+        this.arr_airport = arr_airport;
         this.price = price;
     }
 
@@ -63,13 +67,13 @@ public class Flight {
 
     public Calendar getArrival() { return this.arrival; }
 
-    public void setDepAirport(String depAirport) { this.depAirport = depAirport; }
+    public void setDep_airport(String dep_airport) { this.dep_airport = dep_airport; }
 
-    public String getDepAirport() { return this.depAirport;}
+    public String getDep_airport() { return this.dep_airport;}
 
-    public void setArrAirport(String arrAirport) {this.arrAirport = arrAirport; }
+    public void setArr_airport(String arr_airport) {this.arr_airport = arr_airport; }
 
-    public String getArrAirport() { return this.arrAirport; } 
+    public String getArr_airport() { return this.arr_airport; }
 
     public void setPrice(double price) { this.price = price; }
 

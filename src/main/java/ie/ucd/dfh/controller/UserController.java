@@ -68,8 +68,8 @@ public class UserController {
         List<Flight> searchResults = null;
         try {
             searchResults = searchservice.fuzzySearchFlight(query);
-            System.out.println("SEARCH RESULTS : "+ searchResults);
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         model.addAttribute("flights", searchResults);
