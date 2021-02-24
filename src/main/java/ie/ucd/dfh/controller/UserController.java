@@ -75,4 +75,10 @@ public class UserController {
         model.addAttribute("flights", searchResults);
         return "search_flights_results.html";
     }
+
+    @GetMapping("/book-flight")
+    public void bookFlight() {
+        User user = userSession.getUser();
+        
+    }
 }
