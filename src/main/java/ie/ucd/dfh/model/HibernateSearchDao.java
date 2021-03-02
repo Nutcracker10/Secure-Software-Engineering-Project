@@ -1,6 +1,7 @@
 package ie.ucd.dfh.model;
 
 import org.apache.lucene.search.Query;
+import org.hibernate.search.hcore.impl.HibernateSessionFactoryService;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
 import org.hibernate.search.jpa.Search;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.websocket.Session;
+
 import java.util.List;
 
 @Repository

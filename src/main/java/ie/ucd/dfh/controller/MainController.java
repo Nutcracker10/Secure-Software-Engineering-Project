@@ -31,6 +31,4 @@ public class MainController {
         userSession.setEmailTaken(false);
         return "login";
     }
-
-
 }
