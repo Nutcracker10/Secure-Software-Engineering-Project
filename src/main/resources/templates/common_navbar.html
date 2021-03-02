@@ -21,7 +21,7 @@
                 <a class="nav-link" href="#">About</a>
             </li>
             <li class="nav-item" th:if="${user != null}">
-                <a class="nav-link" th:href="@{/profile(id=${user.userId})}">Profile</a>
+                <a class="nav-link" th:href="@{/profile(id=${user.id})}">Profile</a>
             </li>
         </ul>
         <form class="form-inline my-2 my-lg-0" th:action="@{/search_flights}" th:object="${fight}">

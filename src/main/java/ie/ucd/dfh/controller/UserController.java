@@ -8,10 +8,7 @@ import ie.ucd.dfh.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -34,13 +31,15 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public String proifle(@RequestParam("id") Long id, Model model, HttpServletResponse response) throws IOException {
-        User user = userSession.getUser();
+    public String profile(@RequestParam("id") Long id, Model model, HttpServletResponse response) throws IOException {
+        User user = userRepository.findUserById(userSession.getUser().getId()).orElse(null);
 
-        if(user != null && user.getUserId().equals(id) && user.getRole().equals("member")){
+        if(user != null && user.getId().equals(id) && user.getRole().equals("member")){
             model.addAttribute("firstName", user.getFirstName());
             model.addAttribute("lastName", user.getLastName());
             model.addAttribute("email", user.getEmail());
+
+            model.addAttribute("creditCard", user.getCreditCard());
         }else{
             response.sendRedirect("/");
         }
@@ -50,13 +49,14 @@ public class UserController {
 
     @PostMapping("/edit-profile")
     public void editProfile(Model model, String firstName, String lastName, String email, HttpServletResponse response) throws IOException{
-        User user = userSession.getUser();
-        if(user != null){
+        User user = userRepository.findUserById(userSession.getUser().getId()).orElse(null);
+        if(user != null) {
             user.setFirstName(firstName);
             user.setLastName(lastName);
             user.setEmail(email);
+
             userRepository.save(user);
-            response.sendRedirect("/profile?id="+user.getUserId());
+            response.sendRedirect("/profile?id="+user.getId());
         }
     }
 
