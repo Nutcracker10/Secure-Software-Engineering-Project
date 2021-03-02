@@ -24,13 +24,11 @@ public class ReservationController {
     private ReservationRepository reservationRepository;
 
     @RequestMapping(value={"/book-flight/{flight}"}, method=RequestMethod.POST)
-    public void bookFlight(@PathVariable ("flight") Flight flight, Model model) {
+    public String bookFlight(@PathVariable ("flight") Flight flight, Model model) {
         User user = userSession.getUser();
-        Reservation reservation = new Reservation(user, flight);
+        reservationRepository.save(new Reservation(user, flight));
 
-
-        reservationRepository.save(reservation);
-        //TODO gather flight details from form and enter into reservation obj
+        return "booking";
     }
 
 }
