@@ -10,8 +10,5 @@ import ie.ucd.dfh.model.Flight;
 
 @Repository
 public interface FlightRepository extends JpaRepository<Flight, Long>{
-    
-    //@Query("SELECT * FROM flights")
     public List<Flight> findAll();
-
 }

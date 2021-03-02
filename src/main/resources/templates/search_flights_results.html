@@ -11,6 +11,7 @@
         <th>Arrival Time</th>
         <th>Arrivals</th>
         <th>Price</th>
+        <th>Book</th>
     </thead>
     <tbody>
         <tr th:each="flight : ${flights}">
@@ -19,6 +20,7 @@
             <td th:text="${#dates.format(flight.arrival, 'MM/dd/yyyy H:mm z')}"></td>
             <td th:text="${flight.arr_airport}"></td>
             <td th:text="${flight.price}"></td>
+            <td > <a class="btn btn-primary btn-lg" href="/booking" role="button">Book</a></td>
         </tr>
     </tbody>
 </table>

@@ -15,9 +15,7 @@ public class FlightController {
 
     @GetMapping("/show-all-flights")
     public String showAllFlights(Model model) {
-       
         model.addAttribute("flights", flightRepository.findAll() );
-
         return "search_flights_results.html";
     }
 
