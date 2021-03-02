@@ -3,6 +3,7 @@ package ie.ucd.dfh.controller;
 import ie.ucd.dfh.UserSession;
 import ie.ucd.dfh.model.Flight;
 import ie.ucd.dfh.model.HibernateSearchDao;
+import ie.ucd.dfh.model.Reservation;
 import ie.ucd.dfh.model.User;
 import ie.ucd.dfh.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,9 +77,18 @@ public class UserController {
         return "search_flights_results.html";
     }
 
+    @GetMapping("/show-all-flights")
+    public String showAllFlights(Model model) {
+       
+        return "search_flights_results.html";
+    }
+
     @GetMapping("/book-flight")
     public void bookFlight() {
         User user = userSession.getUser();
-        
+        Flight flight = new Flight();
+        Reservation reservation = new Reservation(user, flight);
+
+        //TODO gather flight details from form and enter into reservation obj
     }
 }
