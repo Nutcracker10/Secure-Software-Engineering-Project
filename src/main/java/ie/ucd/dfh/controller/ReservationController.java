@@ -1,9 +1,10 @@
 package ie.ucd.dfh.controller;
 
-;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import ie.ucd.dfh.UserSession;
 import ie.ucd.dfh.model.Flight;
@@ -20,7 +21,7 @@ public class ReservationController {
     @Autowired
     private ReservationRepository reservationRepository;
 
-    @GetMapping("/book-flight")
+    @RequestMapping(value={"/book-flight/{user}/{flight}"}, method=RequestMethod.POST)
     public void bookFlight() {
         User user = userSession.getUser();
         Flight flight = new Flight();
