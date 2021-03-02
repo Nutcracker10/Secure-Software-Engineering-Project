@@ -77,12 +77,7 @@ public class UserController {
         return "search_flights_results.html";
     }
 
-    @GetMapping("/show-all-flights")
-    public String showAllFlights(Model model) {
-       
-        return "search_flights_results.html";
-    }
-
+    
     @GetMapping("/book-flight")
     public void bookFlight() {
         User user = userSession.getUser();
