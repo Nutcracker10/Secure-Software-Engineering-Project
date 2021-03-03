@@ -19,19 +19,21 @@ INSERT INTO credit_card(card_type, card_number, expiry_month, expiry_year, secur
     ('Visa Debit', '4024007103939509', '05', '2024', '111');
 
 CREATE TABLE user(
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT NOT NULL,
     first_name varchar(300) NOT NULL,
     last_name varchar(300) NOT NULL,
+    address varchar(300) NOT NULL,
+    phone_number varchar(300) NOT NULL,
     email varchar(300) NOT NULL,
     password varchar(300) NOT NULL,
     role varchar(100) NOT NULL,
     credit_card_id INT,
+    PRIMARY KEY (id),
     FOREIGN KEY (credit_card_id) REFERENCES credit_card (credit_card_id)
 );
 
-INSERT INTO user(first_name, last_name, email, password, role, credit_card_id) VALUES
-    ('test', 'test', 't@t', 'password', 'guest', null),
-    ('first', 'last', 'test@test', '$2a$10$ifQGrQZoHbTJzSQa0HSXwOM5AT3vKf6zGnXMHSixuyFHmVu.5/afy', 'member', null); /*pass = pass */
+INSERT INTO user(first_name, last_name, address, phone_number, email, password, role, credit_card_id) VALUES
+    ('first', 'last', 'ucd', '+3531111111', 'test@test', '$2a$10$ifQGrQZoHbTJzSQa0HSXwOM5AT3vKf6zGnXMHSixuyFHmVu.5/afy', 'member', null); /*pass = pass */
 
 -- FLIGHT DETAILS -----------------------------
 
@@ -56,7 +58,7 @@ INSERT INTO flights(departure, arrival, dep_airport, arr_airport, capacity, pric
 
 CREATE TABLE Reservation (
     reservation_id INT AUTO_INCREMENT NOT NULL,
-    user_id INT NOT NULL,
+    user_id INT,
     flight_id INT NOT NULL,
     PRIMARY KEY (reservation_id),
     FOREIGN KEY (user_id) REFERENCES user (id),

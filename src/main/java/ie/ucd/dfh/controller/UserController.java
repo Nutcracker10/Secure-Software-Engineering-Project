@@ -39,6 +39,8 @@ public class UserController {
             model.addAttribute("firstName", user.getFirstName());
             model.addAttribute("lastName", user.getLastName());
             model.addAttribute("email", user.getEmail());
+            model.addAttribute("address", user.getAddress());
+            model.addAttribute("phoneNumber", user.getPhoneNumber());
 
             model.addAttribute("creditCard", user.getCreditCard());
         }else{
@@ -49,12 +51,14 @@ public class UserController {
     }
 
     @PostMapping("/edit-profile")
-    public void editProfile(Model model, String firstName, String lastName, String email, HttpServletResponse response) throws IOException{
+    public void editProfile(Model model, String firstName, String lastName, String phoneNumber, String address, String email, HttpServletResponse response) throws IOException{
         User user = userRepository.findUserById(userSession.getUser().getId()).orElse(null);
         if(user != null) {
             user.setFirstName(firstName);
             user.setLastName(lastName);
             user.setEmail(email);
+            user.setPhoneNumber(phoneNumber);
+            user.setAddress(address);
 
             userRepository.save(user);
             response.sendRedirect("/profile?id="+user.getId());
@@ -91,6 +95,9 @@ public class UserController {
     public void deleteUser(@PathVariable Long id, HttpServletResponse response) throws IOException{
         User user = userRepository.findUserById(id).orElse(null);
         if(user != null && userSession.getUser() != null && userSession.getUser().getId().equals(id)){
+            for(Reservation reservation : user.getReservations()){
+                reservation.setUser(null);
+            }
             userRepository.delete(user);
             userSession.setUser(null);
         }

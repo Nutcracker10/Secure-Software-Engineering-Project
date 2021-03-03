@@ -1,6 +1,8 @@
 package ie.ucd.dfh.model;
 
 
+import org.hibernate.sql.Update;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
@@ -14,7 +16,6 @@ public class Reservation {
     private Long reservationId;
 
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
     private User user;
 
     @OneToOne    

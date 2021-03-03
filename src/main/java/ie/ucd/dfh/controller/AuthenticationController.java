@@ -41,7 +41,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/process-registration")
-    public void processRegistration(String firstName, String surname, String email, String password, HttpServletResponse response) throws IOException {
+    public void processRegistration(String firstName, String surname, String address, String phoneNuber, String email, String password, HttpServletResponse response) throws IOException {
         User user = userRepository.findUserByEmail(email).orElse(null);
         if(user != null) {
             userSession.setEmailTaken(true);
@@ -50,7 +50,7 @@ public class AuthenticationController {
         else{
             userSession.setEmailTaken(false);
             String encodedPassword = encoder.encode(password);
-            user = new User(firstName, surname, encodedPassword, email, "user");
+            user = new User(firstName, surname, address, phoneNuber, email, encodedPassword, "member");
             userRepository.save(user);
             userSession.setUser(user);
             response.sendRedirect("/");
