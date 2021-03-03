@@ -12,6 +12,7 @@ import ie.ucd.dfh.UserSession;
 import ie.ucd.dfh.model.Flight;
 import ie.ucd.dfh.model.User;
 import ie.ucd.dfh.model.Reservation;
+import ie.ucd.dfh.repository.FlightRepository;
 import ie.ucd.dfh.repository.ReservationRepository;
 
 @Controller
@@ -23,12 +24,16 @@ public class ReservationController {
     @Autowired
     private ReservationRepository reservationRepository;
 
-    @RequestMapping(value={"/book-flight/{flight}"}, method=RequestMethod.POST)
-    public String bookFlight(@PathVariable ("flight") Flight flight, Model model) {
+    @Autowired
+    private FlightRepository flightrepository;
+
+    @RequestMapping(value={"/book-flight/{flightId}"}, method=RequestMethod.GET)
+    public String bookFlight(@PathVariable ("flightId") Long flightId, Model model) {
         User user = userSession.getUser();
+        Flight flight = flightrepository.findById(flightId);
         reservationRepository.save(new Reservation(user, flight));
 
-        return "booking";
+        return "#";
     }
 
 }
