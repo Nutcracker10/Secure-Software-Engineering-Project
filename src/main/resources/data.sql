@@ -39,11 +39,12 @@ INSERT INTO flights(departure, arrival, dep_airport, arr_airport, capacity, pric
 -- RESERVATION DETAILS ------------------------
 
 CREATE TABLE Reservation (
-    reservation_id INT AUTO_INCREMENT NOT NULL,
-    user_id INT NOT NULL,
+    reservation_id INT AUTO_INCREMENT PRIMARY KEY,
     flight_id INT NOT NULL,
-    PRIMARY KEY (reservation_id),
-    FOREIGN KEY (user_id) REFERENCES users (user_id),
+    first_name varchar(300) NOT NULL,
+    last_name varchar(300) NOT NULL,
+    home_address varchar(300) NOT NULL,
+    email varchar(300) NOT NULL,
     FOREIGN KEY (flight_id) REFERENCES flights (flight_id)
 );
 

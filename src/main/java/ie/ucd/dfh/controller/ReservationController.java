@@ -34,6 +34,10 @@ public class ReservationController {
     public String bookFlight(@RequestParam ("flightId") String flightId) {
         User user = userSession.getUser();
 
+        if (user == null) {
+            //TODO prompt form
+        }
+
         Long id =  Long.valueOf(flightId);
 
         Optional<Flight> flight = flightrepository.findById(id);
