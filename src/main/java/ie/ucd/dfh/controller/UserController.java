@@ -3,7 +3,6 @@ package ie.ucd.dfh.controller;
 import ie.ucd.dfh.UserSession;
 import ie.ucd.dfh.model.Flight;
 import ie.ucd.dfh.model.HibernateSearchDao;
-import ie.ucd.dfh.model.Reservation;
 import ie.ucd.dfh.model.User;
 import ie.ucd.dfh.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
