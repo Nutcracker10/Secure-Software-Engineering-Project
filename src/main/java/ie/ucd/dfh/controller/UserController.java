@@ -86,4 +86,14 @@ public class UserController {
 
         //TODO gather flight details from form and enter into reservation obj
     }
+
+    @RequestMapping(value = "/user/delete/{id}", method = RequestMethod.DELETE)
+    public void deleteUser(@PathVariable Long id, HttpServletResponse response) throws IOException{
+        User user = userRepository.findUserById(id).orElse(null);
+        if(user != null && userSession.getUser() != null && userSession.getUser().getId().equals(id)){
+            userRepository.delete(user);
+            userSession.setUser(null);
+        }
+        response.sendRedirect("/");
+    }
 }
