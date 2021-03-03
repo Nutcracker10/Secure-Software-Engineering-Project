@@ -30,15 +30,17 @@ public class ReservationController {
     @Autowired
     private FlightRepository flightrepository;
 
-    @RequestMapping(value="/book-flight", method=RequestMethod.POST)
-    public String bookFlight(@RequestParam ("flight") Flight flight) {
+    @RequestMapping(value="/book-flight")
+    public String bookFlight(@RequestParam ("flightId") String flightId) {
         User user = userSession.getUser();
 
-        //Long id =  Long.valueOf(flightId);
+        Long id =  Long.valueOf(flightId);
 
-        //Optional<Flight> flight = flightrepository.findById(id);
+        Optional<Flight> flight = flightrepository.findById(id);
 
-        reservationRepository.save(new Reservation(user, flight));
+        if (flight.isPresent()) {
+            reservationRepository.save(new Reservation(user, flight.get()));
+        }
 
         return "#";
     }
