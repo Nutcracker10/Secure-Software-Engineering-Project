@@ -5,12 +5,10 @@ import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
 public class User {
 
-    @Column(name="user_id")
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long id;
 
     @NotBlank
     @Column(name="first_name")
@@ -35,6 +33,10 @@ public class User {
     @Column(name="role")
     private String role;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "creditCardId", nullable = false)
+    private CreditCard creditCard;
+
     public User() {
     }
 
@@ -46,12 +48,12 @@ public class User {
         this.role = role;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getId() {
+        return id;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -100,5 +102,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public CreditCard getCreditCard() {
+        return creditCard;
+    }
+
+    public void setCreditCard(CreditCard creditCard) {
+        this.creditCard = creditCard;
     }
 }

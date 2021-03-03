@@ -14,14 +14,17 @@ public class Reservation {
     private Long reservationId;
 
     @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(name = "id", nullable = false)
     private User user;
 
     @OneToOne    
     @JoinColumn(name="flightId", nullable = false)
     private Flight flight;
 
-    
+
+    public Reservation() {
+    }
+
     public Reservation(@NotBlank User user, @NotBlank Flight flight) {
         this.user = user;
         this.flight = flight;
