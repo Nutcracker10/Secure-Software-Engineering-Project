@@ -44,6 +44,7 @@ CREATE TABLE Reservation (
     first_name varchar(300) NOT NULL,
     last_name varchar(300) NOT NULL,
     home_address varchar(300) NOT NULL,
+    phonenumber INT NOT NULL,
     email varchar(300) NOT NULL,
     FOREIGN KEY (flight_id) REFERENCES flights (flight_id)
 );
