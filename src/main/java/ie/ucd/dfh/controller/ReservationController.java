@@ -51,7 +51,7 @@ public class ReservationController {
 
     @GetMapping("/booking")
     public String booking() {
-        return "booking.html";
+        return "modals/booking.html";
     }
 
 }
