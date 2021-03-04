@@ -49,4 +49,9 @@ public class ReservationController {
         return "#";
     }
 
+    @GetMapping("/booking")
+    public String booking() {
+        return "booking.html";
+    }
+
 }
