@@ -5,12 +5,10 @@ import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
 public class User {
 
-    @Column(name="user_id")
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long id;
 
     @NotBlank
     @Column(name="first_name")
@@ -21,12 +19,20 @@ public class User {
     private String lastName;
 
     @NotBlank
-    @Column(name="password")
-    private String password;
+    @Column(name="address")
+    private String address;
+
+    @NotBlank
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
     @NotBlank
     @Column(name="email")
     private String email; //TODO CHECK WHY @EMAIL VALIDATOR DETECT VALID EMAILS AS NOT VALID
+
+    @NotBlank
+    @Column(name="password")
+    private String password;
 
     @OneToMany(mappedBy = "user")
     private Set<Reservation> reservations;
@@ -35,23 +41,29 @@ public class User {
     @Column(name="role")
     private String role;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "creditCardId", nullable = false)
+    private CreditCard creditCard;
+
     public User() {
     }
 
-    public User(@NotBlank String firstName, @NotBlank String lastName, @NotBlank String password, @NotBlank String email, @NotBlank String role) {
+    public User(@NotBlank String firstName, @NotBlank String lastName, @NotBlank String address, @NotBlank String phoneNumber, @NotBlank String email, @NotBlank String password, @NotBlank String role) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.password = password;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
         this.email = email;
+        this.password = password;
         this.role = role;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getId() {
+        return id;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -70,6 +82,22 @@ public class User {
         this.lastName = lastName;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -78,12 +106,12 @@ public class User {
         this.email = email;
     }
 
-    public String getRole() {
-        return role;
+    public String getPassword() {
+        return password;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Set<Reservation> getReservations() {
@@ -94,11 +122,19 @@ public class User {
         this.reservations = reservations;
     }
 
-    public String getPassword() {
-        return password;
+    public String getRole() {
+        return role;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public CreditCard getCreditCard() {
+        return creditCard;
+    }
+
+    public void setCreditCard(CreditCard creditCard) {
+        this.creditCard = creditCard;
     }
 }

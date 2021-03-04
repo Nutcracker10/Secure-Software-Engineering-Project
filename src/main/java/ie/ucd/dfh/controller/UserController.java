@@ -3,15 +3,13 @@ package ie.ucd.dfh.controller;
 import ie.ucd.dfh.UserSession;
 import ie.ucd.dfh.model.Flight;
 import ie.ucd.dfh.model.HibernateSearchDao;
+import ie.ucd.dfh.model.Reservation;
 import ie.ucd.dfh.model.User;
 import ie.ucd.dfh.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -34,13 +32,17 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public String proifle(@RequestParam("id") Long id, Model model, HttpServletResponse response) throws IOException {
-        User user = userSession.getUser();
+    public String profile(@RequestParam("id") Long id, Model model, HttpServletResponse response) throws IOException {
+        User user = userRepository.findUserById(userSession.getUser().getId()).orElse(null);
 
-        if(user != null && user.getUserId().equals(id) && user.getRole().equals("member")){
+        if(user != null && user.getId().equals(id) && user.getRole().equals("member")){
             model.addAttribute("firstName", user.getFirstName());
             model.addAttribute("lastName", user.getLastName());
             model.addAttribute("email", user.getEmail());
+            model.addAttribute("address", user.getAddress());
+            model.addAttribute("phoneNumber", user.getPhoneNumber());
+
+            model.addAttribute("creditCard", user.getCreditCard());
         }else{
             response.sendRedirect("/");
         }
@@ -49,14 +51,17 @@ public class UserController {
     }
 
     @PostMapping("/edit-profile")
-    public void editProfile(Model model, String firstName, String lastName, String email, HttpServletResponse response) throws IOException{
-        User user = userSession.getUser();
-        if(user != null){
+    public void editProfile(Model model, String firstName, String lastName, String phoneNumber, String address, String email, HttpServletResponse response) throws IOException{
+        User user = userRepository.findUserById(userSession.getUser().getId()).orElse(null);
+        if(user != null) {
             user.setFirstName(firstName);
             user.setLastName(lastName);
             user.setEmail(email);
+            user.setPhoneNumber(phoneNumber);
+            user.setAddress(address);
+
             userRepository.save(user);
-            response.sendRedirect("/profile?id="+user.getUserId());
+            response.sendRedirect("/profile?id="+user.getId());
         }
     }
 
@@ -74,5 +79,18 @@ public class UserController {
 
         model.addAttribute("flights", searchResults);
         return "search_flights_results.html";
+    }
+
+    @RequestMapping(value = "/user/delete/{id}", method = RequestMethod.DELETE)
+    public void deleteUser(@PathVariable Long id, HttpServletResponse response) throws IOException{
+        User user = userRepository.findUserById(id).orElse(null);
+        if(user != null && userSession.getUser() != null && userSession.getUser().getId().equals(id)){
+            for(Reservation reservation : user.getReservations()){
+                reservation.setUser(null);
+            }
+            userRepository.delete(user);
+            userSession.setUser(null);
+        }
+        response.sendRedirect("/");
     }
 }

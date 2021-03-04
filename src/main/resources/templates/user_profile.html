@@ -20,14 +20,41 @@
                                     <td th:text="${lastName}"></td>
                                 </tr>
                                 <tr>
+                                    <td>Phone Number: </td>
+                                    <td th:text="${phoneNumber}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Address: </td>
+                                    <td th:text="${address}"></td>
+                                </tr>
+                                <tr>
                                     <td>Email: </td>
                                     <td th:text="${email}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Credit Card: </td>
+                                    <span id="creditCardNumber" th:if="${creditCard != null}">
+                                        <td>
+                                            ending in <span th:text="${#strings.substring(creditCard.cardNumber, #strings.length(creditCard.cardNumber)-4, #strings.length(creditCard.cardNumber))}"></span>
+                                            <span th:include="modals/add_credit_card.html"></span>
+                                            <a href="javascript:{}" style="color:blue;" onclick="document.getElementById('deleteCard').submit();">Remove</a>
+                                            <form id="deleteCard" action="#" th:action="@{'/credit-card/delete/{id}'(id=${creditCard.creditCardId})}" th:method="delete">
+
+                                            </form>
+                                        </td>
+                                    </span>
+                                    <span th:if="${creditCard == null}">
+                                        <td><span th:include="modals/add_credit_card.html"></span></td>
+                                    </span>
                                 </tr>
                             </tbody>
                         </table>
                         <span th:include="modals/edit_profile.html"></span>
+                        <button form="deleteRegistration" type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                        <form id="deleteRegistration" action="#" th:action="@{'/user/delete/{id}'(id=${user.id})}" th:method="delete">
 
-                        <button class="btn btn-danger">Delete</button>
+                        </form>
+
                     </div>
                 </div>
 
@@ -35,5 +62,6 @@
         </div>
 
     </div>
+
 </body>
 </html>
