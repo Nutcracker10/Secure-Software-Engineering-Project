@@ -10,9 +10,7 @@
             <th>Status</th>
         </thead>
         <tbody>
-            <tr th:each="reservation : ${reservation}">
-                <td th:text="${reservation.flight}"></td>
-                <td th:text="${reservation.status}"></td>
+            <tr th:each="reservation : ${reservations}">
             </tr>
         </tbody>
     </table>

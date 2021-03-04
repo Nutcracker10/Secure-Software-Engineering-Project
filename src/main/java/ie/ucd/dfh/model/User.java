@@ -1,5 +1,7 @@
 package ie.ucd.dfh.model;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Set;
@@ -114,6 +116,7 @@ public class User {
         this.password = password;
     }
 
+    @Transactional
     public Set<Reservation> getReservations() {
         return reservations;
     }

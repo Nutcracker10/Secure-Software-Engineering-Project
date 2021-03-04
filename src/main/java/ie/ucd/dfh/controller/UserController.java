@@ -5,12 +5,14 @@ import ie.ucd.dfh.model.*;
 import ie.ucd.dfh.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Controller
@@ -63,13 +65,13 @@ public class UserController {
         }
     }
 
+
     @GetMapping("/history")
-    public String displayHistory(Model  model) {
-        User user = userSession.getUser();
-        if(user != null){
-            Set<Reservation> reservations = user.getReservations();
-            model.addAttribute("reservation", reservations);
-        }
+    public String displayHistory(@RequestParam("id") Long id,Model  model) {
+        Optional<User> userResponse = userRepository.findUserById(id);
+        User user = userResponse.get();
+        Set<Reservation> reservations =  user.getReservations();
+        model.addAttribute("reservations", reservations);
         return "history.html";
     }
 
