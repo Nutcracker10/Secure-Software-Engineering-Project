@@ -14,7 +14,7 @@ import java.util.Calendar;
 @Table(name = "flights")
 public class Flight {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long flightId;
+    private Long id;
 
  //   @NotBlank
     @Field
@@ -46,8 +46,8 @@ public class Flight {
 
     public Flight(){}
 
-    public Flight(@NotBlank Long flightId, Calendar departure, Calendar arrival, @NotBlank String dep_airport, @NotBlank String arr_airport, double price) {
-        this.flightId = flightId;
+    public Flight(@NotBlank Long id, Calendar departure, Calendar arrival, @NotBlank String dep_airport, @NotBlank String arr_airport, double price) {
+        this.id = id;
         this.departure = departure;
         this.arrival = arrival;
         this.dep_airport = dep_airport;
@@ -55,9 +55,9 @@ public class Flight {
         this.price = price;
     }
 
-    public void setFlightId(Long flightId) { this.flightId = flightId; }
+    public void setId(Long id) { this.id = id; }
 
-    public Long getFlightId() {return this.flightId; }
+    public Long getId() {return this.id; }
 
     public void setDeparture(Calendar departure) { this.departure = departure; }
 

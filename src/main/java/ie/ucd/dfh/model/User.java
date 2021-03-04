@@ -116,7 +116,6 @@ public class User {
         this.password = password;
     }
 
-    @Transactional
     public Set<Reservation> getReservations() {
         return reservations;
     }

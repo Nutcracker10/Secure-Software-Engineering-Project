@@ -1,0 +1,62 @@
+<a href="#" data-target="#booking" data-toggle="modal" style="color:blue;" xmlns="http://www.w3.org/1999/html">
+    Book
+</a>
+<div class="modal text-center" id="booking">
+    <div class="modal-dialog" type="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Make Booking</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/book-flight" method="POST">
+                    <input id ="flightId" name="flightId" th:value="${flight.id}" type="hidden">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-9" style="margin-left: 10%">
+                                <label class="col-form-label" for="firstName">First Name</label>
+                                <input class="form-control" id="firstName" name="firstName" type="text" maxlength="300" minlength="1" required title="Can't be blank">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9" style="margin-left: 10%">
+                                <label class="col-form-label" for="lastName">First Name</label>
+                                <input class="form-control" id="lastName" name="lastName" type="text" maxlength="300" minlength="1" required title="Can't be blank">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9" style="margin-left: 10%">
+                                <label class="col-form-label" for="homeAddress">Home address</label>
+                                <input autocomplete="off" class="form-control" id="homeAddress" name="homeAddress" placeholder="Address" type="text" maxlength="300" required title="Can't be blank">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9" style="margin-left: 10%">
+                                <label class="col-form-label" for="phonenumber">Phone Number</label>
+                                <input autocomplete="off" class="form-control" id="phonenumber" name="phonenumber" placeholder="123456789" type="text" maxlength="10" required title="Can't be blank">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9" style="margin-left: 10%">
+                                <label class="col-form-label" for="email">Email address</label>
+                                <input autocomplete="off" class="form-control" id="email" name="email" placeholder="email@email.com" type="text" maxlength="300" required title="Can't be blank">
+                            </div>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-10"></div>
+                            <div class="col" style="margin-top: 5%">
+                                <button class="btn btn-primary" type="submit">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
