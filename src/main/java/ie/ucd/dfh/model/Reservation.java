@@ -15,17 +15,10 @@ public class Reservation {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reservationId;
 
-<<<<<<< HEAD
-=======
-    @ManyToOne
-    private User user;
-
->>>>>>> master
     @OneToOne    
     @JoinColumn(name="flightId", nullable = false)
     private Flight flight;
 
-<<<<<<< HEAD
     @NotBlank
     @Column(name="first_name")
     private String firstName;
@@ -38,7 +31,7 @@ public class Reservation {
     @Column(name="home_address")
     private String homeAddress;
 
-    @NotBlank
+    //@NotBlank
     @Column(name="phonenumber")
     private int phonenumber;
 
@@ -48,14 +41,6 @@ public class Reservation {
 
     
     public Reservation(@NotBlank Flight flight, @NotBlank String firstName, @NotBlank String lastName, @NotBlank String homeAddress, @NotBlank int phonenumber, @NotBlank String email) {
-=======
-
-    public Reservation() {
-    }
-
-    public Reservation(@NotBlank User user, @NotBlank Flight flight) {
-        this.user = user;
->>>>>>> master
         this.flight = flight;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -63,6 +48,8 @@ public class Reservation {
         this.phonenumber = phonenumber;
         this.email = email;
     }
+
+    public  Reservation() {}
 
     public Long getReservationId() {
         return reservationId;

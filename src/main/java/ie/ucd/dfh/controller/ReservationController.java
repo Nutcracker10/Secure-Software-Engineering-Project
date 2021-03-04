@@ -41,10 +41,10 @@ public class ReservationController {
         Long id =  Long.valueOf(flightId);
 
         Optional<Flight> flight = flightrepository.findById(id);
-
-        if (flight.isPresent()) {
-            reservationRepository.save(new Reservation(user, flight.get()));
-        }
+//
+//        if (flight.isPresent()) {
+//            reservationRepository.save(new Reservation(user, flight.get()));
+//        }
 
         return "#";
     }

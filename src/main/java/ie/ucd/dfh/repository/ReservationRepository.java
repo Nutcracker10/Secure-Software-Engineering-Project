@@ -10,5 +10,5 @@ import ie.ucd.dfh.model.User;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {    
-    Optional<Reservation> findReservationByUser(User user);
+
 }
