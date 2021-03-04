@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<div th:replace="common_head.html"></div>
+<body>
+<nav th:replace="common_navbar.html"></nav>
+<div class="container">
+    <table class="table table-hover" style="margin-top: 10%">
+        <thead>
+            <th>Reservation</th>
+            <th>Status</th>
+        </thead>
+        <tbody>
+            <tr th:each="reservation : ${reservation}">
+                <td th:text="${reservation.flight}"></td>
+                <td th:text="${reservation.status}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
