@@ -34,8 +34,8 @@ public class User {
     @Column(name="password")
     private String password;
 
-    @OneToMany(mappedBy = "user")
-    private Set<Reservation> reservations;
+//    @OneToMany(mappedBy = "user")
+//    private Set<Reservation> reservations;
 
     @NotBlank
     @Column(name="role")
@@ -114,13 +114,13 @@ public class User {
         this.password = password;
     }
 
-    public Set<Reservation> getReservations() {
-        return reservations;
-    }
-
-    public void setReservations(Set<Reservation> reservations) {
-        this.reservations = reservations;
-    }
+//    public Set<Reservation> getReservations() {
+//        return reservations;
+//    }
+//
+//    public void setReservations(Set<Reservation> reservations) {
+//        this.reservations = reservations;
+//    }
 
     public String getRole() {
         return role;

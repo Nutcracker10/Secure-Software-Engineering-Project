@@ -5,8 +5,7 @@ import org.hibernate.sql.Update;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-
-import org.hibernate.search.annotations.Field;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Reservation {
@@ -31,7 +30,7 @@ public class Reservation {
     @Column(name="home_address")
     private String homeAddress;
 
-    //@NotBlank
+    @NotNull
     @Column(name="phonenumber")
     private int phonenumber;
 
@@ -40,7 +39,7 @@ public class Reservation {
     private String email;
 
     
-    public Reservation(@NotBlank Flight flight, @NotBlank String firstName, @NotBlank String lastName, @NotBlank String homeAddress, @NotBlank int phonenumber, @NotBlank String email) {
+    public Reservation(@NotBlank Flight flight, @NotBlank String firstName, @NotBlank String lastName, @NotBlank String homeAddress, @NotNull int phonenumber, @NotBlank String email) {
         this.flight = flight;
         this.firstName = firstName;
         this.lastName = lastName;
