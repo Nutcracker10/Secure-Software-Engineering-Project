@@ -20,7 +20,10 @@
             <td th:text="${#dates.format(flight.arrival, 'MM/dd/yyyy H:mm z')}"></td>
             <td th:text="${flight.arr_airport}"></td>
             <td th:text="${flight.price}"></td>
-            <td > <a class="btn btn-primary btn-sm" href="/booking" role="button">Book</a></td>
+            <td >
+                <!-- <a class="btn btn-primary btn-sm" th:inlcude="modals/booking.html" role="button">Book</a> -->
+                <span th:include="modals/booking.html"></span>
+            </td>
         </tr>
     </tbody>
 </table>
