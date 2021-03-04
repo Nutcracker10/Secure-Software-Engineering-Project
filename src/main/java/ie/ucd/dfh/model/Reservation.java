@@ -6,6 +6,8 @@ import org.hibernate.sql.Update;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
+import org.hibernate.search.annotations.Field;
+
 @Entity
 public class Reservation {
     
