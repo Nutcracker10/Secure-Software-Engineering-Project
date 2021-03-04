@@ -17,8 +17,8 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">Executive Club Members</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">About</a>
+            <li class="nav-item" th:if="${user != null}">
+                <a class="nav-link" th:href="@{/history}">Your History</a>
             </li>
             <li class="nav-item" th:if="${user != null}">
                 <a class="nav-link" th:href="@{/profile(id=${user.id})}">Profile</a>

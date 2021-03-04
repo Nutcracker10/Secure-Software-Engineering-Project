@@ -15,6 +15,10 @@ public class Reservation {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reservationId;
 
+    @Column(name="status")
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
     @ManyToOne
     private User user;
 
@@ -26,11 +30,18 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(@NotBlank User user, @NotBlank Flight flight) {
+    public Reservation(@NotBlank User user, @NotBlank Flight flight, Status status) {
         this.user = user;
         this.flight = flight;
+        this.status = status;
     }
 
+    public Status getStatus(){
+        return status;
+    }
+    public void setStatus(Status status){
+        this.status = status;
+    }
     public Long getReservationId() {
         return reservationId;
     }
