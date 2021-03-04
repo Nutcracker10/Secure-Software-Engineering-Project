@@ -4,6 +4,7 @@
 <body>
     <nav th:replace="common_navbar.html"></nav>
     <div class="container-fluid">
+
         <div class="container">
             <div class="row" id="content">
                 <div  class="col-lg-6" style="display: block;">
@@ -33,17 +34,13 @@
                                 </tr>
                                 <tr>
                                     <td>Credit Card: </td>
-                                    <span id="creditCardNumber" th:if="${creditCard != null}">
+                                    <span id="creditCardNumber" th:unless="${#lists.isEmpty(creditCards)}">
                                         <td>
-                                            ending in <span th:text="${#strings.substring(creditCard.cardNumber, #strings.length(creditCard.cardNumber)-4, #strings.length(creditCard.cardNumber))}"></span>
+                                            <span th:include="modals/view_credit_cards.html"></span>
                                             <span th:include="modals/add_credit_card.html"></span>
-                                            <a href="javascript:{}" style="color:blue;" onclick="document.getElementById('deleteCard').submit();">Remove</a>
-                                            <form id="deleteCard" action="#" th:action="@{'/credit-card/delete/{id}'(id=${creditCard.creditCardId})}" th:method="delete">
-
-                                            </form>
                                         </td>
                                     </span>
-                                    <span th:if="${creditCard == null}">
+                                    <span th:if="${#lists.isEmpty(creditCards)}">
                                         <td><span th:include="modals/add_credit_card.html"></span></td>
                                     </span>
                                 </tr>

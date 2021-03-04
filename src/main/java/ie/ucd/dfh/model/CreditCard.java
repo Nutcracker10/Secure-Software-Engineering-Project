@@ -31,15 +31,19 @@ public class CreditCard {
     @Column(name = "security_code")
     private String securityCode;
 
+    @ManyToOne
+    private User user;
+
     public CreditCard() {
     }
 
-    public CreditCard(@NotBlank String cardType, @NotBlank String cardNumber, @NotBlank String expiryMonth, @NotBlank String expiryYear, @NotBlank String securityCode) {
+    public CreditCard(@NotBlank String cardType, @NotBlank String cardNumber, @NotBlank String expiryMonth, @NotBlank String expiryYear, @NotBlank String securityCode, User user) {
         this.cardType = cardType;
         this.cardNumber = cardNumber;
         this.expiryMonth = expiryMonth;
         this.expiryYear = expiryYear;
         this.securityCode = securityCode;
+        this.user = user;
     }
 
     public Long getCreditCardId() {
@@ -88,5 +92,13 @@ public class CreditCard {
 
     public void setSecurityCode(String securityCode) {
         this.securityCode = securityCode;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

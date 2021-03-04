@@ -41,8 +41,7 @@ public class UserController {
             model.addAttribute("email", user.getEmail());
             model.addAttribute("address", user.getAddress());
             model.addAttribute("phoneNumber", user.getPhoneNumber());
-
-            model.addAttribute("creditCard", user.getCreditCard());
+            model.addAttribute("creditCards", user.getCreditCards());
         }else{
             response.sendRedirect("/");
         }

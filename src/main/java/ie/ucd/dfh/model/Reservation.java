@@ -63,11 +63,15 @@ public class Reservation {
         this.user = user;
     }
 
-    public Flight getFlightId() {
+    public void setReservationId(Long reservationId) {
+        this.reservationId = reservationId;
+    }
+
+    public Flight getFlight() {
         return flight;
     }
 
-    public void setFlightCode(Flight flight) {
+    public void setFlight(Flight flight) {
         this.flight = flight;
     }
 }

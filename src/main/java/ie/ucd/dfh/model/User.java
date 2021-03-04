@@ -43,9 +43,8 @@ public class User {
     @Column(name="role")
     private String role;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "creditCardId", nullable = false)
-    private CreditCard creditCard;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<CreditCard> creditCards;
 
     public User() {
     }
@@ -116,7 +115,6 @@ public class User {
         this.password = password;
     }
 
-    @Transactional
     public Set<Reservation> getReservations() {
         return reservations;
     }
@@ -133,11 +131,11 @@ public class User {
         this.role = role;
     }
 
-    public CreditCard getCreditCard() {
-        return creditCard;
+    public Set<CreditCard> getCreditCards() {
+        return creditCards;
     }
 
-    public void setCreditCard(CreditCard creditCard) {
-        this.creditCard = creditCard;
+    public void setCreditCards(Set<CreditCard> creditCards) {
+        this.creditCards = creditCards;
     }
 }

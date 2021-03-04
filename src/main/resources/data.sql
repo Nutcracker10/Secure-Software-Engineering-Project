@@ -1,22 +1,11 @@
 DROP TABLE IF EXISTS Reservation;
-DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS credit_card;
+DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS flights;
 
 -- USER DETAILS -----------------------------
 
-CREATE TABLE credit_card(
-    credit_card_id INT AUTO_INCREMENT NOT NULL,
-    card_type varchar(60) NOT NULL,
-    card_number varchar(20) NOT NULL,
-    expiry_month varchar(30) NOT NULL,
-    expiry_year varchar(30) NOT NULL,
-    security_code varchar(10) NOT NULL,
-    PRIMARY KEY (credit_card_id)
-);
 
-INSERT INTO credit_card(card_type, card_number, expiry_month, expiry_year, security_code) VALUES
-    ('Visa Debit', '4024007103939509', '05', '2024', '111');
 
 CREATE TABLE user(
     id INT AUTO_INCREMENT NOT NULL,
@@ -28,12 +17,28 @@ CREATE TABLE user(
     password varchar(300) NOT NULL,
     role varchar(100) NOT NULL,
     credit_card_id INT,
-    PRIMARY KEY (id),
-    FOREIGN KEY (credit_card_id) REFERENCES credit_card (credit_card_id)
+    PRIMARY KEY (id)
 );
 
 INSERT INTO user(first_name, last_name, address, phone_number, email, password, role, credit_card_id) VALUES
     ('first', 'last', 'ucd', '+3531111111', 'test@test', '$2a$10$ifQGrQZoHbTJzSQa0HSXwOM5AT3vKf6zGnXMHSixuyFHmVu.5/afy', 'member', null); /*pass = pass */
+
+
+CREATE TABLE credit_card(
+    credit_card_id INT AUTO_INCREMENT NOT NULL,
+    card_type varchar(60) NOT NULL,
+    card_number varchar(20) NOT NULL,
+    expiry_month varchar(30) NOT NULL,
+    expiry_year varchar(30) NOT NULL,
+    security_code varchar(10) NOT NULL,
+    user_id INT NOT NULL,
+    PRIMARY KEY (credit_card_id),
+    FOREIGN KEY (user_id) REFERENCES user(id)
+);
+
+INSERT INTO credit_card(card_type, card_number, expiry_month, expiry_year, security_code, user_id) VALUES
+    ('Visa Debit', '4024007103939509', '05', '2024', '111', 1);
+
 
 -- FLIGHT DETAILS -----------------------------
 

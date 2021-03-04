@@ -1,6 +1,6 @@
 <a href="#" data-target="#creditCard" data-toggle="modal" style="color:blue;" xmlns="http://www.w3.org/1999/html">
-    <span th:if="${creditCard == null}">Add Credit Card</span>
-    <span th:if="${creditCard != null}">Update</span>
+    <span th:if="${#lists.isEmpty(creditCards)}">Add Credit Card</span>
+    <span th:unless="${#lists.isEmpty(creditCards)}">Add Another Card</span>
 </a>
 <div class="modal text-center" id="creditCard">
     <div class="modal-dialog" type="document">
@@ -18,11 +18,11 @@
                             <div class="col-9" style="margin-left: 10%">
                                 <label class="col-form-label" for="cardType">Card Type</label>
                                 <select class="form-control" id="cardType" name="cardType" >
-                                    <option value="0">Visa Credit</option>
-                                    <option value="1">Visa Debit</option>
-                                    <option value="2">Visa Electron</option>
-                                    <option value="3">Mastercard</option>
-                                    <option value="4">Maestro</option>
+                                    <option value="Visa Credit">Visa Credit</option>
+                                    <option value="Visa Debit">Visa Debit</option>
+                                    <option value="Visa Electron">Visa Electron</option>
+                                    <option value="Mastercard">Mastercard</option>
+                                    <option value="Maestro">Maestro</option>
                                 </select>
                             </div>
                         </div>

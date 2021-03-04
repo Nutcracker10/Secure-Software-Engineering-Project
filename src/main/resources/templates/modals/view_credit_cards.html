@@ -1,0 +1,40 @@
+<a href="#" data-target="#viewCreditCards" data-toggle="modal" style="color:blue;">
+    View
+</a>
+<div class="modal text-center" id="viewCreditCards">
+    <div class="modal-dialog" type="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Your Credit Cards</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table >
+                    <thead>
+                        <th>Type</th>
+                        <th>Card Number</th>
+                        <th></th>
+                    </thead>
+                    <tbody >
+                        <tr th:each="creditCard:${creditCards}">
+                            <td th:text="${creditCard.cardType}"></td>
+                            <td>ending in <span th:text="${#strings.substring(creditCard.cardNumber, #strings.length(creditCard.cardNumber)-4, #strings.length(creditCard.cardNumber))}"></span></td>
+                            <td>
+                                <!--<a href="javascript:{}" style="color:blue;" onclick="document.getElementById('deleteCard').submit();">Remove</a>-->
+                                <form action="#" th:action="@{'/credit-card/delete/{id}'(id=${creditCard.creditCardId})}" th:method="delete">
+                                    <button class="btn btn-danger btn-sm" type="submit">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
