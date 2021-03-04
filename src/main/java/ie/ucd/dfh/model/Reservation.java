@@ -70,4 +70,8 @@ public class Reservation {
     public void setFlightCode(Flight flight) {
         this.flight = flight;
     }
+
+    public void cancelReservation() {
+        setStatus(Status.CANCELLED);
+    }
 }

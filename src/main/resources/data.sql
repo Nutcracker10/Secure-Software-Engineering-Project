@@ -53,6 +53,9 @@ INSERT INTO flights( departure, arrival, dep_airport, arr_airport, capacity, pri
 INSERT INTO flights(departure, arrival, dep_airport, arr_airport, capacity, price) VALUES
     ('2008-11-13 12:30:00', '2008-11-13 14:30:00', 'Madrid', 'Dublin', 200, 30.0  );
 
+INSERT INTO flights(departure, arrival, dep_airport, arr_airport, capacity, price) VALUES
+('2021-11-13 12:30:00', '2021-11-13 14:30:00', 'Dublin', 'Berlin', 200, 30.0  );
+
 
 -- RESERVATION DETAILS ------------------------
 
@@ -68,4 +71,7 @@ CREATE TABLE Reservation (
 
 INSERT INTO Reservation(user_id, flight_id, status) VALUES
     ( 1, 1, 'SCHEDULED');
+
+INSERT INTO Reservation(user_id, flight_id, status) VALUES
+( 1, 3, 'SCHEDULED');
 
