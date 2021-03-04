@@ -13,4 +13,6 @@ public interface FlightRepository extends JpaRepository<Flight, Long>{
     public List<Flight> findAll();
 
     public Optional<Flight> findById(Long id);
+
+    public Optional<Flight> findFlightById(Long id);
 }

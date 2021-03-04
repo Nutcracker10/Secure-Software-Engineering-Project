@@ -1,15 +1,12 @@
 package ie.ucd.dfh.controller;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import ie.ucd.dfh.UserSession;
 import ie.ucd.dfh.model.Flight;
@@ -17,6 +14,8 @@ import ie.ucd.dfh.model.User;
 import ie.ucd.dfh.model.Reservation;
 import ie.ucd.dfh.repository.FlightRepository;
 import ie.ucd.dfh.repository.ReservationRepository;
+
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class ReservationController {
@@ -30,23 +29,17 @@ public class ReservationController {
     @Autowired
     private FlightRepository flightrepository;
 
-    @RequestMapping(value="/book-flight")
-    public String bookFlight(@RequestParam ("flightId") String flightId) {
-        User user = userSession.getUser();
+    @PostMapping(value="/book-flight")
+    public void bookFlight(Long flightId, String firstName, String lastName, String homeAddress, String phonenumber, String email, HttpServletResponse response) throws IOException {
 
-        if (user == null) {
-            //TODO prompt form
+        Optional<Flight> flight = flightrepository.findFlightById(flightId);
+        
+        if (flight.isPresent()) {
+            Reservation reservation = new Reservation(flight.get(), firstName, lastName, homeAddress, phonenumber, email);
+            reservationRepository.save(reservation);
+
+            response.sendRedirect("/");
         }
-
-        Long id =  Long.valueOf(flightId);
-
-        Optional<Flight> flight = flightrepository.findById(id);
-//
-//        if (flight.isPresent()) {
-//            reservationRepository.save(new Reservation(user, flight.get()));
-//        }
-
-        return "#";
     }
 
     @GetMapping("/booking")

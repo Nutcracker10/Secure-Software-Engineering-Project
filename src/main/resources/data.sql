@@ -38,7 +38,7 @@ INSERT INTO user(first_name, last_name, address, phone_number, email, password, 
 -- FLIGHT DETAILS -----------------------------
 
 CREATE TABLE flights (
-  flight_id INT AUTO_INCREMENT PRIMARY KEY,
+  id INT AUTO_INCREMENT PRIMARY KEY,
   departure TIMESTAMP NOT NULL,
   arrival TIMESTAMP NOT NULL,
   dep_airport varchar(100) NOT NULL,
@@ -62,9 +62,9 @@ CREATE TABLE Reservation (
     first_name varchar(300) NOT NULL,
     last_name varchar(300) NOT NULL,
     home_address varchar(300) NOT NULL,
-    phonenumber INT NOT NULL,
+    phonenumber varchar(300) NOT NULL,
     email varchar(300) NOT NULL,
-    FOREIGN KEY (flight_id) REFERENCES flights (flight_id)
+    FOREIGN KEY (flight_id) REFERENCES flights (id)
 );
 
 INSERT INTO Reservation(flight_id, first_name, last_name, home_address, phonenumber, email) VALUES

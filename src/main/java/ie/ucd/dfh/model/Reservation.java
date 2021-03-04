@@ -32,14 +32,14 @@ public class Reservation {
 
     @NotNull
     @Column(name="phonenumber")
-    private int phonenumber;
+    private String phonenumber;
 
     @NotBlank
     @Column(name="email")
     private String email;
 
     
-    public Reservation(@NotBlank Flight flight, @NotBlank String firstName, @NotBlank String lastName, @NotBlank String homeAddress, @NotNull int phonenumber, @NotBlank String email) {
+    public Reservation(@NotBlank Flight flight, @NotBlank String firstName, @NotBlank String lastName, @NotBlank String homeAddress, @NotNull String phonenumber, @NotBlank String email) {
         this.flight = flight;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -90,11 +90,11 @@ public class Reservation {
         this.homeAddress = homeAddress;
     }
 
-    public int getPhonenumber() {
+    public String getPhonenumber() {
         return this.phonenumber;
     }
 
-    public void setPhonenumber(int phonenumber) {
+    public void setPhonenumber(String phonenumber) {
         this.phonenumber = phonenumber;
     }
 
