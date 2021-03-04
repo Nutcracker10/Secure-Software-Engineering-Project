@@ -59,14 +59,16 @@ INSERT INTO flights(departure, arrival, dep_airport, arr_airport, capacity, pric
 CREATE TABLE Reservation (
     reservation_id INT AUTO_INCREMENT PRIMARY KEY,
     flight_id INT NOT NULL,
+    user_id INT,
     status VARCHAR(10) NOT NULL,
     first_name varchar(300) NOT NULL,
     last_name varchar(300) NOT NULL,
     home_address varchar(300) NOT NULL,
     phonenumber varchar(300) NOT NULL,
     email varchar(300) NOT NULL,
-    FOREIGN KEY (flight_id) REFERENCES flights (id)
+    FOREIGN KEY (flight_id) REFERENCES flights (id),
+    FOREIGN KEY (user_id) REFERENCES user (id)
 );
 
-INSERT INTO Reservation(flight_id, first_name, last_name, home_address, phonenumber, email) VALUES
-    ('1', 'Bob', 'Bobson', 'Bob Lane', '0761234332', 'bob@bobmail.com');
+INSERT INTO Reservation(flight_id, user_id, first_name, last_name, home_address, phonenumber, email, status) VALUES
+    (1, null, 'Bob', 'Bobson', 'Bob Lane', '0761234332', 'bob@bobmail.com', 'SCHEDULED');

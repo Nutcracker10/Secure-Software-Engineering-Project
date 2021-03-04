@@ -20,7 +20,7 @@ public class Reservation {
     private Status status;
 
     @OneToOne    
-    @JoinColumn(name="id", nullable = false)
+    @JoinColumn(name="flightId", nullable = false)
     private Flight flight;
 
     @NotBlank
@@ -35,8 +35,6 @@ public class Reservation {
     @Column(name="home_address")
     private String homeAddress;
 
-
-
     @NotNull
     @Column(name="phonenumber")
     private String phonenumber;
@@ -44,6 +42,9 @@ public class Reservation {
     @NotBlank
     @Column(name="email")
     private String email;
+
+    @ManyToOne
+    private User user;
 
     
     public Reservation(@NotBlank Flight flight, @NotBlank String firstName, @NotBlank String lastName, @NotBlank String homeAddress, @NotNull String phonenumber, @NotBlank String email) {
@@ -61,28 +62,28 @@ public class Reservation {
         return reservationId;
     }
 
-    public void setReservationId(long reservationId) {
+    public void setReservationId(Long reservationId) {
         this.reservationId = reservationId;
     }
 
-    public Flight getFlightId() {
+    public Flight getFlight() {
         return flight;
     }
 
-    public void setFlightCode(Flight flight) {
+    public void setFlight(Flight flight) {
         this.flight = flight;
     }
 
-    public String getFirstName() { 
-        return this.firstName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setfirstName(String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
     public String getLastName() {
-        return this.lastName;
+        return lastName;
     }
 
     public void setLastName(String lastName) {
@@ -90,7 +91,7 @@ public class Reservation {
     }
 
     public String getHomeAddress() {
-        return this.homeAddress;
+        return homeAddress;
     }
 
     public void setHomeAddress(String homeAddress) {
@@ -98,7 +99,7 @@ public class Reservation {
     }
 
     public String getPhonenumber() {
-        return this.phonenumber;
+        return phonenumber;
     }
 
     public void setPhonenumber(String phonenumber) {
@@ -106,11 +107,19 @@ public class Reservation {
     }
 
     public String getEmail() {
-        return this.email;
+        return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Status getStatus(){
@@ -124,4 +133,6 @@ public class Reservation {
     public void setStatus(Status status){
         this.status = status;
     }
+
+
 }

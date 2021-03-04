@@ -3,6 +3,7 @@ package ie.ucd.dfh.controller;
 import java.io.IOException;
 import java.util.Optional;
 
+import ie.ucd.dfh.model.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +37,7 @@ public class ReservationController {
         
         if (flight.isPresent()) {
             Reservation reservation = new Reservation(flight.get(), firstName, lastName, homeAddress, phonenumber, email);
+            reservation.setStatus(Status.SCHEDULED);
             reservationRepository.save(reservation);
 
             response.sendRedirect("/");
