@@ -37,6 +37,11 @@ public class Reservation {
     }
 
     public Status getStatus(){
+        //Do checks to see if Status has changed
+        Calendar calendar = Calendar.getInstance();
+        if(calendar.after(flight.getDeparture())){
+            setStatus(Status.PAST);
+        }
         return status;
     }
     public void setStatus(Status status){
