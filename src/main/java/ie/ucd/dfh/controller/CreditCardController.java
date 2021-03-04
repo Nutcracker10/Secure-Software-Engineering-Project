@@ -8,6 +8,8 @@ import ie.ucd.dfh.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServletResponse;
@@ -44,8 +46,27 @@ public class CreditCardController {
 
 
             user.setCreditCard(creditCard);
+            userSession.setUser(user);
             userRepository.save(user);
             response.sendRedirect("/profile?id="+user.getId());
+        }else{
+            response.sendRedirect("/");
+        }
+    }
+
+    @DeleteMapping("/credit-card/delete/{id}")
+    public void deleteCreditCard(@PathVariable Long id, HttpServletResponse response) throws IOException {
+        User user = userSession.getUser();
+        if(user != null){
+            CreditCard creditCard = user.getCreditCard();
+            if(creditCard != null && creditCard.getCreditCardId().equals(id)){
+                user.setCreditCard(null);
+                userRepository.save(user);
+                creditCardRepository.delete(creditCard);
+                response.sendRedirect("/profile?id="+user.getId());
+            }else{
+                response.sendRedirect("/");
+            }
         }else{
             response.sendRedirect("/");
         }
