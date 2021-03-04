@@ -67,6 +67,6 @@ CREATE TABLE Reservation (
     FOREIGN KEY (flight_id) REFERENCES flights (flight_id)
 );
 
-INSERT INTO Reservation(user_id, flight_id) VALUES
-    ( 1, 1);
+INSERT INTO Reservation(flight_id, first_name, last_name, home_address, phonenumber, email) VALUES
+    ('1', 'Bob', 'Bobson', 'Bob Lane', '0761234332', 'bob@bobmail.com');
 
