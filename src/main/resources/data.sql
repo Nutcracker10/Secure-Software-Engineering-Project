@@ -60,11 +60,12 @@ CREATE TABLE Reservation (
     reservation_id INT AUTO_INCREMENT NOT NULL,
     user_id INT,
     flight_id INT NOT NULL,
+    status VARCHAR(10) NOT NULL,
     PRIMARY KEY (reservation_id),
     FOREIGN KEY (user_id) REFERENCES user (id),
     FOREIGN KEY (flight_id) REFERENCES flights (flight_id)
 );
 
-INSERT INTO Reservation(user_id, flight_id) VALUES
-    ( 1, 1);
+INSERT INTO Reservation(user_id, flight_id, status) VALUES
+    ( 1, 1, 'SCHEDULED');
 

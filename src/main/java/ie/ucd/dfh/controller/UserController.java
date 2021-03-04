@@ -1,19 +1,19 @@
 package ie.ucd.dfh.controller;
 
 import ie.ucd.dfh.UserSession;
-import ie.ucd.dfh.model.Flight;
-import ie.ucd.dfh.model.HibernateSearchDao;
-import ie.ucd.dfh.model.Reservation;
-import ie.ucd.dfh.model.User;
+import ie.ucd.dfh.model.*;
 import ie.ucd.dfh.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Controller
 public class UserController {
@@ -65,6 +65,16 @@ public class UserController {
         }
     }
 
+
+    @GetMapping("/history")
+    public String displayHistory(@RequestParam("id") Long id,Model  model) {
+        Optional<User> userResponse = userRepository.findUserById(id);
+        User user = userResponse.get();
+        Set<Reservation> reservations =  user.getReservations();
+        model.addAttribute("reservations", reservations);
+        return "history.html";
+    }
+
     @GetMapping("/search_flights")
     public String displayFlights(@RequestParam(value="search",required = false)String query, Model model){
         if(query.isEmpty()){
@@ -86,7 +96,7 @@ public class UserController {
     public void bookFlight() {
         User user = userSession.getUser();
         Flight flight = new Flight();
-        Reservation reservation = new Reservation(user, flight);
+        Reservation reservation = new Reservation(user, flight, Status.SCHEDULED);
 
         //TODO gather flight details from form and enter into reservation obj
     }
