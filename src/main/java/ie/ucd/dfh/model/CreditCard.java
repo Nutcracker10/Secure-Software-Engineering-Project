@@ -101,4 +101,10 @@ public class CreditCard {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public boolean checkIfDetailsMatch( String cardType, String cardNumber, String expiryMonth, String expiryYear,
+                                        String securityCode){
+        return (this.cardType.matches(cardType)) && (this.cardNumber.matches(cardNumber))
+                && (this.expiryMonth.matches(expiryMonth)) && (this.expiryYear.matches(expiryYear)) && (this.securityCode.matches(securityCode));
+    }
 }

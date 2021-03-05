@@ -1,7 +1,9 @@
 package ie.ucd.dfh.controller;
 
 import ie.ucd.dfh.UserSession;
+import ie.ucd.dfh.model.Credentials;
 import ie.ucd.dfh.model.User;
+import ie.ucd.dfh.repository.CredentialsRepository;
 import ie.ucd.dfh.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,13 +25,17 @@ public class AuthenticationController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CredentialsRepository credentialsRepository;
+
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @PostMapping("/process-login")
     public void processLogin(Model model, String email, String password, HttpServletResponse response) throws IOException{
         User user = userRepository.findUserByEmail(email).orElse(null);
 
-        boolean success = user != null && encoder.matches(password, user.getPassword());
+        boolean success = user != null && encoder.matches(password, user.getCredentials().getPassword());
         if (success){
             userSession.setUser(user);
             userSession.setLoginFailed(false);
@@ -50,7 +56,10 @@ public class AuthenticationController {
         else{
             userSession.setEmailTaken(false);
             String encodedPassword = encoder.encode(password);
-            user = new User(firstName, surname, address, phoneNumber, email, encodedPassword, "member");
+            Credentials credentials = new Credentials(encodedPassword);
+            user = new User(firstName, surname, address, phoneNumber, email, "member");
+            user.setCredentials(credentials);
+            credentialsRepository.save(credentials);
             userRepository.save(user);
             userSession.setUser(user);
             response.sendRedirect("/");

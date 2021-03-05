@@ -1,11 +1,5 @@
 package ie.ucd.dfh.model;
-
-
-import org.hibernate.sql.Update;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-
 import java.util.Calendar;
 
 @Entity
@@ -19,31 +13,20 @@ public class Reservation {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @ManyToOne
-    private User user;
-
     @OneToOne    
     @JoinColumn(name="flightId", nullable = false)
     private Flight flight;
 
+    @ManyToOne
+    private User user;
 
-    public Reservation() {
-    }
-
-    public Reservation(@NotBlank User user, @NotBlank Flight flight, Status status) {
-        this.user = user;
-        this.flight = flight;
+    public Reservation(Status status, Flight flight, User user) {
         this.status = status;
+        this.flight = flight;
+        this.user = user;
     }
 
-    public Status getStatus(){
-        //Do checks to see if Status has changed
-        Calendar calendar = Calendar.getInstance();
-        if(calendar.after(flight.getDeparture())){
-            setStatus(Status.PAST);
-        }
-        return status;
-    }
+    public  Reservation() {}
 
     public Long getReservationId() {
         return reservationId;
@@ -53,8 +36,12 @@ public class Reservation {
         this.reservationId = reservationId;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public Flight getFlight() {
+        return flight;
+    }
+
+    public void setFlight(Flight flight) {
+        this.flight = flight;
     }
 
     public User getUser() {
@@ -65,11 +52,20 @@ public class Reservation {
         this.user = user;
     }
 
-    public Flight getFlight() {
-        return flight;
+    public void cancelReservation() {
+        setStatus(Status.CANCELLED);
     }
 
-    public void setFlight(Flight flight) {
-        this.flight = flight;
+    public Status getStatus(){
+        //Do checks to see if Status has changed
+        Calendar calendar = Calendar.getInstance();
+        if(calendar.after(flight.getDeparture())){
+            setStatus(Status.PAST);
+        }
+        return status;
     }
+    public void setStatus(Status status){
+        this.status = status;
+    }
+
 }

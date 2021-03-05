@@ -11,6 +11,7 @@
             <th>Arrival Airport</th>
             <th>Arrival Date</th>
             <th>Status</th>
+        <th>Button</th>
         </thead>
         <tbody>
             <tr th:each="reservation : ${reservations}">
@@ -19,6 +20,10 @@
                 <td th:text="${reservation.flight.arr_airport}"></td>
                 <td th:text="${#dates.format(reservation.flight.arrival, 'MM/dd/yyyy H:mm z')}"></td>
                 <td th:text="${reservation.status}"></td>
+                <td  th:if="${reservation.status == T(ie.ucd.dfh.model.Status).SCHEDULED}">
+                    <span th:include="modals/delete_reservation_check.html"></span>
+                </td>
+                <td><span th:include="modals/view_passengers_history.html"></span></td>
             </tr>
         </tbody>
     </table>

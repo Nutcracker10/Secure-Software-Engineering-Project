@@ -70,11 +70,12 @@ public class UserController {
 
 
     @GetMapping("/history")
-    public String displayHistory(@RequestParam("id") Long id,Model  model) {
+    public String displayHistory(@RequestParam("id") Long id, Model model) {
         Optional<User> userResponse = userRepository.findUserById(id);
         User user = userResponse.get();
         Set<Reservation> reservations =  user.getReservations();
         model.addAttribute("reservations", reservations);
+
         return "history.html";
     }
 
@@ -94,15 +95,6 @@ public class UserController {
         return "search_flights_results.html";
     }
 
-    
-    @GetMapping("/book-flight")
-    public void bookFlight() {
-        User user = userSession.getUser();
-        Flight flight = new Flight();
-        Reservation reservation = new Reservation(user, flight, Status.SCHEDULED);
-
-        //TODO gather flight details from form and enter into reservation obj
-    }
 
     @RequestMapping(value = "/user/delete/{id}", method = RequestMethod.DELETE)
     public void deleteUser(@PathVariable Long id, HttpServletResponse response) throws IOException{
@@ -122,6 +114,31 @@ public class UserController {
         Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
 
         model.addAttribute("retrievedReservation", reservation);
+        if(reservation != null){
+            Set<Reservation> passengers = reservation.getFlight().getReservations();
+            model.addAttribute("passengers", passengers);
+        }
+        return "index";
+    }
+
+    @GetMapping("/cancel-res-prompt")
+    public String promptReservationCancel(@RequestParam("id") Long reservationId, Model model ){
+        System.out.println("WE ARE IN");
+        model.addAttribute("resId", reservationId);
+        return "modals/delete_reservation_check.html";
+    }
+
+    @DeleteMapping("/delete-reservation")
+    public String cancelReservations(Model model, String cardType, String cardNumber,
+                                     String expiryMonth, String expiryYear, String securityCode, @RequestParam Long id) {
+        Reservation res = reservationRepository.findById(id).orElse(null);
+        Set<CreditCard> cards = res.getUser().getCreditCards();
+        System.out.println(cards.size());
+        for(CreditCard card : cards){
+            if( card.checkIfDetailsMatch(cardType,cardNumber,expiryMonth,expiryYear,securityCode)){
+                reservationRepository.delete(res);
+            }
+        }
         return "index";
     }
 
