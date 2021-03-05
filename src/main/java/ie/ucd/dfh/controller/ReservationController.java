@@ -2,7 +2,6 @@ package ie.ucd.dfh.controller;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.Set;
 
 import ie.ucd.dfh.model.*;
 import ie.ucd.dfh.repository.CreditCardRepository;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import ie.ucd.dfh.UserSession;
 import ie.ucd.dfh.repository.FlightRepository;
 import ie.ucd.dfh.repository.ReservationRepository;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -37,8 +37,9 @@ public class ReservationController {
     private FlightRepository flightrepository;
 
     @PostMapping(value="/book-flight")
-    public void bookFlight(Long flightId, String firstName, String lastName, String homeAddress, String phonenumber, String email,
-                           String cardType, String cardNumber, String expiryMonth, String expiryYear, String securityCode, HttpServletResponse response) throws IOException {
+    public String bookFlight(Long flightId, String firstName, String lastName, String homeAddress, String phonenumber, String email,
+                           String cardType, String cardNumber, String expiryMonth, String expiryYear, String securityCode,
+                           HttpServletResponse response, RedirectAttributes redirectAttributes) throws IOException {
 
         Optional<Flight> flight = flightrepository.findFlightById(flightId);
         User user;
@@ -54,14 +55,15 @@ public class ReservationController {
             creditCardRepository.save(creditCard);
             reservation = new Reservation(Status.SCHEDULED, flight.get(), user);
             reservationRepository.save(reservation);
-            response.sendRedirect("/");
+            redirectAttributes.addFlashAttribute("message",reservation.getReservationId());
+            return "redirect:/";
         }
+        return "redirect:/";
     }
 
     @GetMapping("/show-passengers")
     public void getPassengers(@RequestParam Long id, Model model){
         Reservation reservation = reservationRepository.findById(id).orElse(null);
-        System.out.println("Reservation Id " + id);
     }
 
     @RequestMapping(value = "/member-book-flight")

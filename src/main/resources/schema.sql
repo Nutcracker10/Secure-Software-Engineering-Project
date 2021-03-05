@@ -2,6 +2,7 @@ CREATE TABLE credentials (
   id INT AUTO_INCREMENT PRIMARY KEY,
   password varchar(300) NOT NULL
 );
+<<<<<<< HEAD
 
 CREATE TABLE user(
 id INT AUTO_INCREMENT NOT NULL,
