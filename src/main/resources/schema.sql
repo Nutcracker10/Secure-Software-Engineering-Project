@@ -2,7 +2,6 @@ CREATE TABLE credentials (
   id INT AUTO_INCREMENT PRIMARY KEY,
   password varchar(300) NOT NULL
 );
-<<<<<<< HEAD
 
 CREATE TABLE user(
 id INT AUTO_INCREMENT NOT NULL,
@@ -39,7 +38,7 @@ capacity INT NOT NULL,
 price DOUBLE NOT NULL
 );
 
-CREATE TABLE Reservation (
+CREATE TABLE reservation (
 reservation_id INT AUTO_INCREMENT PRIMARY KEY,
 flight_id INT NOT NULL,
 user_id INT,
