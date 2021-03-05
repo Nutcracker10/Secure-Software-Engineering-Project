@@ -40,21 +40,36 @@ public class ReservationController {
                            String cardType, String cardNumber, String expiryMonth, String expiryYear, String securityCode, HttpServletResponse response) throws IOException {
 
         Optional<Flight> flight = flightrepository.findFlightById(flightId);
+        User user;
+        Reservation reservation;
 
-        // if user is guest, create record of guest and payment
-        if (userSession.getUser() == null) {
-            User user = new User(firstName, lastName, homeAddress, phonenumber, email, "guest");
+
+        if (flight.isPresent()) {
+            // if user is guest, create record of guest and payment
+
+            user = new User(firstName, lastName, homeAddress, phonenumber, email, "guest");
             CreditCard creditCard = new CreditCard(cardType, cardNumber, expiryMonth, expiryYear, securityCode, user);
             userRepository.save(user);
             creditCardRepository.save(creditCard);
-            if (flight.isPresent()) {
-                Reservation reservation = new Reservation(Status.SCHEDULED, flight.get(), user);
-                reservationRepository.save(reservation);
-                response.sendRedirect("/");
-            }
+            reservation = new Reservation(Status.SCHEDULED, flight.get(), user);
+            reservationRepository.save(reservation);
+            response.sendRedirect("/");
         }
         
 
+    }
+
+    @RequestMapping(value = "/member-book-flight")
+    public void memberBookFlight(@RequestParam("flightId") Long flightId, HttpServletResponse response) throws IOException{
+        Reservation reservation;
+        Optional<Flight> flight = flightrepository.findFlightById(flightId);
+        User user = userSession.getUser();
+
+        if (flight.isPresent()) {
+            reservation = new Reservation(Status.SCHEDULED, flight.get(), user);
+            reservationRepository.save(reservation);
+        }
+        response.sendRedirect("/");
     }
 
 }

@@ -20,8 +20,11 @@
             <td th:text="${#dates.format(flight.arrival, 'MM/dd/yyyy H:mm z')}"></td>
             <td th:text="${flight.arr_airport}"></td>
             <td th:text="${flight.price}"></td>
-            <td >
-                <span th:include="modals/booking.html"></span>
+            <td>
+                <span th:if="${user == null}" th:include="modals/booking.html"></span>
+                <span th:unless="${user == null}">
+                    <a th:href="@{/member-book-flight(flightId=${flight.id} )}">Book</a>
+                </span>
             </td>
         </tr>
     </tbody>
