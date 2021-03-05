@@ -54,13 +54,23 @@
                                     <td th:text="${#dates.format(retrievedReservation.flight.arrival, 'MM/dd/yyyy H:mm z')}"></td>
                                     <td th:text="${retrievedReservation.status}"></td>
                                     <td  th:if="${retrievedReservation.status == T(ie.ucd.dfh.model.Status).SCHEDULED}">
-                                       <span th:include="modals/delete_reservation_check.html"></span>
+                                        <span th:include="modals/delete_reservation_check.html"></span>
+                                    </td>
                                     <td><span th:include="modals/view_passengers.html"></span></td>
                                 </tbody>
                             </table>
                         </span>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div th:if="${message}" class="col-3" style="padding-top: 25%">
+            <div class="alert alert-dismissible alert-success">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Thank you for booking a flight with us! <br>
+                    Your Reservation number is :
+                </strong>
+                <p th:text="${message}"></p>
             </div>
         </div>
     </div>

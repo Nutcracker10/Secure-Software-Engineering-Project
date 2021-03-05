@@ -34,8 +34,7 @@ public class AuthenticationController {
     @PostMapping("/process-login")
     public void processLogin(Model model, String email, String password, HttpServletResponse response) throws IOException{
         User user = userRepository.findUserByEmail(email).orElse(null);
-
-        boolean success = user != null && encoder.matches(password, user.getCredentials().getPassword());
+        boolean success = user != null && user.getCredentials() != null && encoder.matches(password, user.getCredentials().getPassword());
         if (success){
             userSession.setUser(user);
             userSession.setLoginFailed(false);

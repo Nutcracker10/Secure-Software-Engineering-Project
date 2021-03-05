@@ -100,8 +100,10 @@ public class UserController {
     public void deleteUser(@PathVariable Long id, HttpServletResponse response) throws IOException{
         User user = userRepository.findUserById(id).orElse(null);
         if(user != null && userSession.getUser() != null && userSession.getUser().getId().equals(id)){
+            User copyUser = new User(user.getFirstName(), user.getLastName(), user.getAddress(), user.getPhoneNumber(), user.getEmail(), "guest");
+            userRepository.save(copyUser);
             for(Reservation reservation : user.getReservations()){
-                reservation.setUser(null);
+                reservation.setUser(copyUser);
             }
             userRepository.delete(user);
             userSession.setUser(null);
