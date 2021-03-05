@@ -29,19 +29,17 @@ spring.datasource.url=jdbc:mysql://localhost:3306/sse
 spring.datasource.username=java
 spring.datasource.password=password
 ```
-<<<<<<< HEAD
-6. 
 
-=======
->>>>>>> 1721463c33e9bf40c3256083e37e6775e5a851fb
+6. Lastly, load the schema and data from the CLI
+```SQL
+mysql -u java -p sse < src/main/resources/schema.sql
+mysql -u java -p sse < src/main/resources/data.sql
+```
+
 # TO RUN THE PROJECT
-
 In the root directory of the project, run:
 ```mvn
 mvn spring-boot:run
 ```
-<<<<<<< HEAD
 
 
-=======
->>>>>>> 1721463c33e9bf40c3256083e37e6775e5a851fb
