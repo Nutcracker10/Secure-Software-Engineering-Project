@@ -14,7 +14,7 @@ CREATE TABLE user(
     address varchar(300) NOT NULL,
     phone_number varchar(300) NOT NULL,
     email varchar(300) NOT NULL,
-    password varchar(300) NOT NULL,
+    password varchar(300),
     role varchar(100) NOT NULL,
     credit_card_id INT,
     PRIMARY KEY (id)
@@ -43,7 +43,7 @@ INSERT INTO credit_card(card_type, card_number, expiry_month, expiry_year, secur
 -- FLIGHT DETAILS -----------------------------
 
 CREATE TABLE flights (
-  flight_id INT AUTO_INCREMENT PRIMARY KEY,
+  id INT AUTO_INCREMENT PRIMARY KEY,
   departure TIMESTAMP NOT NULL,
   arrival TIMESTAMP NOT NULL,
   dep_airport varchar(100) NOT NULL,
@@ -65,18 +65,19 @@ INSERT INTO flights(departure, arrival, dep_airport, arr_airport, capacity, pric
 -- RESERVATION DETAILS ------------------------
 
 CREATE TABLE Reservation (
-    reservation_id INT AUTO_INCREMENT NOT NULL,
-    user_id INT,
+    reservation_id INT AUTO_INCREMENT PRIMARY KEY,
     flight_id INT NOT NULL,
+    user_id INT,
     status VARCHAR(10) NOT NULL,
-    PRIMARY KEY (reservation_id),
-    FOREIGN KEY (user_id) REFERENCES user (id),
-    FOREIGN KEY (flight_id) REFERENCES flights (flight_id)
+    first_name varchar(300) NOT NULL,
+    last_name varchar(300) NOT NULL,
+    home_address varchar(300) NOT NULL,
+    phonenumber varchar(300) NOT NULL,
+    email varchar(300) NOT NULL,
+    FOREIGN KEY (flight_id) REFERENCES flights (id),
+    FOREIGN KEY (user_id) REFERENCES user (id)
 );
 
-INSERT INTO Reservation(user_id, flight_id, status) VALUES
-    ( 1, 1, 'SCHEDULED');
-
-INSERT INTO Reservation(user_id, flight_id, status) VALUES
-( 1, 3, 'SCHEDULED');
+INSERT INTO Reservation(flight_id, user_id, first_name, last_name, home_address, phonenumber, email, status) VALUES
+    (1, null, 'Bob', 'Bobson', 'Bob Lane', '0761234332', 'bob@bobmail.com', 'SCHEDULED');
 

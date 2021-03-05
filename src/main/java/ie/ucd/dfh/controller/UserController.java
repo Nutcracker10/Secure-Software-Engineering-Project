@@ -94,15 +94,6 @@ public class UserController {
         return "search_flights_results.html";
     }
 
-    
-    @GetMapping("/book-flight")
-    public void bookFlight() {
-        User user = userSession.getUser();
-        Flight flight = new Flight();
-        Reservation reservation = new Reservation(user, flight, Status.SCHEDULED);
-
-        //TODO gather flight details from form and enter into reservation obj
-    }
 
     @RequestMapping(value = "/user/delete/{id}", method = RequestMethod.DELETE)
     public void deleteUser(@PathVariable Long id, HttpServletResponse response) throws IOException{

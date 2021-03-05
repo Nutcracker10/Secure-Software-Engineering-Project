@@ -5,7 +5,7 @@ import org.hibernate.sql.Update;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-
+import javax.validation.constraints.NotNull;
 import java.util.Calendar;
 
 @Entity
@@ -19,31 +19,45 @@ public class Reservation {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @ManyToOne
-    private User user;
-
     @OneToOne    
     @JoinColumn(name="flightId", nullable = false)
     private Flight flight;
 
+    @NotBlank
+    @Column(name="first_name")
+    private String firstName;
 
-    public Reservation() {
-    }
+    @NotBlank
+    @Column(name="last_name")
+    private String lastName;
 
-    public Reservation(@NotBlank User user, @NotBlank Flight flight, Status status) {
-        this.user = user;
+    @NotBlank
+    @Column(name="home_address")
+    private String homeAddress;
+
+    @NotNull
+    @Column(name="phonenumber")
+    private String phonenumber;
+
+    @NotBlank
+    @Column(name="email")
+    private String email;
+
+    @ManyToOne
+    private User user;
+
+    
+    public Reservation(@NotBlank Flight flight, @NotBlank String firstName, @NotBlank String lastName, @NotBlank String homeAddress, @NotNull String phonenumber, @NotBlank String email) {
         this.flight = flight;
-        this.status = status;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.homeAddress = homeAddress;
+        this.phonenumber = phonenumber;
+        this.email = email;
     }
 
-    public Status getStatus(){
-        //Do checks to see if Status has changed
-        Calendar calendar = Calendar.getInstance();
-        if(calendar.after(flight.getDeparture())){
-            setStatus(Status.PAST);
-        }
-        return status;
-    }
+
+    public  Reservation() {}
 
     public Long getReservationId() {
         return reservationId;
@@ -51,18 +65,6 @@ public class Reservation {
 
     public void setReservationId(Long reservationId) {
         this.reservationId = reservationId;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public Flight getFlight() {
@@ -73,7 +75,68 @@ public class Reservation {
         this.flight = flight;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getHomeAddress() {
+        return homeAddress;
+    }
+
+    public void setHomeAddress(String homeAddress) {
+        this.homeAddress = homeAddress;
+    }
+
+    public String getPhonenumber() {
+        return phonenumber;
+    }
+
+    public void setPhonenumber(String phonenumber) {
+        this.phonenumber = phonenumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public void cancelReservation() {
         setStatus(Status.CANCELLED);
     }
+
+    public Status getStatus(){
+        //Do checks to see if Status has changed
+        Calendar calendar = Calendar.getInstance();
+        if(calendar.after(flight.getDeparture())){
+            setStatus(Status.PAST);
+        }
+        return status;
+    }
+    public void setStatus(Status status){
+        this.status = status;
+    }
+
 }

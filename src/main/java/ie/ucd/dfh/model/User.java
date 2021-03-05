@@ -32,7 +32,6 @@ public class User {
     @Column(name="email")
     private String email; //TODO CHECK WHY @EMAIL VALIDATOR DETECT VALID EMAILS AS NOT VALID
 
-    @NotBlank
     @Column(name="password")
     private String password;
 
