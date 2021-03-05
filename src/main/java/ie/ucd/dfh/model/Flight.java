@@ -8,6 +8,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 import java.util.Calendar;
+import java.util.Set;
 
 @Entity
 @Indexed
@@ -44,6 +45,9 @@ public class Flight {
     @Column(name="price")
     private double price;
 
+    @OneToMany(mappedBy = "flight")
+    private Set<Reservation> reservations;
+
     public Flight(){}
 
     public Flight(@NotBlank Long id, Calendar departure, Calendar arrival, @NotBlank String dep_airport, @NotBlank String arr_airport, double price) {
@@ -78,4 +82,12 @@ public class Flight {
     public void setPrice(double price) { this.price = price; }
 
     public double getPrice() { return this.price;}
+
+    public Set<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(Set<Reservation> reservations) {
+        this.reservations = reservations;
+    }
 }

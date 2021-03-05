@@ -11,7 +11,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/delete-reservation(id=${reservation.reservationId})}" th:method="delete">
+                <form th:action="@{/delete-reservation(id=${retrievedReservation.reservationId})}" th:method="delete">
                     <div class="form-group">
                         <div class="row">
                             <div class="col-9" style="margin-left: 10%">
