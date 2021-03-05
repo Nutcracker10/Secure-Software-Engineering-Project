@@ -9,3 +9,13 @@ Improvements can be proposed in the [original project](https://gitlab.com/gitlab
 This template is compatible with [Auto DevOps](https://docs.gitlab.com/ee/topics/autodevops/).
 
 If Auto DevOps is not already enabled for this project, you can [turn it on](https://docs.gitlab.com/ee/topics/autodevops/#enabling-auto-devops) in the project settings.
+
+
+### Work Split
+Martynas Jagutis : 1/3
+
+Caoimhe Tiernan: 1/3
+
+James Kirwan : 1/3
+
+Each team member did work on both the front and back end. 
