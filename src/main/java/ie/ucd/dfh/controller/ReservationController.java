@@ -40,18 +40,28 @@ public class ReservationController {
                            String cardType, String cardNumber, String expiryMonth, String expiryYear, String securityCode, HttpServletResponse response) throws IOException {
 
         Optional<Flight> flight = flightrepository.findFlightById(flightId);
+        User user;
+        Reservation reservation;
 
         // if user is guest, create record of guest and payment
         if (userSession.getUser() == null) {
-            User user = new User(firstName, lastName, homeAddress, phonenumber, email, null, "guest");
+            user = new User(firstName, lastName, homeAddress, phonenumber, email, null, "guest");
             CreditCard creditCard = new CreditCard(cardType, cardNumber, expiryMonth, expiryYear, securityCode, user);
             userRepository.save(user);
             creditCardRepository.save(creditCard);
+        } else {
+            user = userSession.getUser();
         }
+
         
         if (flight.isPresent()) {
-            Reservation reservation = new Reservation(flight.get(), firstName, lastName, homeAddress, phonenumber, email);
-            reservation.setStatus(Status.SCHEDULED);
+            if (userSession.getUser() == null) {
+                reservation = new Reservation(flight.get(), firstName, lastName, homeAddress, phonenumber, email);
+                reservation.setStatus(Status.SCHEDULED);
+            } else {
+                reservation = new Reservation(flight.get(), user.getFirstName(), user.getLastName(), user.getAddress(), user.getPhoneNumber(), user.getEmail());
+            }
+
             reservationRepository.save(reservation);
 
             response.sendRedirect("/");
