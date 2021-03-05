@@ -21,8 +21,9 @@
                 <td th:text="${#dates.format(reservation.flight.arrival, 'MM/dd/yyyy H:mm z')}"></td>
                 <td th:text="${reservation.status}"></td>
                 <td  th:if="${reservation.status == T(ie.ucd.dfh.model.Status).SCHEDULED}">
-                    <button type="button" class="btn btn-danger">Cancel</button></td>
-                <td><span th:include="modals/view_passengers.html"></span></td>
+                    <span th:include="modals/delete_reservation_check.html"></span>
+                </td>
+                <td><span th:include="modals/view_passengers_history.html"></span></td>
             </tr>
         </tbody>
     </table>

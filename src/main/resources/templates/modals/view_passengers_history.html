@@ -1,7 +1,7 @@
-<button class="btn btn-primary btn-sm"  data-target="#viewPassengers" data-toggle="modal">
+<button class="btn btn-primary btn-sm"  data-target="#viewPassengers" th:attrappend="data-target=${reservation.reservationId}" data-toggle="modal">
     View
 </button>
-<div class="modal text-center" id="viewPassengers">
+<div class="modal text-center" id="viewPassengers" th:attrappend="id=${reservation.reservationId}">
     <div class="modal-dialog" type="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -17,7 +17,14 @@
                         <th>Surname</th>
                     </thead>
                     <tbody >
-                        <tr th:each="passenger:${passengers}">
+<!--                        <span th:if="${passengers != null}" >
+                            <tr th:each="passenger:${passengers}">
+                                <td th:text="${passenger.user.firstName}"></td>
+                                <td th:text="${passenger.user.lastName}"></td>
+                            </tr>
+                        </span>-->
+
+                       <tr th:each="passenger:${reservation.flight.reservations}">
                             <td th:text="${passenger.user.firstName}"></td>
                             <td th:text="${passenger.user.lastName}"></td>
                         </tr>

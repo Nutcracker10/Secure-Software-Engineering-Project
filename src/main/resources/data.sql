@@ -51,7 +51,7 @@ CREATE TABLE credit_card(
 );
 
 INSERT INTO credit_card(card_type, card_number, expiry_month, expiry_year, security_code, user_id) VALUES
-    ('Visa Debit', '4024007103939509', '05', '2024', '111', 1);
+    ('Visa Debit', '4024007103939509', '5', '2024', '111', 1);
 
 
 -- FLIGHT DETAILS -----------------------------
