@@ -22,7 +22,7 @@ public class FlightController {
     public void addAttribute(Model model){
         model.addAttribute("user", userSession.getUser());
     }
-    
+
     @GetMapping("/show-all-flights")
     public String showAllFlights(Model model) {
         model.addAttribute("flights", flightRepository.findAll() );

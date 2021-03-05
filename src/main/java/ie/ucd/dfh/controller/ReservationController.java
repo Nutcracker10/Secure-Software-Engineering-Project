@@ -62,7 +62,7 @@ public class ReservationController {
         response.sendRedirect("/");
     }
 
-    @PostMapping(value = "/member-book-flight")
+    @RequestMapping(value = "/member-book-flight")
     public void memberBookFlight(@RequestParam("flightId") Long flightId, HttpServletResponse response) throws IOException{
         Reservation reservation;
         Optional<Flight> flight = flightrepository.findFlightById(flightId);
