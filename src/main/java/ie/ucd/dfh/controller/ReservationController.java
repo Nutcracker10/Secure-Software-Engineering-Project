@@ -51,15 +51,12 @@ public class ReservationController {
             CreditCard creditCard = new CreditCard(cardType, cardNumber, expiryMonth, expiryYear, securityCode, user);
             userRepository.save(user);
             creditCardRepository.save(creditCard);
-
-            reservation = new Reservation(flight.get(), user.getFirstName(), user.getLastName(), user.getAddress(), user.getPhoneNumber(), user.getEmail());
-            reservation.setStatus(Status.SCHEDULED);
-            reservation.setUser(user);
+            reservation = new Reservation(Status.SCHEDULED, flight.get(), user);
             reservationRepository.save(reservation);
+            response.sendRedirect("/");
         }
+        
 
-
-        response.sendRedirect("/");
     }
 
     @RequestMapping(value = "/member-book-flight")
@@ -69,9 +66,7 @@ public class ReservationController {
         User user = userSession.getUser();
 
         if (flight.isPresent()) {
-            reservation = new Reservation(flight.get(), user.getFirstName(), user.getLastName(), user.getAddress(), user.getPhoneNumber(), user.getEmail());
-            reservation.setStatus(Status.SCHEDULED);
-            reservation.setUser(user);
+            reservation = new Reservation(Status.SCHEDULED, flight.get(), user);
             reservationRepository.save(reservation);
         }
         response.sendRedirect("/");

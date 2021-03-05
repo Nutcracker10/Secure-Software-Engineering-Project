@@ -28,6 +28,4 @@ public class FlightController {
         model.addAttribute("flights", flightRepository.findAll() );
         return "search_flights_results.html";
     }
-
-
 }

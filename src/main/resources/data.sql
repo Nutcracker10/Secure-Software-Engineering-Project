@@ -15,8 +15,6 @@ CREATE TABLE credentials (
 INSERT INTO credentials(password) VALUES
     ('$2a$10$ifQGrQZoHbTJzSQa0HSXwOM5AT3vKf6zGnXMHSixuyFHmVu.5/afy'); /*pass = pass */
 
-
-
 CREATE TABLE user(
     id INT AUTO_INCREMENT NOT NULL,
     first_name varchar(300) NOT NULL,
@@ -26,13 +24,12 @@ CREATE TABLE user(
     email varchar(300) NOT NULL,
     credential_id INT,
     role varchar(100) NOT NULL,
-    credit_card_id INT,
     PRIMARY KEY (id),
     FOREIGN KEY (credential_id) REFERENCES credentials(id)
 );
 
-INSERT INTO user(first_name, last_name, address, phone_number, email, credential_id, role, credit_card_id) VALUES
-    ('first', 'last', 'ucd', '+3531111111', 'test@test', 1, 'member', null); /*pass = pass */
+INSERT INTO user(first_name, last_name, address, phone_number, email, credential_id, role) VALUES
+    ('first', 'last', 'ucd', '+3531111111', 'test@test', 1, 'member'); /*pass = pass */
 
 
 CREATE TABLE credit_card(
@@ -80,15 +77,10 @@ CREATE TABLE Reservation (
     flight_id INT NOT NULL,
     user_id INT,
     status VARCHAR(10) NOT NULL,
-    first_name varchar(300) NOT NULL,
-    last_name varchar(300) NOT NULL,
-    home_address varchar(300) NOT NULL,
-    phonenumber varchar(300) NOT NULL,
-    email varchar(300) NOT NULL,
     FOREIGN KEY (flight_id) REFERENCES flights (id),
     FOREIGN KEY (user_id) REFERENCES user (id)
 );
 
-INSERT INTO Reservation(flight_id, user_id, first_name, last_name, home_address, phonenumber, email, status) VALUES
-    (1, 1, 'Bob', 'Bobson', 'Bob Lane', '0761234332', 'bob@bobmail.com', 'SCHEDULED');
+INSERT INTO Reservation(flight_id, user_id,status) VALUES
+    ( 1, 1, 'SCHEDULED');
 
