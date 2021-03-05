@@ -45,6 +45,7 @@
                                     <th>Arrival Airport</th>
                                     <th>Arrival Date</th>
                                     <th>Status</th>
+                                    <th></th>
                                 </thead>
                                 <tbody>
                                     <td th:text="${retrievedReservation.flight.dep_airport}"></td>
@@ -52,6 +53,7 @@
                                     <td th:text="${retrievedReservation.flight.arr_airport}"></td>
                                     <td th:text="${#dates.format(retrievedReservation.flight.arrival, 'MM/dd/yyyy H:mm z')}"></td>
                                     <td th:text="${retrievedReservation.status}"></td>
+                                    <td><span th:include="modals/view_passengers.html"></span></td>
                                 </tbody>
                             </table>
                         </span>

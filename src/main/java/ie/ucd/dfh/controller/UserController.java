@@ -70,11 +70,12 @@ public class UserController {
 
 
     @GetMapping("/history")
-    public String displayHistory(@RequestParam("id") Long id,Model  model) {
+    public String displayHistory(@RequestParam("id") Long id, Model model) {
         Optional<User> userResponse = userRepository.findUserById(id);
         User user = userResponse.get();
         Set<Reservation> reservations =  user.getReservations();
         model.addAttribute("reservations", reservations);
+
         return "history.html";
     }
 
@@ -113,6 +114,10 @@ public class UserController {
         Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
 
         model.addAttribute("retrievedReservation", reservation);
+        if(reservation != null){
+            Set<Reservation> passengers = reservation.getFlight().getReservations();
+            model.addAttribute("passengers", passengers);
+        }
         return "index";
     }
 

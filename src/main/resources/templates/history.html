@@ -22,6 +22,7 @@
                 <td th:text="${reservation.status}"></td>
                 <td  th:if="${reservation.status == T(ie.ucd.dfh.model.Status).SCHEDULED}">
                     <button type="button" class="btn btn-danger">Cancel</button></td>
+                <td><span th:include="modals/view_passengers.html"></span></td>
             </tr>
         </tbody>
     </table>
