@@ -17,13 +17,46 @@
     <div class="row">
         <div class="col"  style="padding-top: 25%">
             <div class="jumbotron">
-                <h1 class="display-3">Hello, world!</h1>
-                <p class="lead">Flights to all over the world. Book your reservations now!</p>
-                <hr class="my-4">
-                <p>Make a reservation as a guest</p>
-                <p class="lead">
-                    <a class="btn btn-primary btn-lg" href="/show-all-flights" role="button">Book Flight</a>
-                </p>
+                <div>
+                    <h1 class="display-3">Hello, world!</h1>
+                    <p class="lead">Flights to all over the world. Book your reservations now!</p>
+                    <hr class="my-4">
+                    <div>
+                        <p>Make a reservation as a guest</p>
+                        <p class="lead">
+                            <a class="btn btn-primary btn-lg" href="/show-all-flights" role="button">Book Flight</a>
+                        </p>
+                        <div th:if="${user == null}">
+                            <p>Retrieve your past reservation</p>
+                            <p class="lead">
+                                <form class="form-inline my-2 my-lg-0" action="/reservation" method="GET">
+                                    <input id="reservationId" name="reservationId" class="form-control" placeholder="Reservation ID" type="search" style="background-color:white;">
+                                    <button class="btn btn-primary" type="submit" >Search</button>
+                                </form>
+                            </p>
+                        </div>
+                    </div>
+                    <div th:if="${user == null}">
+                        <span th:if="${retrievedReservation != null}">
+                            <table class= "table table-hover">
+                                <thead>
+                                    <th>Departure Airport</th>
+                                    <th>Departure Date</th>
+                                    <th>Arrival Airport</th>
+                                    <th>Arrival Date</th>
+                                    <th>Status</th>
+                                </thead>
+                                <tbody>
+                                    <td th:text="${retrievedReservation.flight.dep_airport}"></td>
+                                    <td th:text="${#dates.format(retrievedReservation.flight.departure, 'MM/dd/yyyy H:mm z')}"></td>
+                                    <td th:text="${retrievedReservation.flight.arr_airport}"></td>
+                                    <td th:text="${#dates.format(retrievedReservation.flight.arrival, 'MM/dd/yyyy H:mm z')}"></td>
+                                    <td th:text="${retrievedReservation.status}"></td>
+                                </tbody>
+                            </table>
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -44,15 +44,17 @@ public class Reservation {
         }
         return status;
     }
-    public void setStatus(Status status){
-        this.status = status;
-    }
+
     public Long getReservationId() {
         return reservationId;
     }
 
-    public void setReservationId(long reservationId) {
+    public void setReservationId(Long reservationId) {
         this.reservationId = reservationId;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public User getUser() {
@@ -63,11 +65,11 @@ public class Reservation {
         this.user = user;
     }
 
-    public Flight getFlightId() {
+    public Flight getFlight() {
         return flight;
     }
 
-    public void setFlightCode(Flight flight) {
+    public void setFlight(Flight flight) {
         this.flight = flight;
     }
 

@@ -1,18 +1,18 @@
-<a href="#" data-target="#creditCard" data-toggle="modal" style="color:blue;" xmlns="http://www.w3.org/1999/html">
-    <span th:if="${#lists.isEmpty(creditCards)}">Add Credit Card</span>
-    <span th:unless="${#lists.isEmpty(creditCards)}">Add Another Card</span>
-</a>
-<div class="modal text-center" id="creditCard">
+<button class="btn btn-primary btn-sm"  data-target="#updateCreditCard" th:attrappend="data-target=${creditCard.creditCardId}" data-toggle="modal">
+    Update
+</button>
+<div class="modal text-center" id="updateCreditCard" th:attrappend="id=${creditCard.creditCardId}">
     <div class="modal-dialog" type="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Credit Card</h5>
+                <h5 class="modal-title">Update Credit Card</h5>
                 <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form action="/add-credit-card" method="POST">
+                <form action="/credit-card/update"  th:method="put">
+                    <input type="hidden" th:value="${creditCard.creditCardId}" name="creditCardId" id="creditCardId">
                     <div class="form-group">
                         <div class="row">
                             <div class="col-9" style="margin-left: 10%">
@@ -79,7 +79,7 @@
                         <div class="row text-center">
                             <div class="col-10"></div>
                             <div class="col" style="margin-top: 5%">
-                                <button class="btn btn-primary" type="submit">Add</button>
+                                <button class="btn btn-primary" type="submit">Update</button>
                             </div>
                         </div>
                     </div>

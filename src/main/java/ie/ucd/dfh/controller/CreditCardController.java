@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,23 +30,13 @@ public class CreditCardController {
 
     @PostMapping("/add-credit-card")
     public void addCreditCard(Model model, String cardType, String cardNumber, String expiryMonth, String expiryYear, String securityCode, HttpServletResponse response) throws IOException {
+
         User user = userRepository.findUserById(userSession.getUser().getId()).orElse(null);
 
         if(user != null){
+            CreditCard creditCard = new CreditCard(cardType, cardNumber, expiryMonth, expiryYear, securityCode, user);
+            creditCardRepository.save(creditCard);
 
-            CreditCard creditCard = user.getCreditCard();
-            if(creditCard != null){
-                creditCard.setCardType(cardType);
-                creditCard.setCardNumber(cardNumber);
-                creditCard.setExpiryMonth(expiryMonth);
-                creditCard.setExpiryYear(expiryYear);
-                creditCard.setSecurityCode(securityCode);
-            }else{
-                creditCard = new CreditCard(cardType, cardNumber, expiryMonth, expiryYear, securityCode);
-            }
-
-
-            user.setCreditCard(creditCard);
             userSession.setUser(user);
             userRepository.save(user);
             response.sendRedirect("/profile?id="+user.getId());
@@ -58,15 +49,32 @@ public class CreditCardController {
     public void deleteCreditCard(@PathVariable Long id, HttpServletResponse response) throws IOException {
         User user = userSession.getUser();
         if(user != null){
-            CreditCard creditCard = user.getCreditCard();
+            CreditCard creditCard = creditCardRepository.findById(id).orElse(null);
             if(creditCard != null && creditCard.getCreditCardId().equals(id)){
-                user.setCreditCard(null);
+                user.setCreditCards(null);
                 userRepository.save(user);
                 creditCardRepository.delete(creditCard);
                 response.sendRedirect("/profile?id="+user.getId());
             }else{
                 response.sendRedirect("/");
             }
+        }else{
+            response.sendRedirect("/");
+        }
+    }
+
+    @PutMapping("credit-card/update")
+    public void updateCreditCard(Long creditCardId, String cardType, String cardNumber, String expiryMonth, String expiryYear, String securityCode, HttpServletResponse response) throws IOException {
+        CreditCard creditCard = creditCardRepository.findById(creditCardId).orElse(null);
+        User user = userSession.getUser();
+        if(creditCard != null && user != null && creditCard.getUser().getId().equals(user.getId())){
+            creditCard.setCardType(cardType);
+            creditCard.setCardNumber(cardNumber);
+            creditCard.setExpiryMonth(expiryMonth);
+            creditCard.setExpiryYear(expiryYear);
+            creditCard.setSecurityCode(securityCode);
+            creditCardRepository.save(creditCard);
+            response.sendRedirect("/profile?id="+user.getId());
         }else{
             response.sendRedirect("/");
         }
