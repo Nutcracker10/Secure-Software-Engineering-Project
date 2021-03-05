@@ -8,13 +8,14 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 import java.util.Calendar;
+import java.util.Set;
 
 @Entity
 @Indexed
 @Table(name = "flights")
 public class Flight {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long flightId;
+    private Long id;
 
  //   @NotBlank
     @Field
@@ -44,10 +45,13 @@ public class Flight {
     @Column(name="price")
     private double price;
 
+    @OneToMany(mappedBy = "flight")
+    private Set<Reservation> reservations;
+
     public Flight(){}
 
-    public Flight(@NotBlank Long flightId, Calendar departure, Calendar arrival, @NotBlank String dep_airport, @NotBlank String arr_airport, double price) {
-        this.flightId = flightId;
+    public Flight(@NotBlank Long id, Calendar departure, Calendar arrival, @NotBlank String dep_airport, @NotBlank String arr_airport, double price) {
+        this.id = id;
         this.departure = departure;
         this.arrival = arrival;
         this.dep_airport = dep_airport;
@@ -55,9 +59,9 @@ public class Flight {
         this.price = price;
     }
 
-    public void setFlightId(Long flightId) { this.flightId = flightId; }
+    public void setId(Long id) { this.id = id; }
 
-    public Long getFlightId() {return this.flightId; }
+    public Long getId() {return this.id; }
 
     public void setDeparture(Calendar departure) { this.departure = departure; }
 
@@ -78,4 +82,12 @@ public class Flight {
     public void setPrice(double price) { this.price = price; }
 
     public double getPrice() { return this.price;}
+
+    public Set<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(Set<Reservation> reservations) {
+        this.reservations = reservations;
+    }
 }

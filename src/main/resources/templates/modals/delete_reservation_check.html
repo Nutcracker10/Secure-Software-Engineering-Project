@@ -1,18 +1,17 @@
-<a href="#" data-target="#creditCard" data-toggle="modal" style="color:blue;" xmlns="http://www.w3.org/1999/html">
-    <span th:if="${#lists.isEmpty(creditCards)}">Add Credit Card</span>
-    <span th:unless="${#lists.isEmpty(creditCards)}">Add Another Card</span>
-</a>
-<div class="modal text-center" id="creditCard">
+<button class="btn btn-danger" data-target="#deleteRes" data-toggle="modal" type="button">
+    Cancel
+</button>
+<div class="modal text-center" id="deleteRes">
     <div class="modal-dialog" type="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Credit Card</h5>
+                <h5 class="modal-title">Confirm Credit Card Details</h5>
                 <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form action="/add-credit-card" method="POST">
+                <form th:action="@{/delete-reservation(id=${retrievedReservation.reservationId})}" th:method="delete">
                     <div class="form-group">
                         <div class="row">
                             <div class="col-9" style="margin-left: 10%">
@@ -39,7 +38,7 @@
                             <div class="col-5" style="margin-left: 10%">
                                 <select class="form-control" id="expiryMonth" name="expiryMonth" >
                                     <option value="1">January (01)</option>
-                                    <optionS value="2">February (02)</optionS>
+                                    <option value="2">February (02)</option>
                                     <option value="3">March (03)</option>
                                     <option value="4">April (04)</option>
                                     <option value="5">May (05)</option>
@@ -91,4 +90,3 @@
         </div>
     </div>
 </div>
-

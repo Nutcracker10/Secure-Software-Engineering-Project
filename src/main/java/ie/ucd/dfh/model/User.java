@@ -32,12 +32,12 @@ public class User {
     @Column(name="email")
     private String email; //TODO CHECK WHY @EMAIL VALIDATOR DETECT VALID EMAILS AS NOT VALID
 
-    @NotBlank
-    @Column(name="password")
-    private String password;
-
     @OneToMany(mappedBy = "user")
     private Set<Reservation> reservations;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id")
+    private Credentials credentials;
 
     @NotBlank
     @Column(name="role")
@@ -49,13 +49,12 @@ public class User {
     public User() {
     }
 
-    public User(@NotBlank String firstName, @NotBlank String lastName, @NotBlank String address, @NotBlank String phoneNumber, @NotBlank String email, @NotBlank String password, @NotBlank String role) {
+    public User(@NotBlank String firstName, @NotBlank String lastName, @NotBlank String address, @NotBlank String phoneNumber, @NotBlank String email, @NotBlank String role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.password = password;
         this.role = role;
     }
 
@@ -107,14 +106,6 @@ public class User {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public Set<Reservation> getReservations() {
         return reservations;
     }
@@ -137,5 +128,13 @@ public class User {
 
     public void setCreditCards(Set<CreditCard> creditCards) {
         this.creditCards = creditCards;
+    }
+
+    public Credentials getCredentials() {
+        return credentials;
+    }
+
+    public void setCredentials(Credentials credentials) {
+        this.credentials = credentials;
     }
 }
