@@ -2,6 +2,7 @@ package ie.ucd.dfh.controller;
 
 import ie.ucd.dfh.UserSession;
 import ie.ucd.dfh.model.*;
+import ie.ucd.dfh.repository.ReservationRepository;
 import ie.ucd.dfh.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,9 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private HibernateSearchDao searchservice;
+
+    @Autowired
+    private ReservationRepository reservationRepository;
 
     @ModelAttribute
     public void addAttribute(Model model){
@@ -112,4 +116,13 @@ public class UserController {
         }
         response.sendRedirect("/");
     }
+
+    @GetMapping("/reservation")
+    public String getReservation(Model model, @RequestParam Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
+
+        model.addAttribute("retrievedReservation", reservation);
+        return "index";
+    }
+
 }

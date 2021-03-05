@@ -14,10 +14,10 @@
         </thead>
         <tbody>
             <tr th:each="reservation : ${reservations}">
-                <td th:text="${reservation.flightId.dep_airport}"></td>
-                <td th:text="${#dates.format(reservation.flightId.departure, 'MM/dd/yyyy H:mm z')}"></td>
-                <td th:text="${reservation.flightId.arr_airport}"></td>
-                <td th:text="${#dates.format(reservation.flightId.arrival, 'MM/dd/yyyy H:mm z')}"></td>
+                <td th:text="${reservation.flight.dep_airport}"></td>
+                <td th:text="${#dates.format(reservation.flight.departure, 'MM/dd/yyyy H:mm z')}"></td>
+                <td th:text="${reservation.flight.arr_airport}"></td>
+                <td th:text="${#dates.format(reservation.flight.arrival, 'MM/dd/yyyy H:mm z')}"></td>
                 <td th:text="${reservation.status}"></td>
             </tr>
         </tbody>
