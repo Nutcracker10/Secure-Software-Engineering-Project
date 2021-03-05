@@ -43,7 +43,7 @@ public class ReservationController {
 
         // if user is guest, create record of guest and payment
         if (userSession.getUser() == null) {
-            User user = new User(firstName, lastName, homeAddress, phonenumber, email, null, "guest");
+            User user = new User(firstName, lastName, homeAddress, phonenumber, email, "guest");
             CreditCard creditCard = new CreditCard(cardType, cardNumber, expiryMonth, expiryYear, securityCode, user);
             userRepository.save(user);
             creditCardRepository.save(creditCard);
