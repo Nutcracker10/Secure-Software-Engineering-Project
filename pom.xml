@@ -102,6 +102,10 @@
             <artifactId>spring-security-crypto</artifactId>
             <version>5.4.4</version>
         </dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

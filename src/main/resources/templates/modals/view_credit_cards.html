@@ -16,16 +16,19 @@
                         <th>Type</th>
                         <th>Card Number</th>
                         <th></th>
+                        <th></th>
                     </thead>
                     <tbody >
                         <tr th:each="creditCard:${creditCards}">
                             <td th:text="${creditCard.cardType}"></td>
                             <td>ending in <span th:text="${#strings.substring(creditCard.cardNumber, #strings.length(creditCard.cardNumber)-4, #strings.length(creditCard.cardNumber))}"></span></td>
                             <td>
-                                <!--<a href="javascript:{}" style="color:blue;" onclick="document.getElementById('deleteCard').submit();">Remove</a>-->
                                 <form action="#" th:action="@{'/credit-card/delete/{id}'(id=${creditCard.creditCardId})}" th:method="delete">
                                     <button class="btn btn-danger btn-sm" type="submit">Remove</button>
                                 </form>
+                            </td>
+                            <td>
+                                <span th:include="modals/update_credit_card.html"></span>
                             </td>
                         </tr>
                     </tbody>
