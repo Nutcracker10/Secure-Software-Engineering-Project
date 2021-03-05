@@ -52,6 +52,8 @@
                                     <td th:text="${retrievedReservation.flight.arr_airport}"></td>
                                     <td th:text="${#dates.format(retrievedReservation.flight.arrival, 'MM/dd/yyyy H:mm z')}"></td>
                                     <td th:text="${retrievedReservation.status}"></td>
+                                    <td  th:if="${reservation.status == T(ie.ucd.dfh.model.Status).SCHEDULED}">
+                                       <span th:include="modals/delete_reservation_check.html"></span>
                                 </tbody>
                             </table>
                         </span>

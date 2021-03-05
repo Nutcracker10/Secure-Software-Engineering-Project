@@ -116,4 +116,25 @@ public class UserController {
         return "index";
     }
 
+    @GetMapping("/cancel-res-prompt")
+    public String promptReservationCancel(@RequestParam("id") Long reservationId, Model model ){
+        System.out.println("WE ARE IN");
+        model.addAttribute("resId", reservationId);
+        return "modals/delete_reservation_check.html";
+    }
+
+    @DeleteMapping("/delete-reservation")
+    public String cancelReservations(Model model, String cardType, String cardNumber,
+                                     String expiryMonth, String expiryYear, String securityCode, @RequestParam Long id) {
+        Reservation res = reservationRepository.findById(id).orElse(null);
+        Set<CreditCard> cards = res.getUser().getCreditCards();
+        System.out.println(cards.size());
+        for(CreditCard card : cards){
+            if( card.checkIfDetailsMatch(cardType,cardNumber,expiryMonth,expiryYear,securityCode)){
+                reservationRepository.delete(res);
+            }
+        }
+        return "index";
+    }
+
 }
