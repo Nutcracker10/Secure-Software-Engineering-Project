@@ -1,9 +1,19 @@
+
 DROP TABLE IF EXISTS Reservation;
 DROP TABLE IF EXISTS credit_card;
 DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS Credentials;
 DROP TABLE IF EXISTS flights;
 
 -- USER DETAILS -----------------------------
+
+CREATE TABLE credentials (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  password varchar(300) NOT NULL
+);
+
+INSERT INTO credentials(password) VALUES
+    ('$2a$10$ifQGrQZoHbTJzSQa0HSXwOM5AT3vKf6zGnXMHSixuyFHmVu.5/afy'); /*pass = pass */
 
 
 
@@ -14,14 +24,15 @@ CREATE TABLE user(
     address varchar(300) NOT NULL,
     phone_number varchar(300) NOT NULL,
     email varchar(300) NOT NULL,
-    password varchar(300),
+    credential_id INT,
     role varchar(100) NOT NULL,
     credit_card_id INT,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (credential_id) REFERENCES credentials(id)
 );
 
-INSERT INTO user(first_name, last_name, address, phone_number, email, password, role, credit_card_id) VALUES
-    ('first', 'last', 'ucd', '+3531111111', 'test@test', '$2a$10$ifQGrQZoHbTJzSQa0HSXwOM5AT3vKf6zGnXMHSixuyFHmVu.5/afy', 'member', null); /*pass = pass */
+INSERT INTO user(first_name, last_name, address, phone_number, email, credential_id, role, credit_card_id) VALUES
+    ('first', 'last', 'ucd', '+3531111111', 'test@test', 1, 'member', null); /*pass = pass */
 
 
 CREATE TABLE credit_card(
@@ -79,5 +90,5 @@ CREATE TABLE Reservation (
 );
 
 INSERT INTO Reservation(flight_id, user_id, first_name, last_name, home_address, phonenumber, email, status) VALUES
-    (1, null, 'Bob', 'Bobson', 'Bob Lane', '0761234332', 'bob@bobmail.com', 'SCHEDULED');
+    (1, 1, 'Bob', 'Bobson', 'Bob Lane', '0761234332', 'bob@bobmail.com', 'SCHEDULED');
 

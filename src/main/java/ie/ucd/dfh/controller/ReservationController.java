@@ -45,7 +45,7 @@ public class ReservationController {
 
         // if user is guest, create record of guest and payment
         if (userSession.getUser() == null) {
-            user = new User(firstName, lastName, homeAddress, phonenumber, email, null, "guest");
+            User user = new User(firstName, lastName, homeAddress, phonenumber, email, "guest");
             CreditCard creditCard = new CreditCard(cardType, cardNumber, expiryMonth, expiryYear, securityCode, user);
             userRepository.save(user);
             creditCardRepository.save(creditCard);
@@ -53,7 +53,7 @@ public class ReservationController {
             user = userSession.getUser();
         }
 
-        
+
         if (flight.isPresent()) {
             if (userSession.getUser() == null) {
                 reservation = new Reservation(flight.get(), firstName, lastName, homeAddress, phonenumber, email);
@@ -63,9 +63,17 @@ public class ReservationController {
             }
 
             reservationRepository.save(reservation);
+            if (flight.isPresent()) {
+                Reservation reservation = new Reservation(flight.get(), firstName, lastName, homeAddress, phonenumber, email);
+                reservation.setStatus(Status.SCHEDULED);
+                reservation.setUser(user);
+                reservationRepository.save(reservation);
 
-            response.sendRedirect("/");
+                response.sendRedirect("/");
+            }
         }
+
+
     }
 
 }

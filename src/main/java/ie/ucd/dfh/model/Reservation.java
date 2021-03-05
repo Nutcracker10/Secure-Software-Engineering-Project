@@ -56,7 +56,6 @@ public class Reservation {
         this.email = email;
     }
 
-
     public  Reservation() {}
 
     public Long getReservationId() {
