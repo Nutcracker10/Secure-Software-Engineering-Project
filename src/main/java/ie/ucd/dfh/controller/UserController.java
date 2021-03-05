@@ -91,17 +91,17 @@ public class UserController {
         return "search_flights_results.html";
     }
 
-//
-//    @RequestMapping(value = "/user/delete/{id}", method = RequestMethod.DELETE)
-//    public void deleteUser(@PathVariable Long id, HttpServletResponse response) throws IOException{
-//        User user = userRepository.findUserById(id).orElse(null);
-//        if(user != null && userSession.getUser() != null && userSession.getUser().getId().equals(id)){
-//            for(Reservation reservation : user.getReservations()){
-//                reservation.setUser(null);
-//            }
-//            userRepository.delete(user);
-//            userSession.setUser(null);
-//        }
-//        response.sendRedirect("/");
-//    }
+
+    @RequestMapping(value = "/user/delete/{id}", method = RequestMethod.DELETE)
+    public void deleteUser(@PathVariable Long id, HttpServletResponse response) throws IOException{
+        User user = userRepository.findUserById(id).orElse(null);
+        if(user != null && userSession.getUser() != null && userSession.getUser().getId().equals(id)){
+            for(Reservation reservation : user.getReservations()){
+                reservation.setUser(null);
+            }
+            userRepository.delete(user);
+            userSession.setUser(null);
+        }
+        response.sendRedirect("/");
+    }
 }
