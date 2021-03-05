@@ -47,15 +47,17 @@ public class ReservationController {
             CreditCard creditCard = new CreditCard(cardType, cardNumber, expiryMonth, expiryYear, securityCode, user);
             userRepository.save(user);
             creditCardRepository.save(creditCard);
+            if (flight.isPresent()) {
+                Reservation reservation = new Reservation(flight.get(), firstName, lastName, homeAddress, phonenumber, email);
+                reservation.setStatus(Status.SCHEDULED);
+                reservation.setUser(user);
+                reservationRepository.save(reservation);
+
+                response.sendRedirect("/");
+            }
         }
         
-        if (flight.isPresent()) {
-            Reservation reservation = new Reservation(flight.get(), firstName, lastName, homeAddress, phonenumber, email);
-            reservation.setStatus(Status.SCHEDULED);
-            reservationRepository.save(reservation);
 
-            response.sendRedirect("/");
-        }
     }
 
 }
