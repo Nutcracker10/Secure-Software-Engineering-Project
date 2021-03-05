@@ -63,9 +63,10 @@ public class ReservationController {
     }
 
     @PostMapping(value = "/member-book-flight")
-    public void memberBookFlight(Long flightId, @RequestBody User user, HttpServletResponse response) throws IOException{
+    public void memberBookFlight(@RequestParam("flightId") Long flightId, HttpServletResponse response) throws IOException{
         Reservation reservation;
         Optional<Flight> flight = flightrepository.findFlightById(flightId);
+        User user = userSession.getUser();
 
         if (flight.isPresent()) {
             reservation = new Reservation(flight.get(), user.getFirstName(), user.getLastName(), user.getAddress(), user.getPhoneNumber(), user.getEmail());

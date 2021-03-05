@@ -21,8 +21,12 @@
             <td th:text="${flight.arr_airport}"></td>
             <td th:text="${flight.price}"></td>
             <td>
-                <span th:if="${user} == null" th:include="modals/booking.html"></span>
-                <span th:unless="${user} != null"><a><button th:href="/member-book-flight"></button></a></span>
+                <span th:if="${user == null}" th:include="modals/booking.html"></span>
+                <span th:unless="${user == null}">
+                    <a>
+                        <button class="btn btn-primary"  th:href="@{/member-book-flight(flightId=${flight.id} )}">Book</button>
+                    </a>
+                </span>
             </td>
         </tr>
     </tbody>
