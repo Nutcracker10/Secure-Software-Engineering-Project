@@ -1,7 +1,5 @@
 package ie.ucd.dfh.model;
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.Calendar;
 
 @Entity
@@ -21,7 +19,6 @@ public class Reservation {
 
     @ManyToOne
     private User user;
-
 
     public Reservation(Status status, Flight flight, User user) {
         this.status = status;

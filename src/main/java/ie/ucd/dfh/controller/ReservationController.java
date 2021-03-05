@@ -2,6 +2,7 @@ package ie.ucd.dfh.controller;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.Set;
 
 import ie.ucd.dfh.model.*;
 import ie.ucd.dfh.repository.CreditCardRepository;
@@ -55,8 +56,12 @@ public class ReservationController {
             reservationRepository.save(reservation);
             response.sendRedirect("/");
         }
-        
+    }
 
+    @GetMapping("/show-passengers")
+    public void getPassengers(@RequestParam Long id, Model model){
+        Reservation reservation = reservationRepository.findById(id).orElse(null);
+        System.out.println("Reservation Id " + id);
     }
 
     @RequestMapping(value = "/member-book-flight")

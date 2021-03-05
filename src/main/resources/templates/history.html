@@ -23,6 +23,7 @@
                 <td  th:if="${reservation.status == T(ie.ucd.dfh.model.Status).SCHEDULED}">
                     <span th:include="modals/delete_reservation_check.html"></span>
                 </td>
+                <td><span th:include="modals/view_passengers_history.html"></span></td>
             </tr>
         </tbody>
     </table>

@@ -1,0 +1,33 @@
+<button class="btn btn-primary btn-sm"  data-target="#viewPassengers" data-toggle="modal">
+    View
+</button>
+<div class="modal text-center" id="viewPassengers">
+    <div class="modal-dialog" type="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Passengers</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table>
+                    <thead>
+                        <th>Name</th>
+                        <th>Surname</th>
+                    </thead>
+                    <tbody >
+                        <tr th:each="passenger:${passengers}">
+                            <td th:text="${passenger.user.firstName}"></td>
+                            <td th:text="${passenger.user.lastName}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
