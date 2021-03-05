@@ -29,6 +29,8 @@ spring.datasource.url=jdbc:mysql://localhost:3306/sse
 spring.datasource.username=java
 spring.datasource.password=password
 ```
+6. 
+
 # TO RUN THE PROJECT
 
 In the root directory of the project, run:
