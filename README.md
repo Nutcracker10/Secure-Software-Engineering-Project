@@ -8,9 +8,9 @@
 ## SQL Setup
 
 1. In your MySQL server,  create a database for this project ( the one we used was called 'sse')
-
+```SQL
 CREATE DATABASE sse;
-
+```
 2. Then create a user with a password for the database, we used the name java
 ```SQL
 CREATE USER 'java'@'localhost' IDENTIFIED BY 'password';
