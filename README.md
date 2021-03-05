@@ -1,11 +1,37 @@
-### Java Spring template project
+# READ ME
 
-This project is based on a GitLab [Project Template](https://docs.gitlab.com/ee/gitlab-basics/create-project.html).
+|Member Name | Student # | % worked |
+|------------|:---------:|---------:|
+|James Kirwan| 17402782 | 33% |
+|Caoimhe Tiernan| 17336331 | 33%|
+| Martynas Jagutis| 17424866 | 33% |
+## SQL Setup
 
-Improvements can be proposed in the [original project](https://gitlab.com/gitlab-org/project-templates/spring).
+1. In your MySQL server,  create a database for this project ( the one we used was called 'sse')
 
-### CI/CD with Auto DevOps
+CREATE DATABASE sse;
 
-This template is compatible with [Auto DevOps](https://docs.gitlab.com/ee/topics/autodevops/).
+2. Then create a user with a password for the database, we used the name java
+```SQL
+CREATE USER 'java'@'localhost' IDENTIFIED BY 'password';
+```
+3. Give them permissions for the database.
+```SQL
+GRANT ALL ON sse.* TO 'java'@'localhost' IDENTIFIED BY 'password';
+```
+4. In src/main/resources/application.properties file : <br />
+change spring.datasource.url=" " to source your database
+```
+spring.datasource.url=jdbc:mysql://localhost:3306/sse
+```
+5. Set the username and password to the ones you created earlier
+```
+spring.datasource.username=java
+spring.datasource.password=password
+```
+# TO RUN THE PROJECT
 
-If Auto DevOps is not already enabled for this project, you can [turn it on](https://docs.gitlab.com/ee/topics/autodevops/#enabling-auto-devops) in the project settings.
+In the root directory of the project, run:
+```mvn
+mvn spring-boot:run
+```
