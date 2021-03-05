@@ -48,11 +48,8 @@ public class ReservationController {
             userRepository.save(user);
             creditCardRepository.save(creditCard);
             if (flight.isPresent()) {
-                Reservation reservation = new Reservation(flight.get(), firstName, lastName, homeAddress, phonenumber, email);
-                reservation.setStatus(Status.SCHEDULED);
-                reservation.setUser(user);
+                Reservation reservation = new Reservation(Status.SCHEDULED, flight.get(), user);
                 reservationRepository.save(reservation);
-
                 response.sendRedirect("/");
             }
         }
