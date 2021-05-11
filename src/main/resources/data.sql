@@ -26,3 +26,11 @@ INSERT INTO flights(departure, arrival, dep_airport, arr_airport, capacity, pric
 INSERT INTO reservation(flight_id, user_id,status) VALUES
     ( 1, 1, 'SCHEDULED');
 
+--- LOGIN ATTEMPTS ------------------------------
+CREATE TABLE Attempts (
+    id int(45) NOT NULL AUTO_INCREMENT,
+    username varchar(45) NOT NULL,
+    attempts varchar(45) NOT NULL,
+    PRIMARY KEY (id)
+);
+

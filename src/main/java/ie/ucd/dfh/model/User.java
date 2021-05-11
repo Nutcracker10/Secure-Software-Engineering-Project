@@ -4,6 +4,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -27,6 +28,15 @@ public class User {
     @NotBlank
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @Column(name = "account_non_locked")
+    private boolean accountNonLocked;
+
+    @Column(name = "num_failed_attempts")
+    private int numFailedAttempts;
+
+    @Column(name = "lock_time")
+    private Date lockTime;
 
     @NotBlank
     @Column(name="email")
