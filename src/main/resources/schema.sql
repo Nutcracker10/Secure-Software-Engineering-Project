@@ -46,3 +46,11 @@ status VARCHAR(10) NOT NULL,
 FOREIGN KEY (flight_id) REFERENCES flights (id),
 FOREIGN KEY (user_id) REFERENCES user (id)
 );
+
+--- LOGIN ATTEMPTS ------------------------------
+CREATE TABLE Attempts (
+id int(45) NOT NULL AUTO_INCREMENT,
+username varchar(45) NOT NULL,
+attempts varchar(45) NOT NULL,
+PRIMARY KEY (id)
+);
