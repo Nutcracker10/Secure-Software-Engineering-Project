@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,14 +34,16 @@ public class AuthenticationController {
     @Autowired
     private UserService userService;
 
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @Autowired
     private RoleRepository roleRepository;
 
-    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    @Autowired
+    private BCryptPasswordEncoder encoder;
+
+    @ModelAttribute
+    public void addAttribute(Model model){
+        model.addAttribute("user", userSession.getUser());
+    }
 
     @GetMapping("/login")
     public String login() {
@@ -56,7 +59,7 @@ public class AuthenticationController {
     public String addUser(String firstName, String surname, String username, String address, String phoneNumber, String email, String password) {
         User user = new User();
         user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(password));
+        user.setPassword(encoder.encode(password));
         user.setEmail(email);
         user.setPhoneNumber(phoneNumber);
         user.setAddress(address);
@@ -65,9 +68,12 @@ public class AuthenticationController {
         user.setRoles(Arrays.asList(roleRepository.findByName("USER").orElse(null)));
         userService.save(user);
 
-        //securityService.autoLogin(user.getUsername(), user.getPassword());
+        //TODO NOT REACHING AFTER LOGIN FOR SOME REASON
+        logger.info("Before login");
+        securityService.autoLogin(user.getUsername(), user.getPassword());
+        logger.info("After login");
 
-        return "redirect:/";
+        return "redirect:/profile?id="+user.getId();
     }
 
 

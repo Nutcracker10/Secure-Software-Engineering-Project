@@ -34,12 +34,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login")
+                .defaultSuccessUrl("/", true)
                 .permitAll()
                 .and()
                 .logout()
                 .logoutUrl("/logout")
+
                 .invalidateHttpSession(true)
-                .clearAuthentication(true) .permitAll();
+                .clearAuthentication(true).permitAll();
     }
 
     @Bean

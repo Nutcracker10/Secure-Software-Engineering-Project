@@ -13,11 +13,12 @@ public class Reservation {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToOne    
-    @JoinColumn(name="flightId", nullable = false)
+    @ManyToOne
+    //@JoinColumn(name="flight_id", nullable = false)
     private Flight flight;
 
     @ManyToOne
+    //@JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Reservation(Status status, Flight flight, User user) {

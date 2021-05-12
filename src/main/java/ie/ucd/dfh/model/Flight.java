@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Entity
 @Indexed
-@Table(name = "flights")
+@Table(name = "flight")
 public class Flight {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -41,6 +41,9 @@ public class Flight {
     @Column(name="arr_airport")
     private String arr_airport;
 
+    @Column(name="capacity")
+    private int capacity;
+
     @Min(0)
     @Column(name="price")
     private double price;
@@ -59,29 +62,53 @@ public class Flight {
         this.price = price;
     }
 
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public Long getId() {return this.id; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public void setDeparture(Calendar departure) { this.departure = departure; }
+    public Calendar getDeparture() {
+        return departure;
+    }
 
-    public Calendar getDeparture() { return this.departure; }
+    public void setDeparture(Calendar departure) {
+        this.departure = departure;
+    }
 
-    public void setArrival(Calendar arrival) { this.arrival = arrival;}
+    public Calendar getArrival() {
+        return arrival;
+    }
 
-    public Calendar getArrival() { return this.arrival; }
+    public void setArrival(Calendar arrival) {
+        this.arrival = arrival;
+    }
 
-    public void setDep_airport(String dep_airport) { this.dep_airport = dep_airport; }
+    public String getDep_airport() {
+        return dep_airport;
+    }
 
-    public String getDep_airport() { return this.dep_airport;}
+    public void setDep_airport(String dep_airport) {
+        this.dep_airport = dep_airport;
+    }
 
-    public void setArr_airport(String arr_airport) {this.arr_airport = arr_airport; }
+    public String getArr_airport() {
+        return arr_airport;
+    }
 
-    public String getArr_airport() { return this.arr_airport; }
+    public void setArr_airport(String arr_airport) {
+        this.arr_airport = arr_airport;
+    }
 
-    public void setPrice(double price) { this.price = price; }
+    public double getPrice() {
+        return price;
+    }
 
-    public double getPrice() { return this.price;}
+    public void setPrice(double price) {
+        this.price = price;
+    }
 
     public Set<Reservation> getReservations() {
         return reservations;
@@ -89,5 +116,13 @@ public class Flight {
 
     public void setReservations(Set<Reservation> reservations) {
         this.reservations = reservations;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 }
