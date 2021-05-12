@@ -49,7 +49,12 @@ public class ReservationController {
         if (flight.isPresent()) {
             // if user is guest, create record of guest and payment
 
-            user = new User(firstName, lastName, homeAddress, phonenumber, email, "guest");
+            user = new User();
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setAddress(homeAddress);
+            user.setPhoneNumber(phonenumber);
+            user.setEmail(email);
             CreditCard creditCard = new CreditCard(cardType, cardNumber, expiryMonth, expiryYear, securityCode, user);
             userRepository.save(user);
             creditCardRepository.save(creditCard);

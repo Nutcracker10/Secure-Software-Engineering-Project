@@ -39,7 +39,7 @@ public class UserController {
     public String profile(@RequestParam("id") Long id, Model model, HttpServletResponse response) throws IOException {
         User user = userRepository.findUserById(userSession.getUser().getId()).orElse(null);
 
-        if(user != null && user.getId().equals(id) && user.getRole().equals("member")){
+        if(user != null && user.getId().equals(id)){ //&& user.getRole().equals("member")){
             model.addAttribute("firstName", user.getFirstName());
             model.addAttribute("lastName", user.getLastName());
             model.addAttribute("email", user.getEmail());
@@ -100,7 +100,13 @@ public class UserController {
     public void deleteUser(@PathVariable Long id, HttpServletResponse response) throws IOException{
         User user = userRepository.findUserById(id).orElse(null);
         if(user != null && userSession.getUser() != null && userSession.getUser().getId().equals(id)){
-            User copyUser = new User(user.getFirstName(), user.getLastName(), user.getAddress(), user.getPhoneNumber(), user.getEmail(), "guest");
+            User copyUser = new User();
+            copyUser.setFirstName(user.getFirstName());
+            copyUser.setLastName(user.getLastName());
+            copyUser.setUsername(user.getUsername());
+            copyUser.setAddress(user.getAddress());
+            copyUser.setPhoneNumber(user.getPhoneNumber());
+            copyUser.setEmail(user.getEmail());
             userRepository.save(copyUser);
             for(Reservation reservation : user.getReservations()){
                 reservation.setUser(copyUser);

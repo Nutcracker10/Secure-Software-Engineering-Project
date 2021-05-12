@@ -1,9 +1,15 @@
 package ie.ucd.dfh.model;
 
-import org.springframework.transaction.annotation.Transactional;
+import com.sun.tools.javac.util.List;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -11,6 +17,10 @@ public class User {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String username;
+
+    private String password;
 
     @NotBlank
     @Column(name="first_name")
@@ -21,7 +31,6 @@ public class User {
     private String lastName;
 
     @NotBlank
-    @Column(name="address")
     private String address;
 
     @NotBlank
@@ -29,34 +38,20 @@ public class User {
     private String phoneNumber;
 
     @NotBlank
-    @Column(name="email")
     private String email; //TODO CHECK WHY @EMAIL VALIDATOR DETECT VALID EMAILS AS NOT VALID
 
     @OneToMany(mappedBy = "user")
     private Set<Reservation> reservations;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
-    private Credentials credentials;
-
-    @NotBlank
-    @Column(name="role")
-    private String role;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<CreditCard> creditCards;
 
-    public User() {
-    }
-
-    public User(@NotBlank String firstName, @NotBlank String lastName, @NotBlank String address, @NotBlank String phoneNumber, @NotBlank String email, @NotBlank String role) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.role = role;
-    }
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name="user_roles",
+            joinColumns = @JoinColumn(name="user_id", referencedColumnName="id"),
+            inverseJoinColumns = @JoinColumn(name="role_id", referencedColumnName="id")
+    )
+    private Collection<Role> roles;
 
     public Long getId() {
         return id;
@@ -64,6 +59,22 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getFirstName() {
@@ -114,14 +125,6 @@ public class User {
         this.reservations = reservations;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public Set<CreditCard> getCreditCards() {
         return creditCards;
     }
@@ -130,11 +133,11 @@ public class User {
         this.creditCards = creditCards;
     }
 
-    public Credentials getCredentials() {
-        return credentials;
+    public Collection<Role> getRoles() {
+        return roles;
     }
 
-    public void setCredentials(Credentials credentials) {
-        this.credentials = credentials;
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
     }
 }

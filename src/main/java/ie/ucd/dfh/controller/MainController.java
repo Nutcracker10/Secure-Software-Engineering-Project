@@ -35,11 +35,11 @@ public class MainController {
         return "index";
     }
 
-    @GetMapping("/login")
+/*    @GetMapping("/login")
     public String login(){
         userSession.setEmailTaken(false);
         return "login";
-    }
+    }*/
 
 
 }
