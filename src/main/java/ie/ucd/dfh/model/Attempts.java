@@ -11,7 +11,7 @@ public class Attempts {
 
     private String username;
 
-    private int attemps;
+    private int attempts;
 
     public int getId() {
         return id;
@@ -29,12 +29,12 @@ public class Attempts {
         this.username = username;
     }
 
-    public int getAttemps() {
-        return attemps;
+    public int getAttempts() {
+        return attempts;
     }
 
-    public void setAttemps(int attemps) {
-        this.attemps = attemps;
+    public void setAttempts(int attempts) {
+        this.attempts = attempts;
     }
 
 }
