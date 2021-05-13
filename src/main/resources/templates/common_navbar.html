@@ -17,11 +17,11 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">Executive Club Members</a>
             </li>
-            <li class="nav-item" th:if="${user != null}">
-                <a class="nav-link" th:href="@{/history(id=${user.id})}">Your History</a>
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a class="nav-link" th:href="@{/history(id=${#authentication.getPrincipal().getUser().getId()})}">Your History</a>
             </li>
-            <li class="nav-item" th:if="${user != null}">
-                <a class="nav-link" th:href="@{/profile(id=${user.id})}">Profile</a>
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a class="nav-link" th:href="@{/profile/{username}(username=${#authentication.getPrincipal().getUsername()})}">Profile</a>
             </li>
         </ul>
         <form class="form-inline my-2 my-lg-0" th:action="@{/search_flights}" th:object="${fight}">
