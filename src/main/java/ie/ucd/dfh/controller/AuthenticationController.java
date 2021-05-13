@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.logging.Logger;
 
 @Controller
@@ -47,6 +48,7 @@ public class AuthenticationController {
 
     @GetMapping("/login")
     public String login() {
+        System.out.println("Logged in " + securityService.findLoggedInUsername());
         return "login";
     }
 
@@ -65,75 +67,31 @@ public class AuthenticationController {
         user.setAddress(address);
         user.setFirstName(firstName);
         user.setLastName(surname);
-        user.setRoles(Arrays.asList(roleRepository.findByName("USER").orElse(null)));
+        //user.setRoles(new HashSet<>(roleRepository.findByName()));
         userService.save(user);
 
         //TODO NOT REACHING AFTER LOGIN FOR SOME REASON
         logger.info("Before login");
-        securityService.autoLogin(user.getUsername(), user.getPassword());
+        securityService.authenticate(user.getUsername(), user.getPassword());
         logger.info("After login");
 
         return "redirect:/profile?id="+user.getId();
     }
 
-
-/*    @PostMapping("/registration")
-    public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult) {
-        //userValidator.validate(userForm, bindingResult);
-        System.out.println("mail " + userForm.getEmail());
-
-        if (bindingResult.hasErrors()) {
-            return "registration";
-        }
-        userService.save(userForm);
-
-        //securityService.autoLogin(userForm.getUsername(), userForm.getPasswordConfirm());
-        return "redirect:/";
-    }*/
-
-/*    @PostMapping("/login")
-    public void processLogin(Model model, String email, String password, HttpServletResponse response) throws IOException{
-        User user = userService.findByEmail(email);
-        boolean success = user != null && encoder.matches(password, user.getPassword());
-        if (success){
-            logger.info("Login Success");
-            userSession.setUser(user);
-            userSession.setLoginFailed(false);
-            response.sendRedirect("/");
-        }else{
-            logger.info("Login Unsuccessful");
-            userSession.setLoginFailed(true);
-            response.sendRedirect("/login");
-        }
-    }
-
-    @PostMapping("/registration")
-    public void processRegistration(String firstName, String surname, String address, String phoneNumber, String email, String password, HttpServletResponse response) throws IOException {
-        User user = userService.findByEmail(email);
-        if(user != null) {
-            logger.info("Registration Unsuccessful");
-
-            userSession.setEmailTaken(true);
-            response.sendRedirect("/login");
-        }
-        else{
-            logger.info("Registration Success");
-            userSession.setEmailTaken(false);
-            String encodedPassword = encoder.encode(password);
-            user = new User(firstName, surname, address, phoneNumber, email);
-            user.setPassword(encodedPassword);
+    @PostMapping("/change-password")
+    public String changePassword(Model model, String currentPassword, String newPassword, String confirmPassword){
+        User user = userSession.getUser();
+        if(encoder.matches(currentPassword, user.getPassword()) && confirmPassword.equals(newPassword)){
+            user.setPassword(encoder.encode(confirmPassword));
             userService.save(user);
-            securityService.autoLogin(user.getEmail(), user.getPassword());
-            userSession.setUser(user);
-            response.sendRedirect("/profile?id="+user.getId());
         }
-
+        return "redirect:/profile?id="+user.getId();
     }
 
-    @GetMapping("/logout")
-    public void logout(HttpServletResponse response) throws IOException{
+    @PostMapping ("/logout")
+    public String logout(){
         userSession.setUser(null);
-        response.sendRedirect("/");
-    }*/
+        return "redirect:/";
+    }
 
 }

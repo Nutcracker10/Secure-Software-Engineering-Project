@@ -47,6 +47,8 @@
                             </tbody>
                         </table>
                         <span th:include="modals/edit_profile.html"></span>
+                        <span th:include="modals/change_password.html"></span>
+
                         <button form="deleteRegistration" type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
                         <form id="deleteRegistration" action="#" th:action="@{'/user/delete/{id}'(id=${user.id})}" th:method="delete">
 

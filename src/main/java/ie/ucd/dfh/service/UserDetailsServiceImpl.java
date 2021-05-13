@@ -26,15 +26,10 @@ public class UserDetailsServiceImpl implements UserDetailsService{
     private UserSession userSession;
 
     @Override
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) {
         User user = userRepository.findByUsername(username).orElse(null);
-        if (user == null || user.getPassword() == null) throw new UsernameNotFoundException(username);
-        userSession.setUser(user);
-        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        for (Role role : user.getRoles()){
-            grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
-        }
 
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
+        return new ACUserDetails(user);
     }
 }

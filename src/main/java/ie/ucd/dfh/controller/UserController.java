@@ -5,6 +5,7 @@ import ie.ucd.dfh.model.*;
 import ie.ucd.dfh.repository.ReservationRepository;
 import ie.ucd.dfh.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -35,23 +36,26 @@ public class UserController {
         model.addAttribute("user", userSession.getUser());
     }
 
-    @GetMapping("/profile")
-    public String profile(@RequestParam("id") Long id, Model model, HttpServletResponse response) throws IOException {
-        User user = userRepository.findUserById(userSession.getUser().getId()).orElse(null);
+    @PreAuthorize("#username= authentication.name or hasAuthority('ADMIN')")
+    @GetMapping("/profile/{username}")
+    public String profile(@PathVariable String username, Model model) {
+        User user = userRepository.findByUsername(username).orElse(null);
 
-        if(user != null && user.getId().equals(id)){ //&& user.getRole().equals("member")){
+        if(user != null){
             model.addAttribute("firstName", user.getFirstName());
             model.addAttribute("lastName", user.getLastName());
             model.addAttribute("email", user.getEmail());
             model.addAttribute("address", user.getAddress());
             model.addAttribute("phoneNumber", user.getPhoneNumber());
             model.addAttribute("creditCards", user.getCreditCards());
+            model.addAttribute("user", user);
         }else{
-            response.sendRedirect("/");
+            return "redirect:/";
         }
 
         return "user_profile";
     }
+
 
     @PostMapping("/edit-profile")
     public void editProfile(Model model, String firstName, String lastName, String phoneNumber, String address, String email, HttpServletResponse response) throws IOException{
@@ -67,7 +71,6 @@ public class UserController {
             response.sendRedirect("/profile?id="+user.getId());
         }
     }
-
 
     @GetMapping("/history")
     public String displayHistory(@RequestParam("id") Long id, Model model) {
@@ -149,5 +152,7 @@ public class UserController {
         }
         return "index";
     }
+
+
 
 }
