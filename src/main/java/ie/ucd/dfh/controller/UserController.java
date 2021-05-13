@@ -1,18 +1,19 @@
 package ie.ucd.dfh.controller;
 
-import ie.ucd.dfh.UserSession;
 import ie.ucd.dfh.model.*;
 import ie.ucd.dfh.repository.ReservationRepository;
 import ie.ucd.dfh.repository.UserRepository;
+import ie.ucd.dfh.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -21,7 +22,7 @@ import java.util.Set;
 public class UserController {
 
     @Autowired
-    private UserSession userSession;
+    private UserService userService;
 
     @Autowired
     private UserRepository userRepository;
@@ -30,11 +31,6 @@ public class UserController {
 
     @Autowired
     private ReservationRepository reservationRepository;
-
-    @ModelAttribute
-    public void addAttribute(Model model){
-        model.addAttribute("user", userSession.getUser());
-    }
 
     @PreAuthorize("#username= authentication.name or hasAuthority('ADMIN')")
     @GetMapping("/profile/{username}")
@@ -58,8 +54,8 @@ public class UserController {
 
 
     @PostMapping("/edit-profile")
-    public void editProfile(Model model, String firstName, String lastName, String phoneNumber, String address, String email, HttpServletResponse response) throws IOException{
-        User user = userRepository.findUserById(userSession.getUser().getId()).orElse(null);
+    public void editProfile(Principal principal, String firstName, String lastName, String phoneNumber, String address, String email, HttpServletResponse response) throws IOException{
+        User user = userService.findByUsername(principal.getName());
         if(user != null) {
             user.setFirstName(firstName);
             user.setLastName(lastName);
@@ -68,6 +64,7 @@ public class UserController {
             user.setAddress(address);
 
             userRepository.save(user);
+
             response.sendRedirect("/profile?id="+user.getId());
         }
     }
@@ -100,9 +97,9 @@ public class UserController {
 
 
     @RequestMapping(value = "/user/delete/{id}", method = RequestMethod.DELETE)
-    public void deleteUser(@PathVariable Long id, HttpServletResponse response) throws IOException{
-        User user = userRepository.findUserById(id).orElse(null);
-        if(user != null && userSession.getUser() != null && userSession.getUser().getId().equals(id)){
+    public void deleteUser(@PathVariable Long id, Principal principal, HttpServletResponse response) throws IOException{
+        User user = userService.findByUsername(principal.getName());
+        if(user != null ){
             User copyUser = new User();
             copyUser.setFirstName(user.getFirstName());
             copyUser.setLastName(user.getLastName());
@@ -114,8 +111,8 @@ public class UserController {
             for(Reservation reservation : user.getReservations()){
                 reservation.setUser(copyUser);
             }
+            SecurityContextHolder.getContext().setAuthentication(null);
             userRepository.delete(user);
-            userSession.setUser(null);
         }
         response.sendRedirect("/");
     }

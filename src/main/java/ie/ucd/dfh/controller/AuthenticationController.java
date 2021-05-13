@@ -1,24 +1,17 @@
 package ie.ucd.dfh.controller;
 
-import ie.ucd.dfh.UserSession;
 import ie.ucd.dfh.model.User;
 import ie.ucd.dfh.repository.RoleRepository;
 import ie.ucd.dfh.service.SecurityService;
 import ie.ucd.dfh.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.security.Principal;
 import java.util.logging.Logger;
 
 @Controller
@@ -30,25 +23,13 @@ public class AuthenticationController {
     private SecurityService securityService;
 
     @Autowired
-    private UserSession userSession;
-
-    @Autowired
     private UserService userService;
-
-    @Autowired
-    private RoleRepository roleRepository;
 
     @Autowired
     private BCryptPasswordEncoder encoder;
 
-    @ModelAttribute
-    public void addAttribute(Model model){
-        model.addAttribute("user", userSession.getUser());
-    }
-
     @GetMapping("/login")
     public String login() {
-        System.out.println("Logged in " + securityService.findLoggedInUsername());
         return "login";
     }
 
@@ -79,8 +60,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/change-password")
-    public String changePassword(Model model, String currentPassword, String newPassword, String confirmPassword){
-        User user = userSession.getUser();
+    public String changePassword(Principal principal, String currentPassword, String newPassword, String confirmPassword){
+        User user = userService.findByUsername(principal.getName());
         if(encoder.matches(currentPassword, user.getPassword()) && confirmPassword.equals(newPassword)){
             user.setPassword(encoder.encode(confirmPassword));
             userService.save(user);
@@ -90,7 +71,6 @@ public class AuthenticationController {
 
     @PostMapping ("/logout")
     public String logout(){
-        userSession.setUser(null);
         return "redirect:/";
     }
 

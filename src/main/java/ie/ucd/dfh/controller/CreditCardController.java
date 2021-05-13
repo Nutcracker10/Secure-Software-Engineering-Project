@@ -1,20 +1,17 @@
 package ie.ucd.dfh.controller;
 
-import ie.ucd.dfh.UserSession;
 import ie.ucd.dfh.model.CreditCard;
 import ie.ucd.dfh.model.User;
 import ie.ucd.dfh.repository.CreditCardRepository;
 import ie.ucd.dfh.repository.UserRepository;
+import ie.ucd.dfh.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.security.Principal;
 
 @Controller
 public class CreditCardController {
@@ -26,47 +23,40 @@ public class CreditCardController {
     private UserRepository userRepository;
 
     @Autowired
-    private UserSession userSession;
+    private UserService userService;
 
     @PostMapping("/add-credit-card")
-    public void addCreditCard(Model model, String cardType, String cardNumber, String expiryMonth, String expiryYear, String securityCode, HttpServletResponse response) throws IOException {
-
-        User user = userRepository.findUserById(userSession.getUser().getId()).orElse(null);
+    public String addCreditCard(Principal principal, String cardType, String cardNumber, String expiryMonth, String expiryYear, String securityCode) {
+        User user = userService.findByUsername(principal.getName());
 
         if(user != null){
             CreditCard creditCard = new CreditCard(cardType, cardNumber, expiryMonth, expiryYear, securityCode, user);
             creditCardRepository.save(creditCard);
-
-            userSession.setUser(user);
             userRepository.save(user);
-            response.sendRedirect("/profile?id="+user.getId());
-        }else{
-            response.sendRedirect("/");
+            return "redirect:/profile/"+principal.getName();
         }
+        return "redirect:/";
     }
 
     @DeleteMapping("/credit-card/delete/{id}")
-    public void deleteCreditCard(@PathVariable Long id, HttpServletResponse response) throws IOException {
-        User user = userSession.getUser();
-        if(user != null){
+    public String deleteCreditCard(@PathVariable Long id, Principal principal){
+        User user = userService.findByUsername(principal.getName());
+        if(user != null) {
             CreditCard creditCard = creditCardRepository.findById(id).orElse(null);
-            if(creditCard != null && creditCard.getCreditCardId().equals(id)){
+            if (creditCard != null && creditCard.getCreditCardId().equals(id)) {
                 user.setCreditCards(null);
                 userRepository.save(user);
                 creditCardRepository.delete(creditCard);
-                response.sendRedirect("/profile?id="+user.getId());
-            }else{
-                response.sendRedirect("/");
+                return "redirect:/profile/" + principal.getName();
             }
-        }else{
-            response.sendRedirect("/");
         }
+        return "redirect:/";
     }
 
     @PutMapping("credit-card/update")
-    public void updateCreditCard(Long creditCardId, String cardType, String cardNumber, String expiryMonth, String expiryYear, String securityCode, HttpServletResponse response) throws IOException {
+    public String updateCreditCard(Long creditCardId, Principal principal, String cardType, String cardNumber, String expiryMonth, String expiryYear, String securityCode) {
         CreditCard creditCard = creditCardRepository.findById(creditCardId).orElse(null);
-        User user = userSession.getUser();
+        User user = userService.findByUsername(principal.getName());
         if(creditCard != null && user != null && creditCard.getUser().getId().equals(user.getId())){
             creditCard.setCardType(cardType);
             creditCard.setCardNumber(cardNumber);
@@ -74,9 +64,8 @@ public class CreditCardController {
             creditCard.setExpiryYear(expiryYear);
             creditCard.setSecurityCode(securityCode);
             creditCardRepository.save(creditCard);
-            response.sendRedirect("/profile?id="+user.getId());
-        }else{
-            response.sendRedirect("/");
+            return "redirect:/profile/" + principal.getName();
         }
+        return "redirect:/";
     }
 }
