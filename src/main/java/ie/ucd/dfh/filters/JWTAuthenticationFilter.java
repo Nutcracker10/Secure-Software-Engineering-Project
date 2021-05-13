@@ -3,6 +3,7 @@ package ie.ucd.dfh.filters;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import ie.ucd.dfh.model.User;
+import ie.ucd.dfh.service.ACUserDetails;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -40,7 +41,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest servletRequest, HttpServletResponse servletResponse,
                                             FilterChain chain, Authentication auth) throws IOException, ServletException {
         String token  = JWT.create()
-                .withSubject(((User) auth.getPrincipal()).getUsername())
+                .withSubject(((ACUserDetails) auth.getPrincipal()).getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + SecurityConstant.EXPIRATION_TIME))
                 .sign(Algorithm.HMAC512(SecurityConstant.SECRET.getBytes()));
 
