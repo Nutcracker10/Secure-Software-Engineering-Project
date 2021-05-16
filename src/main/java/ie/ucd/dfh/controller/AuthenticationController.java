@@ -1,9 +1,10 @@
 package ie.ucd.dfh.controller;
 
 import ie.ucd.dfh.model.User;
-import ie.ucd.dfh.repository.RoleRepository;
 import ie.ucd.dfh.service.SecurityService;
 import ie.ucd.dfh.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -12,12 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
-import java.util.logging.Logger;
 
 @Controller
 public class AuthenticationController {
 
-    private Logger logger = Logger.getLogger(getClass().getName());
+    private static final Logger log = LoggerFactory.getLogger(AuthenticationController.class);
 
     @Autowired
     private SecurityService securityService;
@@ -40,6 +40,11 @@ public class AuthenticationController {
 
     @PostMapping( "/registration")
     public String addUser(String firstName, String surname, String username, String address, String phoneNumber, String email, String password) {
+        if(userService.findByUsername(username) != null || userService.findByEmail(email) != null){
+            log.info("Could not register User. Username or email already exists.");
+            return "redirect:/registration";
+        }
+
         User user = new User();
         user.setUsername(username);
         user.setPassword(encoder.encode(password));
@@ -50,11 +55,10 @@ public class AuthenticationController {
         user.setLastName(surname);
         //user.setRoles(new HashSet<>(roleRepository.findByName()));
         userService.save(user);
+        log.info("User with ID "+user.getId()+" has registered.");
 
         //TODO NOT REACHING AFTER LOGIN FOR SOME REASON
-        logger.info("Before login");
         securityService.authenticate(user.getUsername(), user.getPassword());
-        logger.info("After login");
 
         return "redirect:/profile?id="+user.getId();
     }
@@ -65,6 +69,7 @@ public class AuthenticationController {
         if(encoder.matches(currentPassword, user.getPassword()) && confirmPassword.equals(newPassword)){
             user.setPassword(encoder.encode(confirmPassword));
             userService.save(user);
+            log.info("Password successfully changed for user with ID "+user.getId());
         }
         return "redirect:/profile?id="+user.getId();
     }

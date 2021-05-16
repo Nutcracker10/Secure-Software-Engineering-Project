@@ -4,6 +4,8 @@ import ie.ucd.dfh.model.*;
 import ie.ucd.dfh.repository.ReservationRepository;
 import ie.ucd.dfh.repository.UserRepository;
 import ie.ucd.dfh.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +22,8 @@ import java.util.Set;
 
 @Controller
 public class UserController {
+
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserService userService;
@@ -113,7 +117,11 @@ public class UserController {
             }
             SecurityContextHolder.getContext().setAuthentication(null);
             userRepository.delete(user);
+            log.info("User [ID:"+user.getId()+"] has been deleted.");
+        }else{
+            log.warn("Unauthorized user attempted to delete user [ID:"+id+"]");
         }
+
         response.sendRedirect("/");
     }
 

@@ -8,6 +8,8 @@ import ie.ucd.dfh.model.*;
 import ie.ucd.dfh.repository.CreditCardRepository;
 import ie.ucd.dfh.repository.UserRepository;
 import ie.ucd.dfh.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class ReservationController {
+
+    private static final Logger log = LoggerFactory.getLogger(ReservationController.class);
 
     @Autowired
     private UserService userService;
