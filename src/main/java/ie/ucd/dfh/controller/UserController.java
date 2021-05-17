@@ -36,7 +36,7 @@ public class UserController {
     @Autowired
     private ReservationRepository reservationRepository;
 
-    @PreAuthorize("#username= authentication.name or hasAuthority('ADMIN')")
+    @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")
     @GetMapping("/profile/{username}")
     public String profile(@PathVariable String username, Model model) {
         User user = userRepository.findByUsername(username).orElse(null);

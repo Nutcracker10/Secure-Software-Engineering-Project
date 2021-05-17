@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -28,6 +29,7 @@ import static ie.ucd.dfh.filters.SecurityConstant.COOKIE_NAME;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Qualifier("userDetailsServiceImpl")
@@ -62,13 +64,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.cors().and().csrf().disable()
+                //.requiresChannel().anyRequest().requiresSecure().and()
                 .authorizeRequests()
                 .antMatchers("/resources/**", "/registration", "/login", "/", "/show-all-flights").permitAll()
                 .antMatchers("/profile").access("hasAnyAuthority('ADMIN', 'USER')")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .failureHandler(authenticationFailureHandler())
+                //.failureHandler(authenticationFailureHandler())
                 .defaultSuccessUrl("/", true)
                 .loginPage("/login")
                 .permitAll()
@@ -78,8 +81,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .deleteCookies(COOKIE_NAME)
                 .permitAll()
                 .and()
-//                .addFilter(new JWTAuthenticationFilter(authenticationManager()))
-//                .addFilter(new JWTAuthorizationFilter(authenticationManager()))
+                .addFilter(new JWTAuthenticationFilter(authenticationManager()))
+                .addFilter(new JWTAuthorizationFilter(authenticationManager()))
                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
