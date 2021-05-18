@@ -35,6 +35,9 @@
                         <label for="email-reg">Email Address:</label>
                         <input type="email" class="form-control" id="email-reg" name="email" placeholder="Enter your email address" autocomplete="off" pattern=".{1,}" required title="Can't be blank">
                     </div>
+                    <span th:if="invalidPass != null">
+                        <label style="color:red"; th:text=""${invalidPass}></label>
+                    </span>
                     <div class="form-group">
                         <label for="password-reg">Password:</label>
                         <input type="password" class="form-control" id="password-reg" name="password" placeholder="Password" autocomplete="off" pattern=".{1,}" required title="Can't be blank">
