@@ -79,4 +79,43 @@ public class AuthenticationController {
         return "redirect:/";
     }
 
+    private boolean strongPass(String password) {
+        boolean flag = false;
+        if ( password.length() < 8) {
+            return false;
+        }
+        //Check for at least one upper case character
+        for (int i=0; i<password.length(); i++){
+            flag = Character.isUpperCase(password.charAt(i));
+
+            if (flag == true )
+                break;
+        }
+        if (flag != true) {
+            return  false;
+        }
+        flag = false;
+        //check for number in password
+        for (int i=0; i<password.length(); i++) {
+            flag = Character.isDigit(password.charAt(i));
+
+            if ( flag == true )
+                break;
+        }
+        if (flag != true) {
+            return false;
+        }
+        flag = false;
+        //check for special char in password
+        for (int i=0; i<password.length(); i++ ) {
+            flag = (String.valueOf(password.charAt(i)).matches("[^a-zA-Z0-9]") );
+
+            if (flag == true) {
+                break;
+            }
+        }
+        return true;
+    }
+
+
 }
