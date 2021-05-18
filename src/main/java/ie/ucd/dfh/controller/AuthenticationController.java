@@ -39,28 +39,36 @@ public class AuthenticationController {
     }
 
     @PostMapping( "/registration")
-    public String addUser(String firstName, String surname, String username, String address, String phoneNumber, String email, String password) {
+    public String addUser(Model model, String firstName, String surname, String username, String address, String phoneNumber, String email, String password) {
         if(userService.findByUsername(username) != null || userService.findByEmail(email) != null){
             log.info("Could not register User. Username or email already exists.");
             return "redirect:/registration";
         }
 
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(encoder.encode(password));
-        user.setEmail(email);
-        user.setPhoneNumber(phoneNumber);
-        user.setAddress(address);
-        user.setFirstName(firstName);
-        user.setLastName(surname);
-        //user.setRoles(new HashSet<>(roleRepository.findByName()));
-        userService.save(user);
-        log.info("User with ID "+user.getId()+" has registered.");
+        String invalidPass = null;
 
-        //TODO NOT REACHING AFTER LOGIN FOR SOME REASON
-        securityService.authenticate(user.getUsername(), user.getPassword());
+        if (strongPass(password) == true) {
+            User user = new User();
+            user.setUsername(username);
+            user.setPassword(encoder.encode(password));
+            user.setEmail(email);
+            user.setPhoneNumber(phoneNumber);
+            user.setAddress(address);
+            user.setFirstName(firstName);
+            user.setLastName(surname);
+            //user.setRoles(new HashSet<>(roleRepository.findByName()));
+            userService.save(user);
+            log.info("User with ID " + user.getId() + " has registered.");
 
-        return "redirect:/profile?id="+user.getId();
+            //TODO NOT REACHING AFTER LOGIN FOR SOME REASON
+            securityService.authenticate(user.getUsername(), user.getPassword());
+
+            return "redirect:/profile?id=" + user.getId();
+        } else {
+            invalidPass = "Password must be at least 8 characters long and contain at least one capital letter, a number and a special character";
+            model.addAttribute("invalidPass", invalidPass);
+            return "redirect:/registration";
+        }
     }
 
     @PostMapping("/change-password")
