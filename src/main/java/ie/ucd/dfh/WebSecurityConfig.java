@@ -70,11 +70,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+        String[] staticResources  =  {
+                "/css/**",
+                "/images/**",
+                "/fonts/**",
+                "/scripts/**",
+
+        };
+
         http.cors().and().csrf().disable()
                 .requiresChannel().anyRequest().requiresSecure().and()
                 .authorizeRequests()
-                .antMatchers("/resources/**", "/registration", "/login", "/", "/show-all-flights").permitAll()
-                .antMatchers("/profile").access("hasAnyAuthority('ADMIN', 'USER')")
+                .antMatchers(staticResources).permitAll()
+                .antMatchers( "/registration", "/login", "/", "/show-all-flights", "/book-flight", "/reservation").permitAll()
+                .antMatchers("/profile", "/history", "/user/delete").access("hasAnyAuthority('ADMIN', 'USER')")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

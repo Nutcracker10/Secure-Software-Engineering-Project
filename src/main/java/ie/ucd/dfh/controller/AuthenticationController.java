@@ -6,6 +6,7 @@ import ie.ucd.dfh.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,11 +29,13 @@ public class AuthenticationController {
     @Autowired
     private BCryptPasswordEncoder encoder;
 
+    @PreAuthorize("permitAll()")
     @GetMapping("/login")
     public String login() {
         return "login";
     }
 
+    @PreAuthorize("permitAll()")
     @GetMapping("/registration")
     public String registration(Model model) {
         return "registration";
@@ -59,6 +62,7 @@ public class AuthenticationController {
         return "redirect:/profile?id="+user.getId();
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/change-password")
     public String changePassword(Principal principal, String currentPassword, String newPassword, String confirmPassword){
         User user = userService.findByUsername(principal.getName());
@@ -67,7 +71,7 @@ public class AuthenticationController {
             userService.save(user);
             log.info("Password successfully changed for user with ID "+user.getId());
         }
-        return "redirect:/profile?id="+user.getId();
+        return "redirect:/profile/"+user.getUsername();
     }
 
     @PostMapping ("/logout")

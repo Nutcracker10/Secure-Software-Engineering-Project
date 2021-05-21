@@ -30,6 +30,7 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private HibernateSearchDao searchservice;
 
@@ -56,7 +57,7 @@ public class UserController {
         return "user_profile";
     }
 
-
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     @PostMapping("/edit-profile")
     public void editProfile(Principal principal, String firstName, String lastName, String phoneNumber, String address, String email, HttpServletResponse response) throws IOException{
         User user = userService.findByUsername(principal.getName());
@@ -69,19 +70,22 @@ public class UserController {
 
             userRepository.save(user);
 
-            response.sendRedirect("/profile?id="+user.getId());
+            response.sendRedirect("/profile/"+user.getUsername());
         }
     }
 
-    @GetMapping("/history")
-    public String displayHistory(@RequestParam("id") Long id, Model model) {
-        Optional<User> userResponse = userRepository.findUserById(id);
-        User user = userResponse.get();
-        Set<Reservation> reservations =  user.getReservations();
-        model.addAttribute("reservations", reservations);
-
-        return "history.html";
+    @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")
+    @GetMapping("/history/{username}")
+    public String displayHistory(@PathVariable String username, Model model) {
+        User user = userService.findByUsername(username);
+        if(user != null){
+            Set<Reservation> reservations =  user.getReservations();
+            model.addAttribute("reservations", reservations);
+            return "history.html";
+        }
+        return "redirect:/";
     }
+
 
     @GetMapping("/search_flights")
     public String displayFlights(@RequestParam(value="search",required = false)String query, Model model){
@@ -100,6 +104,7 @@ public class UserController {
     }
 
 
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     @RequestMapping(value = "/user/delete/{id}", method = RequestMethod.DELETE)
     public void deleteUser(@PathVariable Long id, Principal principal, HttpServletResponse response) throws IOException{
         User user = userService.findByUsername(principal.getName());
@@ -125,6 +130,7 @@ public class UserController {
         response.sendRedirect("/");
     }
 
+    @PreAuthorize("permitAll()")
     @GetMapping("/reservation")
     public String getReservation(Model model, @RequestParam Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
@@ -139,11 +145,11 @@ public class UserController {
 
     @GetMapping("/cancel-res-prompt")
     public String promptReservationCancel(@RequestParam("id") Long reservationId, Model model ){
-        System.out.println("WE ARE IN");
         model.addAttribute("resId", reservationId);
         return "modals/delete_reservation_check.html";
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     @DeleteMapping("/delete-reservation")
     public String cancelReservations(Model model, String cardType, String cardNumber,
                                      String expiryMonth, String expiryYear, String securityCode, @RequestParam Long id) {

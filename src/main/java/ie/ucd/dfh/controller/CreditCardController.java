@@ -8,6 +8,7 @@ import ie.ucd.dfh.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,7 @@ public class CreditCardController {
     @Autowired
     private UserService userService;
 
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/add-credit-card")
     public String addCreditCard(Principal principal, String cardType, String cardNumber, String expiryMonth, String expiryYear, String securityCode) {
         User user = userService.findByUsername(principal.getName());
@@ -37,12 +39,14 @@ public class CreditCardController {
             CreditCard creditCard = new CreditCard(cardType, cardNumber, expiryMonth, expiryYear, securityCode, user);
             creditCardRepository.save(creditCard);
             userRepository.save(user);
-            log.info("User [ID:"+user.getId()+"] successfully added a new credit card");
+            log.info(String.format("Credit Card Added: [User ID: %s, username: %s, Credit Card ID: %s]",
+                    user.getId(), principal.getName(), creditCard.getCreditCardId()));
             return "redirect:/profile/"+principal.getName();
         }
         return "redirect:/";
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @DeleteMapping("/credit-card/delete/{id}")
     public String deleteCreditCard(@PathVariable Long id, Principal principal){
         User user = userService.findByUsername(principal.getName());
@@ -52,13 +56,15 @@ public class CreditCardController {
                 user.setCreditCards(null);
                 userRepository.save(user);
                 creditCardRepository.delete(creditCard);
-                log.info("User [ID:"+user.getId()+"] successfully deleted credit card");
+                log.info(String.format("Credit Card Deleted: [User ID: %s, username: %s, Credit Card ID: %s]",
+                        user.getId(), principal.getName(), creditCard.getCreditCardId()));
                 return "redirect:/profile/" + principal.getName();
             }
         }
         return "redirect:/";
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @PutMapping("credit-card/update")
     public String updateCreditCard(Long creditCardId, Principal principal, String cardType, String cardNumber, String expiryMonth, String expiryYear, String securityCode) {
         CreditCard creditCard = creditCardRepository.findById(creditCardId).orElse(null);
@@ -70,7 +76,8 @@ public class CreditCardController {
             creditCard.setExpiryYear(expiryYear);
             creditCard.setSecurityCode(securityCode);
             creditCardRepository.save(creditCard);
-            log.info("User [ID:"+user.getId()+"] successfully modified credit card");
+            log.info(String.format("Credit Card Modified: [User ID: %s, username: %s, Credit Card ID: %s]",
+                    user.getId(), principal.getName(), creditCard.getCreditCardId()));
             return "redirect:/profile/" + principal.getName();
         }
         return "redirect:/";

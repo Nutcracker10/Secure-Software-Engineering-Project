@@ -11,6 +11,7 @@ import ie.ucd.dfh.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -41,15 +42,15 @@ public class ReservationController {
     @Autowired
     private FlightRepository flightrepository;
 
+
+    @PreAuthorize("permitAll()")
     @PostMapping(value="/book-flight")
     public String bookFlight(Long flightId, String firstName, String lastName, String homeAddress, String phonenumber, String email,
-                           String cardType, String cardNumber, String expiryMonth, String expiryYear, String securityCode,
-                           HttpServletResponse response, RedirectAttributes redirectAttributes) throws IOException {
+                           String cardType, String cardNumber, String expiryMonth, String expiryYear, String securityCode, RedirectAttributes redirectAttributes) {
 
         Optional<Flight> flight = flightrepository.findFlightById(flightId);
         User user;
         Reservation reservation;
-
 
         if (flight.isPresent()) {
             // if user is guest, create record of guest and payment
@@ -71,11 +72,13 @@ public class ReservationController {
         return "redirect:/";
     }
 
+
     @GetMapping("/show-passengers")
     public void getPassengers(@RequestParam Long id, Model model){
         Reservation reservation = reservationRepository.findById(id).orElse(null);
     }
 
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @RequestMapping(value = "/member-book-flight")
     public void memberBookFlight(@RequestParam("flightId") Long flightId, Principal principal, HttpServletResponse response) throws IOException{
         Reservation reservation;
@@ -85,7 +88,10 @@ public class ReservationController {
         if (flight.isPresent()) {
             reservation = new Reservation(Status.SCHEDULED, flight.get(), user);
             reservationRepository.save(reservation);
+            log.info(String.format("Flight Booked: [User ID: %s, username: %s, Flight ID: %s, Reservation ID: %s]",
+                    user.getId(), principal.getName(), flight.get().getId(), reservation.getReservationId()));
         }
+
         response.sendRedirect("/");
     }
 

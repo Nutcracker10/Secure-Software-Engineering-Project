@@ -26,7 +26,7 @@
                         <p class="lead">
                             <a class="btn btn-primary btn-lg" href="/show-all-flights" role="button">Book Flight</a>
                         </p>
-                        <div th:if="${user == null}">
+                        <div sec:authorize="!isAuthenticated()">
                             <p>Retrieve your past reservation</p>
                             <p class="lead">
                                 <form class="form-inline my-2 my-lg-0" action="/reservation" method="GET">
@@ -36,7 +36,7 @@
                             </p>
                         </div>
                     </div>
-                    <div th:if="${user == null}">
+                    <div sec:authorize="!isAuthenticated()">
                         <span th:if="${retrievedReservation != null}">
                             <table class= "table table-hover">
                                 <thead>

@@ -72,7 +72,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication auth) throws IOException, ServletException {
-        log.info(String.format("Successful Authentication: [username: %s]",
+            log.info(String.format("Successful Login: [username: %s]",
                 request.getParameter("username")));
 
         String token = JWT.create()
@@ -127,7 +127,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
            }
        }
 
-        log.warn(String.format("Unsuccessful Authentication: [username: %s, password: %s]",
+        log.warn(String.format("Unsuccessful Login: [username: %s, password: %s]",
                 request.getParameter("username"),
                 request.getParameter("password")));
 
