@@ -39,7 +39,7 @@ public class UserController {
     @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")
     @GetMapping("/profile/{username}")
     public String profile(@PathVariable String username, Model model) {
-        User user = userRepository.findByUsername(username).orElse(null);
+        User user = userService.findByUsername(username);
 
         if(user != null){
             model.addAttribute("firstName", user.getFirstName());

@@ -1,8 +1,19 @@
 package ie.ucd.dfh.filters;
 
 import com.auth0.jwt.JWT;
+import ie.ucd.dfh.controller.AuthenticationController;
+import ie.ucd.dfh.model.Attempts;
+import ie.ucd.dfh.model.User;
+import ie.ucd.dfh.repository.AttemptsRepository;
+import ie.ucd.dfh.repository.UserRepository;
 import ie.ucd.dfh.service.ACUserDetails;
+import ie.ucd.dfh.service.CustomAuthenticationFailureHandler;
+import ie.ucd.dfh.service.UserService;
+import ie.ucd.dfh.service.UserServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,14 +38,20 @@ import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+    private static final Logger log = LoggerFactory.getLogger(JWTAuthenticationFilter.class);
+
     @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
     private UserDetailsService userDetailsService;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager){
+    @Autowired
+    private UserService userService;
+
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, UserService userService){
         this.authenticationManager = authenticationManager;
+        this.userService = userService;
     }
 
     @Override
@@ -55,6 +72,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication auth) throws IOException, ServletException {
+        log.info(String.format("Successful Authentication: [username: %s]",
+                request.getParameter("username")));
 
         String token = JWT.create()
                 .withSubject(((ACUserDetails) auth.getPrincipal()).getUsername())
@@ -68,10 +87,52 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         //authenticationSuccessHandler.onAuthenticationSuccess(request, response, getAuthentication(token));
         //getAuthentication(token).
+    }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        super.unsuccessfulAuthentication(request, response, failed);
+
+        String username = request.getParameter("username");
+        Attempts userAttempts = userService.findAttemptsByUsername(username);
+        User user = userService.findByUsername(username);
+
+       if(user != null) {
+           if (userAttempts == null) {
+               Attempts attempts = new Attempts();
+               attempts.setUsername(username);
+               attempts.setAttempts(1);
+               userService.save(attempts);
+           } else {
+               System.out.println("USER ATTEMPTS PRESENT");
+               userAttempts.setAttempts(userAttempts.getAttempts() + 1);
+               userService.save(userAttempts);
+
+               if (userAttempts.getAttempts() + 1 >
+                       SecurityConstant.LOGIN_ATTEMPT_LIMIT) {
+                   System.out.println("ATTEMPTS GREATER THAN LIMIT");
+                   if (user != null) {
+                       user.setAccountNonLocked(false);
+                       userService.save(user);
+
+                       log.warn(String.format("Account Locked: [ID: %s, username: %s, password: %s]",
+                               user.getId(),
+                               request.getParameter("username"),
+                               request.getParameter("password")));
+
+                       throw new LockedException("Too many invalid attempts. Account is locked!!");
+
+                   }
+               }
+           }
+       }
+
+        log.warn(String.format("Unsuccessful Authentication: [username: %s, password: %s]",
+                request.getParameter("username"),
+                request.getParameter("password")));
 
 
     }
-
 
     private void addCookie(String token, HttpServletResponse response){
         Cookie cookie = new Cookie(COOKIE_NAME, token);

@@ -1,10 +1,13 @@
 package ie.ucd.dfh.service;
 
+import ie.ucd.dfh.model.Attempts;
 import ie.ucd.dfh.model.Role;
 import ie.ucd.dfh.model.User;
+import ie.ucd.dfh.repository.AttemptsRepository;
 import ie.ucd.dfh.repository.RoleRepository;
 import ie.ucd.dfh.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +22,26 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private AttemptsRepository attemptsRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+
     @Override
     public void save(User user) {
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         Role userRole = roleRepository.findByName("USER");
-        Set<Role> roleSet = new HashSet<Role>();
+        Set<Role> roleSet = new HashSet<>();
         roleSet.add(userRole);
         user.setRoles(roleSet);
         userRepository.save(user);
+    }
+
+    @Override
+    public void save(Attempts attempts) {
+        attemptsRepository.save(attempts);
     }
 
     @Override
@@ -34,6 +50,10 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public User findByEmail(String email) {
-        return userRepository.findByUsername(email).orElse(null);
+        return userRepository.findByEmail(email).orElse(null);
+    }
+
+    public Attempts findAttemptsByUsername(String username){
+        return attemptsRepository.findAttemptsByUsername(username).orElse(null);
     }
 }

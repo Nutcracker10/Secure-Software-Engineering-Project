@@ -47,18 +47,14 @@ public class AuthenticationController {
 
         User user = new User();
         user.setUsername(username);
-        user.setPassword(encoder.encode(password));
+        user.setPassword(password);
         user.setEmail(email);
         user.setPhoneNumber(phoneNumber);
         user.setAddress(address);
         user.setFirstName(firstName);
         user.setLastName(surname);
-        //user.setRoles(new HashSet<>(roleRepository.findByName()));
         userService.save(user);
         log.info("User with ID "+user.getId()+" has registered.");
-
-        //TODO NOT REACHING AFTER LOGIN FOR SOME REASON
-        securityService.authenticate(user.getUsername(), user.getPassword());
 
         return "redirect:/profile?id="+user.getId();
     }
