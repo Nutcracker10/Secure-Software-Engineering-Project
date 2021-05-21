@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 
@@ -29,7 +30,7 @@ public class AuthenticationController {
     private BCryptPasswordEncoder encoder;
 
     @GetMapping("/login")
-    public String login() {
+    public String login( Model model) {
         return "login";
     }
 

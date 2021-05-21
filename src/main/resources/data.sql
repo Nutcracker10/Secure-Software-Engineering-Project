@@ -16,4 +16,3 @@ INSERT INTO flight( departure, arrival, dep_airport, arr_airport, capacity, pric
     ('2008-11-11 10:00:00', '2008-11-11 11:00:00', 'Gatwick', 'Dublin', 200, 25.0 ),
     ('2008-11-13 12:30:00', '2008-11-13 14:30:00', 'Madrid', 'Dublin', 200, 30.0  ),
     ('2021-11-13 12:30:00', '2021-11-13 14:30:00', 'Dublin', 'Berlin', 200, 30.0);
-

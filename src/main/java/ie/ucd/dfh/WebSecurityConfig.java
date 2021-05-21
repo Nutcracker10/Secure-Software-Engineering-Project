@@ -97,7 +97,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AuthenticationFailureHandler authenticationFailureHandler() {
-        System.out.println("WEB CONGIF CALLED");
         return new CustomAuthenticationFailureHandler();
     }
 

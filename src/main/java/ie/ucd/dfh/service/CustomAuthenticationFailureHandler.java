@@ -44,11 +44,13 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
                 if(user != null) {
                     user.setAccountNonLocked(false);
                     userRepository.save(user);
+                    response.sendRedirect(request.getContextPath() + "/login?error=2");
                     throw new LockedException("Too many invalid attempts. Account is locked!!");
                 }
             }
+            response.sendRedirect(request.getContextPath() + "/login?error=1");
         }
 
-        response.sendRedirect(request.getContextPath() + "/login");
+        response.sendRedirect(request.getContextPath() + "/login?error=0");
     }
 }
