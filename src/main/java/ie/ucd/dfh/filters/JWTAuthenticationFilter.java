@@ -1,19 +1,13 @@
 package ie.ucd.dfh.filters;
 
 import com.auth0.jwt.JWT;
-import ie.ucd.dfh.controller.AuthenticationController;
 import ie.ucd.dfh.model.Attempts;
 import ie.ucd.dfh.model.User;
-import ie.ucd.dfh.repository.AttemptsRepository;
-import ie.ucd.dfh.repository.UserRepository;
 import ie.ucd.dfh.service.ACUserDetails;
-import ie.ucd.dfh.service.CustomAuthenticationFailureHandler;
 import ie.ucd.dfh.service.UserService;
-import ie.ucd.dfh.service.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,16 +17,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Optional;
 import static ie.ucd.dfh.filters.SecurityConstant.*;
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 
@@ -72,8 +63,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication auth) throws IOException, ServletException {
-            log.info(String.format("Successful Login: [username: %s]",
-                request.getParameter("username")));
+
+        log.info(String.format("Successful Login: [username: %s]",
+            request.getParameter("username")));
 
         String token = JWT.create()
                 .withSubject(((ACUserDetails) auth.getPrincipal()).getUsername())
@@ -137,8 +129,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private void addCookie(String token, HttpServletResponse response){
         Cookie cookie = new Cookie(COOKIE_NAME, token);
 
-        //10 days
-        cookie.setMaxAge(10 * 24 * 60 * 60);
+        //25 minutes
+        cookie.setMaxAge( 25 * 60);
 
         cookie.setSecure(true);
         cookie.setHttpOnly(true);
