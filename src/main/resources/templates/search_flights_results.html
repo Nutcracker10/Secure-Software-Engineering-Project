@@ -26,15 +26,14 @@
                     <a th:href="@{/member-book-flight(flightId=${flight.id} )}">Book</a>
                 </span>
             </td>
-                <div sec:authorize="hasAnyAuthority('ADMIN')">
-                    <span th:include="modals/add_new_flight.html"></span>
-                </div>
-            <td>
-                <span sec:>
-            </td>
         </tr>
     </tbody>
 </table>
+    <div sec:authorize="hasAnyAuthority('ADMIN')">
+        <div class="col-3" style="margin-left: 90%;">
+            <div th:include="modals/add_new_flight.html"></div>
+        </div>
+    </div>
 </div>
 
 </body>

@@ -54,6 +54,7 @@ public class AuthenticationController {
         user.setAddress(address);
         user.setFirstName(firstName);
         user.setLastName(surname);
+        user.setAccountNonLocked(true);
         //user.setRoles(new HashSet<>(roleRepository.findByName()));
         userService.save(user);
         log.info("User with ID "+user.getId()+" has registered.");

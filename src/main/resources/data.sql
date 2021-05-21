@@ -1,8 +1,8 @@
-INSERT INTO user(first_name, last_name, username, address, phone_number, email, password) VALUES
-('first', 'last', 'first', 'ucd', '+3531111111', 'test@test', '$2a$10$ifQGrQZoHbTJzSQa0HSXwOM5AT3vKf6zGnXMHSixuyFHmVu.5/afy'),
-('timoty', 'l', 'timoty', 'programmer', '+1111111', 'a@a', '$2a$10$ifQGrQZoHbTJzSQa0HSXwOM5AT3vKf6zGnXMHSixuyFHmVu.5/afy'),
-('arrr', 'nameee', 'arrr', 'moon', '+123456', 'b@b', '$2a$10$ifQGrQZoHbTJzSQa0HSXwOM5AT3vKf6zGnXMHSixuyFHmVu.5/afy'),
-('asv', 'uyhtg', 'ucd', 'first', '+3531111111', 'c@c', '$2a$10$ifQGrQZoHbTJzSQa0HSXwOM5AT3vKf6zGnXMHSixuyFHmVu.5/afy'); /*pass = pass */
+INSERT INTO user(account_non_locked,first_name, last_name, username, address, phone_number, email, password) VALUES
+(true,'first', 'last', 'first', 'ucd', '+3531111111', 'test@test', '$2a$10$ifQGrQZoHbTJzSQa0HSXwOM5AT3vKf6zGnXMHSixuyFHmVu.5/afy'),
+(true,'timoty', 'l', 'timoty', 'programmer', '+1111111', 'a@a', '$2a$10$ifQGrQZoHbTJzSQa0HSXwOM5AT3vKf6zGnXMHSixuyFHmVu.5/afy'),
+(true,'arrr', 'nameee', 'arrr', 'moon', '+123456', 'b@b', '$2a$10$ifQGrQZoHbTJzSQa0HSXwOM5AT3vKf6zGnXMHSixuyFHmVu.5/afy'),
+(true,'asv', 'uyhtg', 'ucd', 'first', '+3531111111', 'c@c', '$2a$10$ifQGrQZoHbTJzSQa0HSXwOM5AT3vKf6zGnXMHSixuyFHmVu.5/afy'); /*pass = pass */
 
 INSERT INTO role (name) VALUES
 ('USER'),
