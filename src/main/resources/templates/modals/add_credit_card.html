@@ -1,6 +1,6 @@
 <a href="#" data-target="#creditCard" data-toggle="modal" style="color:blue;" xmlns="http://www.w3.org/1999/html">
-    <span th:if="${#lists.isEmpty(creditCards)}">Add Credit Card</span>
-    <span th:unless="${#lists.isEmpty(creditCards)}">Add Another Card</span>
+    <span th:if="${#lists.isEmpty(user.creditCards)}">Add Credit Card</span>
+    <span th:unless="${#lists.isEmpty(user.creditCards)}">Add Another Card</span>
 </a>
 <div class="modal text-center" id="creditCard">
     <div class="modal-dialog" type="document">

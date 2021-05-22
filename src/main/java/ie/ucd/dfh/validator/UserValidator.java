@@ -40,12 +40,31 @@ public class UserValidator implements Validator {
         if(!isValid(user.getAddress(), ADDRESS_PATTERN))
             errors.rejectValue("address", "InvalidAddress");
         if ((user.getUsername().length() < 5 || user.getUsername().length() > 32) ||
-                (!isUserValid(user.getUsername())) ||
-                (userService.findByEmail(user.getEmail())!=null) ||
-                (userService.findByUsername(user.getUsername()) != null) //||
+                (!isUserValid(user.getUsername()))
                 //(!isValid(user.getPassword(), PASSWORD_REGEX))
         )
             errors.rejectValue("passwordConfirm", "Diff.user.passwordConfirm");
+    }
+
+    public void validateUsernameAndEmail(User user, Errors errors){
+        if ( !isValidEmail(user.getEmail()) || !isValidUsername(user.getUsername()))
+            errors.rejectValue("passwordConfirm", "Diff.user.passwordConfirm");
+    }
+
+    private boolean isValidUsername(String username) {
+        return userService.findByUsername(username) == null;
+    }
+
+    private boolean isValidEmail(String email) {
+        return userService.findByEmail(email) == null;
+    }
+
+    public void validateEmail(String email, Errors errors){
+        if( !isValidEmail(email) ) errors.rejectValue("passwordConfirm", "Diff.user.passwordConfirm");
+    }
+
+    public void validateUsername(String username, Errors errors){
+        if(!isValidUsername(username) ) errors.rejectValue("passwordConfirm", "Diff.user.passwordConfirm");
     }
 
     private boolean isValid(String toValidate, String regex){

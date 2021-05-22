@@ -4,6 +4,7 @@ import ie.ucd.dfh.model.*;
 import ie.ucd.dfh.repository.ReservationRepository;
 import ie.ucd.dfh.repository.UserRepository;
 import ie.ucd.dfh.service.UserService;
+import ie.ucd.dfh.validator.UserValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
@@ -37,41 +40,44 @@ public class UserController {
     @Autowired
     private ReservationRepository reservationRepository;
 
+    @Autowired
+    private UserValidator userValidator;
+
     @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")
     @GetMapping("/profile/{username}")
     public String profile(@PathVariable String username, Model model) {
         User user = userService.findByUsername(username);
-
         if(user != null){
-            model.addAttribute("firstName", user.getFirstName());
-            model.addAttribute("lastName", user.getLastName());
-            model.addAttribute("email", user.getEmail());
-            model.addAttribute("address", user.getAddress());
-            model.addAttribute("phoneNumber", user.getPhoneNumber());
-            model.addAttribute("creditCards", user.getCreditCards());
             model.addAttribute("user", user);
-        }else{
-            return "redirect:/";
+            return "user_profile";
         }
-
-        return "user_profile";
+        return "redirect:/";
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     @PostMapping("/edit-profile")
-    public void editProfile(Principal principal, String firstName, String lastName, String phoneNumber, String address, String email, HttpServletResponse response) throws IOException{
-        User user = userService.findByUsername(principal.getName());
-        if(user != null) {
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
-            user.setEmail(email);
-            user.setPhoneNumber(phoneNumber);
-            user.setAddress(address);
+    public String editProfile(Principal principal, @ModelAttribute("user") User user, BindingResult bindingResult) {
+        User existingUser = userService.findByUsername(principal.getName());
+        if(existingUser != null) {
+            existingUser.setFirstName(user.getFirstName());
+            existingUser.setLastName(user.getLastName());
+            existingUser.setAddress(user.getAddress());
 
-            userRepository.save(user);
+            if(!user.getEmail().equals(existingUser.getEmail()))
+                userValidator.validateEmail(user.getEmail(), bindingResult);
 
-            response.sendRedirect("/profile/"+user.getUsername());
+            existingUser.setEmail(user.getEmail());
+            existingUser.setPhoneNumber(user.getPhoneNumber());
+
+            userValidator.validate(existingUser, bindingResult);
+            if (bindingResult.hasErrors()){
+                return "redirect:/profile/"+existingUser.getUsername();
+            }
+
+            userRepository.save(existingUser);
+            return "redirect:/profile/"+existingUser.getUsername();
         }
+        return "redirect:/";
     }
 
     @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")

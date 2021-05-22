@@ -55,6 +55,8 @@ public class AuthenticationController {
     @PostMapping( "/registration")
     public String addUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
         userValidator.validate(user, bindingResult);
+        userValidator.validateUsernameAndEmail(user, bindingResult);
+
         if(bindingResult.hasErrors()){
             return "registration";
         }

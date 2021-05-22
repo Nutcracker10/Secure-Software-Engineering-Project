@@ -178,4 +178,23 @@ public class User  {
     public void setPasswordConfirm(String passwordConfirm) {
         this.passwordConfirm = passwordConfirm;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", address='" + address + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", accountNonLocked=" + accountNonLocked +
+                ", email='" + email + '\'' +
+                ", reservations=" + reservations +
+                ", creditCards=" + creditCards +
+                ", roles=" + roles +
+                ", passwordConfirm='" + passwordConfirm + '\'' +
+                '}';
+    }
 }

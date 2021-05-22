@@ -19,7 +19,7 @@
                         <th></th>
                     </thead>
                     <tbody >
-                        <tr th:each="creditCard:${creditCards}">
+                        <tr th:each="creditCard:${user.creditCards}">
                             <td th:text="${creditCard.cardType}"></td>
                             <td>ending in <span th:text="${#strings.substring(creditCard.cardNumber, #strings.length(creditCard.cardNumber)-4, #strings.length(creditCard.cardNumber))}"></span></td>
                             <td>
