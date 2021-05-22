@@ -27,9 +27,6 @@ public class AuthenticationController {
     private static final Logger log = LoggerFactory.getLogger(AuthenticationController.class);
 
     @Autowired
-    private SecurityService securityService;
-
-    @Autowired
     private UserService userService;
 
     @Autowired

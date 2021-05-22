@@ -5,15 +5,16 @@ import ie.ucd.dfh.model.User;
 import ie.ucd.dfh.repository.CreditCardRepository;
 import ie.ucd.dfh.repository.UserRepository;
 import ie.ucd.dfh.service.UserService;
+import ie.ucd.dfh.validator.CreditCardValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.security.Principal;
 
 @Controller
@@ -30,13 +31,21 @@ public class CreditCardController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CreditCardValidator creditCardValidator;
+
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/add-credit-card")
-    public String addCreditCard(Principal principal, String cardType, String cardNumber, String expiryMonth, String expiryYear, String securityCode) {
+    public String addCreditCard(Principal principal, @ModelAttribute("creditCard") @Valid CreditCard creditCard, BindingResult bindingResult) {
         User user = userService.findByUsername(principal.getName());
-
         if(user != null){
-            CreditCard creditCard = new CreditCard(cardType, cardNumber, expiryMonth, expiryYear, securityCode, user);
+            creditCard.setUser(user);
+            System.out.println(creditCard);
+            creditCardValidator.validate(creditCard, bindingResult);
+            if (bindingResult.hasErrors()){
+                return "redirect:/";
+            }
+
             creditCardRepository.save(creditCard);
             userRepository.save(user);
             log.info(String.format("Credit Card Added: [User ID: %s, username: %s, Credit Card ID: %s]",
@@ -66,18 +75,24 @@ public class CreditCardController {
 
     @PreAuthorize("hasAuthority('USER')")
     @PutMapping("credit-card/update")
-    public String updateCreditCard(Long creditCardId, Principal principal, String cardType, String cardNumber, String expiryMonth, String expiryYear, String securityCode) {
-        CreditCard creditCard = creditCardRepository.findById(creditCardId).orElse(null);
+    public String updateCreditCard(Principal principal, @ModelAttribute("creditCard") @Valid CreditCard creditCard, BindingResult bindingResult) {
+        CreditCard existingCreditCard = creditCardRepository.findById(creditCard.getCreditCardId()).orElse(null);
         User user = userService.findByUsername(principal.getName());
-        if(creditCard != null && user != null && creditCard.getUser().getId().equals(user.getId())){
-            creditCard.setCardType(cardType);
-            creditCard.setCardNumber(cardNumber);
-            creditCard.setExpiryMonth(expiryMonth);
-            creditCard.setExpiryYear(expiryYear);
-            creditCard.setSecurityCode(securityCode);
-            creditCardRepository.save(creditCard);
+        if(existingCreditCard != null && user != null && existingCreditCard.getUser().getId().equals(user.getId())){
+            existingCreditCard.setCardType(creditCard.getCardType());
+            existingCreditCard.setCardNumber(creditCard.getCardNumber());
+            existingCreditCard.setExpiryMonth(creditCard.getExpiryMonth());
+            existingCreditCard.setExpiryYear(creditCard.getExpiryYear());
+            existingCreditCard.setSecurityCode(creditCard.getSecurityCode());
+
+            creditCardValidator.validate(existingCreditCard, bindingResult);
+            if(bindingResult.hasErrors()){
+                return "redirect:/profile/" + principal.getName();
+            }
+
+            creditCardRepository.save(existingCreditCard);
             log.info(String.format("Credit Card Modified: [User ID: %s, username: %s, Credit Card ID: %s]",
-                    user.getId(), principal.getName(), creditCard.getCreditCardId()));
+                    user.getId(), principal.getName(), existingCreditCard.getCreditCardId()));
             return "redirect:/profile/" + principal.getName();
         }
         return "redirect:/";

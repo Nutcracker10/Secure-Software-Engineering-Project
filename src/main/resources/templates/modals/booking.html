@@ -11,37 +11,37 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="/book-flight" method="POST">
+                <form action="#" th:action="@{/book-flight}" method="POST">
                     <input id ="flightId" name="flightId" th:value="${flight.id}" type="hidden">
                     <div class="form-group">
                         <div class="row">
                             <div class="col-9" style="margin-left: 10%">
-                                <label class="col-form-label" for="firstName">First Name</label>
-                                <input class="form-control" id="firstName" name="firstName" type="text" maxlength="300" minlength="1" required title="Can't be blank">
+                                <label for="firstName">First Name:</label>
+                                <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name" pattern="([A-Z][a-z]*).{2,32}" required >
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-9" style="margin-left: 10%">
                                 <label class="col-form-label" for="lastName">Last Name</label>
-                                <input class="form-control" id="lastName" name="lastName" type="text" maxlength="300" minlength="1" required title="Can't be blank">
+                                <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Surname" pattern="(^[\\p{L}\\s.’\\-,]+$).{2,32}" required >
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-9" style="margin-left: 10%">
-                                <label class="col-form-label" for="homeAddress">Home address</label>
-                                <input autocomplete="off" class="form-control" id="homeAddress" name="homeAddress" placeholder="Address" type="text" maxlength="300" required title="Can't be blank">
+                                <label for="address">Address:</label>
+                                <input type="text" class="form-control" id="address" name="address" placeholder="Address" pattern="^[#.0-9a-zA-Z\s,-]+$" required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-9" style="margin-left: 10%">
-                                <label class="col-form-label" for="phonenumber">Phone Number</label>
-                                <input autocomplete="off" class="form-control" id="phonenumber" name="phonenumber" placeholder="123456789" type="text" maxlength="10" required title="Can't be blank">
+                                <label for="phoneNumber">Phone Number:</label>
+                                <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Phone Number" pattern="^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$" required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-9" style="margin-left: 10%">
-                                <label class="col-form-label" for="email">Email address</label>
-                                <input autocomplete="off" class="form-control" id="email" name="email" placeholder="email@email.com" type="text" maxlength="300" required title="Can't be blank">
+                                <label for="email">Email Address:</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email address" autocomplete="off" pattern=".{1,}" required>
                             </div>
                         </div>
 
@@ -61,7 +61,7 @@
                                 <div class="row">
                                     <div class="col-9" style="margin-left: 10%">
                                         <label class="col-form-label" for="cardNumber">CardNumber</label>
-                                        <input class="form-control" id="cardNumber" name="cardNumber" placeholder="Card Number" type="text" maxlength="19" minlength="4" required title="Can't be blank">
+                                        <input class="form-control" id="cardNumber" name="cardNumber" placeholder="Card Number" type="text" maxlength="19" minlength="8"  required>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -105,7 +105,7 @@
                                 <div class="row">
                                     <div class="col-9" style="margin-left: 10%">
                                         <label class="col-form-label" for="securityCode">Security Code</label>
-                                        <input autocomplete="off" class="form-control" id="securityCode" name="securityCode" placeholder="Security Code" type="text" maxlength="3" required title="Can't be blank">
+                                        <input autocomplete="off" class="form-control" id="securityCode" name="securityCode" placeholder="Security Code" type="text" maxlength="4" minlength="3" required>
                                     </div>
                                 </div>
                         <div class="row text-center">

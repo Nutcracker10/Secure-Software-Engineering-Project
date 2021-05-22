@@ -11,13 +11,13 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="/credit-card/update"  th:method="put">
-                    <input type="hidden" th:value="${creditCard.creditCardId}" name="creditCardId" id="creditCardId">
+                <form action="#" th:action="@{/credit-card/update}"  th:method="put" th:object="${creditCard}">
+                    <input type="hidden" th:attr="name='creditCardId'" th:value="${creditCard.creditCardId}">
                     <div class="form-group">
                         <div class="row">
                             <div class="col-9" style="margin-left: 10%">
                                 <label class="col-form-label" for="cardType">Card Type</label>
-                                <select class="form-control" id="cardType" name="cardType" >
+                                <select class="form-control" id="cardType" th:field="*{cardType}" >
                                     <option value="Visa Credit">Visa Credit</option>
                                     <option value="Visa Debit">Visa Debit</option>
                                     <option value="Visa Electron">Visa Electron</option>
@@ -29,17 +29,17 @@
                         <div class="row">
                             <div class="col-9" style="margin-left: 10%">
                                 <label class="col-form-label" for="cardNumber">CardNumber</label>
-                                <input class="form-control" id="cardNumber" name="cardNumber" placeholder="Card Number" type="text" maxlength="19" minlength="4" required title="Can't be blank">
+                                <input class="form-control" id="cardNumber" name="cardNumber" placeholder="Card Number" type="text" th:field="*{cardNumber}" maxlength="19" minlength="8"  required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-9" style="margin-left: 10%">
-                                <label class="col-form-label" for="expiryMonth">Expiry Date</label>
+                                <label class="col-form-label" for="expiryMonth" >Expiry Date</label>
                             </div>
                             <div class="col-5" style="margin-left: 10%">
-                                <select class="form-control" id="expiryMonth" name="expiryMonth" >
+                                <select class="form-control" id="expiryMonth" th:field="*{expiryMonth}">
                                     <option value="1">January (01)</option>
-                                    <option value="2">February (02)</option>
+                                    <optionS value="2">February (02)</optionS>
                                     <option value="3">March (03)</option>
                                     <option value="4">April (04)</option>
                                     <option value="5">May (05)</option>
@@ -53,7 +53,7 @@
                                 </select>
                             </div>
                             <div class="col-4" >
-                                <select class="form-control" id="expiryYear" name="expiryYear" >
+                                <select class="form-control" id="expiryYear" th:field="*{expiryYear}" >
                                     <option value="2021">2021</option>
                                     <option value="2022">2022</option>
                                     <option value="2023">2023</option>
@@ -73,13 +73,13 @@
                         <div class="row">
                             <div class="col-9" style="margin-left: 10%">
                                 <label class="col-form-label" for="securityCode">Security Code</label>
-                                <input autocomplete="off" class="form-control" id="securityCode" name="securityCode" placeholder="Security Code" type="text" maxlength="3" required title="Can't be blank">
+                                <input autocomplete="off" class="form-control" id="securityCode" th:field="*{securityCode}" placeholder="Security Code" type="text" maxlength="4" minlength="3" required>
                             </div>
                         </div>
                         <div class="row text-center">
                             <div class="col-10"></div>
                             <div class="col" style="margin-top: 5%">
-                                <button class="btn btn-primary" type="submit">Update</button>
+                                <button class="btn btn-primary" type="submit">Add</button>
                             </div>
                         </div>
                     </div>

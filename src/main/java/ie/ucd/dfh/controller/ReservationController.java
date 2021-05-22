@@ -1,6 +1,6 @@
 package ie.ucd.dfh.controller;
 
-import java.io.IOException;
+
 import java.security.Principal;
 import java.util.Optional;
 
@@ -8,12 +8,15 @@ import ie.ucd.dfh.model.*;
 import ie.ucd.dfh.repository.CreditCardRepository;
 import ie.ucd.dfh.repository.UserRepository;
 import ie.ucd.dfh.service.UserService;
+import ie.ucd.dfh.validator.CreditCardValidator;
+import ie.ucd.dfh.validator.UserValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import ie.ucd.dfh.repository.FlightRepository;
@@ -42,36 +45,38 @@ public class ReservationController {
     @Autowired
     private FlightRepository flightrepository;
 
+    @Autowired
+    private UserValidator userValidator;
+
+    @Autowired
+    private CreditCardValidator creditCardValidator;
 
     @PreAuthorize("permitAll()")
     @PostMapping(value="/book-flight")
-    public String bookFlight(Long flightId, String firstName, String lastName, String homeAddress, String phonenumber, String email,
-                           String cardType, String cardNumber, String expiryMonth, String expiryYear, String securityCode, RedirectAttributes redirectAttributes) {
+    public String bookFlight(Long flightId, String firstName, String lastName, String address, String phoneNumber, String email,
+                             String cardType, String cardNumber, String expiryMonth, String expiryYear, String securityCode, RedirectAttributes redirectAttributes) {
 
         Optional<Flight> flight = flightrepository.findFlightById(flightId);
-        User user;
         Reservation reservation;
 
         if (flight.isPresent()) {
             // if user is guest, create record of guest and payment
-
-            user = new User();
+            User user = new User();
             user.setFirstName(firstName);
             user.setLastName(lastName);
-            user.setAddress(homeAddress);
-            user.setPhoneNumber(phonenumber);
+            user.setAddress(address);
+            user.setPhoneNumber(phoneNumber);
             user.setEmail(email);
+
             CreditCard creditCard = new CreditCard(cardType, cardNumber, expiryMonth, expiryYear, securityCode, user);
             userRepository.save(user);
             creditCardRepository.save(creditCard);
             reservation = new Reservation(Status.SCHEDULED, flight.get(), user);
             reservationRepository.save(reservation);
             redirectAttributes.addFlashAttribute("message",reservation.getReservationId());
-            return "redirect:/";
         }
         return "redirect:/";
     }
-
 
     @GetMapping("/show-passengers")
     public void getPassengers(@RequestParam Long id, Model model){
@@ -80,7 +85,7 @@ public class ReservationController {
 
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @RequestMapping(value = "/member-book-flight")
-    public void memberBookFlight(@RequestParam("flightId") Long flightId, Principal principal, HttpServletResponse response) throws IOException{
+    public String memberBookFlight(@RequestParam("flightId") Long flightId, Principal principal){
         Reservation reservation;
         Optional<Flight> flight = flightrepository.findFlightById(flightId);
         User user = userService.findByUsername(principal.getName());
@@ -91,8 +96,6 @@ public class ReservationController {
             log.info(String.format("Flight Booked: [User ID: %s, username: %s, Flight ID: %s, Reservation ID: %s]",
                     user.getId(), principal.getName(), flight.get().getId(), reservation.getReservationId()));
         }
-
-        response.sendRedirect("/");
+        return "redirect:/";
     }
-
 }

@@ -2,6 +2,7 @@ package ie.ucd.dfh.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "credit_card")
@@ -28,6 +29,7 @@ public class CreditCard {
     private String expiryYear;
 
     @NotBlank
+    @Size(min = 3, max = 4)
     @Column(name = "security_code")
     private String securityCode;
 
@@ -106,5 +108,18 @@ public class CreditCard {
                                         String securityCode){
         return (this.cardType.matches(cardType)) && (this.cardNumber.matches(cardNumber))
                 && (this.expiryMonth.matches(expiryMonth)) && (this.expiryYear.matches(expiryYear)) && (this.securityCode.matches(securityCode));
+    }
+
+    @Override
+    public String toString() {
+        return "CreditCard{" +
+                "creditCardId=" + creditCardId +
+                ", cardType='" + cardType + '\'' +
+                ", cardNumber='" + cardNumber + '\'' +
+                ", expiryMonth='" + expiryMonth + '\'' +
+                ", expiryYear='" + expiryYear + '\'' +
+                ", securityCode='" + securityCode + '\'' +
+                ", user=" + user +
+                '}';
     }
 }

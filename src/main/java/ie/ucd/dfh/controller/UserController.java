@@ -49,6 +49,7 @@ public class UserController {
         User user = userService.findByUsername(username);
         if(user != null){
             model.addAttribute("user", user);
+            model.addAttribute("creditCard", new CreditCard());
             return "user_profile";
         }
         return "redirect:/";

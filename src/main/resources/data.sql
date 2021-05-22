@@ -1,12 +1,12 @@
-INSERT INTO user(first_name, last_name, username, address, phone_number, email, password) VALUES
-('first', 'last', 'first', 'ucd', '+3531111111', 'test@test', '$2a$10$ifQGrQZoHbTJzSQa0HSXwOM5AT3vKf6zGnXMHSixuyFHmVu.5/afy'),
-('timoty', 'l', 'timoty', 'programmer', '+1111111', 'a@a', '$2a$10$ifQGrQZoHbTJzSQa0HSXwOM5AT3vKf6zGnXMHSixuyFHmVu.5/afy'),
-('arrr', 'nameee', 'arrr', 'moon', '+123456', 'b@b', '$2a$10$ifQGrQZoHbTJzSQa0HSXwOM5AT3vKf6zGnXMHSixuyFHmVu.5/afy'),
-('asv', 'uyhtg', 'ucd', 'first', '+3531111111', 'c@c', '$2a$10$ifQGrQZoHbTJzSQa0HSXwOM5AT3vKf6zGnXMHSixuyFHmVu.5/afy'); /*pass = pass */
+INSERT INTO user(account_non_locked, first_name, last_name, username, address, phone_number, email, password) VALUES
+(0, 'John', 'Doe', 'JohnDoe123', 'UCD', '0831112222', 'JohnDoe@gmail.com', '$2a$10$ifQGrQZoHbTJzSQa0HSXwOM5AT3vKf6zGnXMHSixuyFHmVu.5/afy'); /*pass = pass */
 
 INSERT INTO role (name) VALUES
 ('USER'),
 ('ADMIN');
+
+INSERT INTO user_roles (user_id, role_id) VALUES
+    (1, 1);
 
 INSERT INTO credit_card(card_type, card_number, expiry_month, expiry_year, security_code, user_id) VALUES
     ('Visa Debit', '4024007103939509', '5', '2024', '111', 1);
