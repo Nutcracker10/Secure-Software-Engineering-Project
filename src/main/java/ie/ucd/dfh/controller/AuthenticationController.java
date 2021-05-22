@@ -1,8 +1,11 @@
 package ie.ucd.dfh.controller;
 
+import ie.ucd.dfh.model.ConfirmationToken;
 import ie.ucd.dfh.model.User;
+import ie.ucd.dfh.service.EmailSenderService;
 import ie.ucd.dfh.service.SecurityService;
 import ie.ucd.dfh.service.UserService;
+import ie.ucd.dfh.validator.UserValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +13,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 @Controller
@@ -29,6 +35,9 @@ public class AuthenticationController {
     @Autowired
     private BCryptPasswordEncoder encoder;
 
+    @Autowired
+    private UserValidator userValidator;
+
     @PreAuthorize("permitAll()")
     @GetMapping("/login")
     public String login() {
@@ -38,28 +47,22 @@ public class AuthenticationController {
     @PreAuthorize("permitAll()")
     @GetMapping("/registration")
     public String registration(Model model) {
+        model.addAttribute("user", new User());
         return "registration";
     }
 
+    @PreAuthorize("permitAll()")
     @PostMapping( "/registration")
-    public String addUser(String firstName, String surname, String username, String address, String phoneNumber, String email, String password) {
-        if(userService.findByUsername(username) != null || userService.findByEmail(email) != null){
-            log.info("Could not register User. Username or email already exists.");
-            return "redirect:/registration";
+    public String addUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
+        userValidator.validate(user, bindingResult);
+        if(bindingResult.hasErrors()){
+            return "registration";
         }
 
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setEmail(email);
-        user.setPhoneNumber(phoneNumber);
-        user.setAddress(address);
-        user.setFirstName(firstName);
-        user.setLastName(surname);
         userService.save(user);
         log.info("User with ID "+user.getId()+" has registered.");
 
-        return "redirect:/profile?id="+user.getId();
+        return "redirect:/login";
     }
 
     @PreAuthorize("hasAuthority('USER')")
@@ -79,4 +82,15 @@ public class AuthenticationController {
         return "redirect:/";
     }
 
+    @PostMapping("/forgot-password")
+    public String forgotUserPassword(String email, Model model){
+/*        User existingUser = userService.findByEmail(email);
+        if(existingUser != null){
+            ConfirmationToken confirmationToken = new ConfirmationToken(existingUser);
+            userService.save(confirmationToken);
+            emailSenderService.sendForgotEmail(existingUser.getEmail(), confirmationToken);
+        }
+        model.addAttribute("message", "Message sent to the email address provided");*/
+        return "redirect:/login";
+    }
 }

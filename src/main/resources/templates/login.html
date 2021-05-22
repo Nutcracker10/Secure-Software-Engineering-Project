@@ -23,6 +23,10 @@
                             <input type="checkbox" class="form-check-input" id="remember-me" name="remember-me">
                             <label class="form-check-label" for="remember-me">Remember me</label>
                         </div>
+                        <div class="form-check">
+                            <span th:include="modals/forgot_password.html"></span>
+                        </div>
+
                         <span th:if="error != null">
                             <label style="color:red;" th:text="${error}"></label>
                         </span>

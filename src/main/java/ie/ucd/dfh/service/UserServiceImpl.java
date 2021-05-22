@@ -1,9 +1,11 @@
 package ie.ucd.dfh.service;
 
 import ie.ucd.dfh.model.Attempts;
+import ie.ucd.dfh.model.ConfirmationToken;
 import ie.ucd.dfh.model.Role;
 import ie.ucd.dfh.model.User;
 import ie.ucd.dfh.repository.AttemptsRepository;
+import ie.ucd.dfh.repository.ConfirmationTokenRepository;
 import ie.ucd.dfh.repository.RoleRepository;
 import ie.ucd.dfh.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class UserServiceImpl implements UserService {
     private AttemptsRepository attemptsRepository;
 
     @Autowired
+    private ConfirmationTokenRepository confirmationTokenRepository;
+
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
@@ -42,6 +47,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(Attempts attempts) {
         attemptsRepository.save(attempts);
+    }
+
+    @Override
+    public void save(ConfirmationToken confirmationToken) {
+        confirmationTokenRepository.save(confirmationToken);
     }
 
     @Override

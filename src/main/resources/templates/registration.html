@@ -8,45 +8,55 @@
     <div class="container">
         <div class="row">
             <!-- Registration -->
-            <div class="col-md-5">
-                <form role="form" method="post" action="/registration" modelAttribute="userForm">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <form role="form" method="post" action="#" th:action="@{/registration}" th:object="${user}" >
                     <p class="text-uppercase pull-center">Create an Account</p>
                     <div class="form-group">
-                        <label for="first-name">First Name:</label>
-                        <input type="text" class="form-control" id="first-name" name="firstName" placeholder="First Name" pattern=".{1,}" required title="Can't be blank">
+                        <label for="firstName">First Name:</label>
+                        <input type="text" class="form-control" id="firstName" th:field="*{firstName}" placeholder="First Name" pattern="([A-Z][a-z]*).{2,32}" required >
+                        <div class="alert alert-warning" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
                     </div>
                     <div class="form-group">
-                        <label for="surname">Surname:</label>
-                        <input type="text" class="form-control" id="surname" name="surname" placeholder="Surname" pattern=".{1,}" required title="Can't be blank">
+                        <label for="lastName">Surname:</label>
+                        <input type="text" class="form-control" id="lastName" th:field="*{lastName}" placeholder="Surname" pattern="(^[\\p{L}\\s.’\\-,]+$).{2,32}" required >
+                        <div class="alert alert-warning" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
                     </div>
                     <div class="form-group">
                         <label for="username">Username:</label>
-                        <input type="text" class="form-control" id="username" name="username" placeholder="Username" pattern=".{1,}" required title="Can't be blank">
+                        <input type="text" class="form-control" id="username" th:field="*{username}" placeholder="Username" pattern="^[a-z0-9_-]{5,32}$" required>
+                        <!--<div class="alert alert-warning" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>-->
                     </div>
                     <div class="form-group">
                         <label for="phoneNumber">Phone Number:</label>
-                        <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Phone Number" maxlength="12" required title="Can't be blank">
+                        <input type="tel" class="form-control" id="phoneNumber" th:field="*{phoneNumber}" placeholder="Phone Number" pattern="^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$" required>
+                        <div class="alert alert-warning" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
                     </div>
                     <div class="form-group">
                         <label for="address">Address:</label>
-                        <input type="text" class="form-control" id="address" name="address" placeholder="Address" required title="Can't be blank">
+                        <input type="text" class="form-control" id="address" th:field="*{address}" placeholder="Address" pattern="^[#.0-9a-zA-Z\s,-]+$" required>
+                        <div class="alert alert-warning" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
                     </div>
                     <div class="form-group">
-                        <label for="email-reg">Email Address:</label>
-                        <input type="email" class="form-control" id="email-reg" name="email" placeholder="Enter your email address" autocomplete="off" pattern=".{1,}" required title="Can't be blank">
+                        <label for="email">Email Address:</label>
+                        <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="Enter your email address" autocomplete="off" pattern=".{1,}" required>
+                        <div class="alert alert-warning" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
                     </div>
                     <div class="form-group">
-                        <label for="password-reg">Password:</label>
-                        <input type="password" class="form-control" id="password-reg" name="password" placeholder="Password" autocomplete="off" pattern=".{1,}" required title="Can't be blank">
+                        <label for="password">Password:</label>
+                        <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="Password" autocomplete="off" required>
+                        <!--<div class="alert alert-warning" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>-->
                     </div>
                     <span th:if="emailTaken != null" >
                             <label style="color:red;" th:text="${emailTaken}"></label>
                         </span>
+                    <div class="alert alert-warning" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}"></div>
                     <div>
                         <button type="submit" class="btn btn-primary">Create Account</button>
                     </div>
                 </form>
             </div>
+            <div class="col-md-3"></div>
         </div>
     </div>
 </div>

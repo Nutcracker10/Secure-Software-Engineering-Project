@@ -6,20 +6,27 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class User implements UserDetails {
+public class User  {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
+    @Column(unique = true)
     private String username;
 
+    @NotBlank
     private String password;
 
     @NotBlank
@@ -40,8 +47,10 @@ public class User implements UserDetails {
     @Column(name = "account_non_locked")
     private boolean accountNonLocked;
 
-    @NotBlank
-    private String email; //TODO CHECK WHY @EMAIL VALIDATOR DETECT VALID EMAILS AS NOT VALID
+    @NotEmpty
+    @Email
+    @Column(unique = true)
+    private String email;
 
     @OneToMany(mappedBy = "user")
     private Set<Reservation> reservations;
@@ -55,6 +64,9 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name="role_id", referencedColumnName="id")
     )
     private Set<Role> roles = new HashSet<>();
+
+    @Transient
+    private String passwordConfirm;
 
     public Long getId() {
         return id;
@@ -144,21 +156,6 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return accountNonLocked;
-    }
-
     public void setAccountNonLocked(Boolean accountNonLocked) {
         this.accountNonLocked = accountNonLocked;
     }
@@ -166,13 +163,19 @@ public class User implements UserDetails {
         return accountNonLocked;
     }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
+    public boolean isAccountNonLocked() {
+        return accountNonLocked;
     }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
+    public void setAccountNonLocked(boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
+    }
+
+    public String getPasswordConfirm() {
+        return passwordConfirm;
+    }
+
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
     }
 }
