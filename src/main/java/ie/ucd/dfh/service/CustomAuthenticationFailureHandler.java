@@ -65,7 +65,6 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
                 }
             }
         }*/
-
-        response.sendRedirect(request.getContextPath() + "/login");
+        response.sendRedirect(request.getContextPath() + "/login?error=0");
     }
 }
