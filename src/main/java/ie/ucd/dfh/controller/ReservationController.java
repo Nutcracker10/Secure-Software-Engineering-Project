@@ -5,10 +5,12 @@ import java.security.Principal;
 import java.util.Optional;
 
 import ie.ucd.dfh.model.*;
+import ie.ucd.dfh.model.wrapper.GuestBookFlight;
 import ie.ucd.dfh.repository.CreditCardRepository;
 import ie.ucd.dfh.repository.UserRepository;
 import ie.ucd.dfh.service.UserService;
 import ie.ucd.dfh.validator.CreditCardValidator;
+import ie.ucd.dfh.validator.GuestValidator;
 import ie.ucd.dfh.validator.UserValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +24,6 @@ import org.springframework.web.bind.annotation.*;
 import ie.ucd.dfh.repository.FlightRepository;
 import ie.ucd.dfh.repository.ReservationRepository;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class ReservationController {
@@ -49,29 +49,34 @@ public class ReservationController {
     private UserValidator userValidator;
 
     @Autowired
+    private GuestValidator guestValidator;
+
+    @Autowired
     private CreditCardValidator creditCardValidator;
 
+    /**
+     * Book flight as a guest
+     */
     @PreAuthorize("permitAll()")
     @PostMapping(value="/book-flight")
-    public String bookFlight(Long flightId, String firstName, String lastName, String address, String phoneNumber, String email,
-                             String cardType, String cardNumber, String expiryMonth, String expiryYear, String securityCode, RedirectAttributes redirectAttributes) {
-
-        Optional<Flight> flight = flightrepository.findFlightById(flightId);
-        Reservation reservation;
+    public String bookFlight(@ModelAttribute("guestBookFlight") GuestBookFlight guestBookFlight, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+        Optional<Flight> flight = flightrepository.findFlightById(guestBookFlight.getFlightId());
 
         if (flight.isPresent()) {
-            // if user is guest, create record of guest and payment
-            User user = new User();
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
-            user.setAddress(address);
-            user.setPhoneNumber(phoneNumber);
-            user.setEmail(email);
+            User user = guestBookFlight.getUser();
+            guestValidator.validate(user,bindingResult);
 
-            CreditCard creditCard = new CreditCard(cardType, cardNumber, expiryMonth, expiryYear, securityCode, user);
+            CreditCard creditCard = guestBookFlight.getCreditCard();
+            creditCard.setUser(user);
+            creditCardValidator.validate(creditCard, bindingResult);
+
+            if(bindingResult.hasErrors()){
+                return "redirect:/show-all-flights";
+            }
+
             userRepository.save(user);
             creditCardRepository.save(creditCard);
-            reservation = new Reservation(Status.SCHEDULED, flight.get(), user);
+            Reservation reservation = new Reservation(Status.SCHEDULED, flight.get(), user);
             reservationRepository.save(reservation);
             redirectAttributes.addFlashAttribute("message",reservation.getReservationId());
         }

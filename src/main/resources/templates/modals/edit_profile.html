@@ -11,41 +11,7 @@
             <div class="modal-body">
                 <form action="#" th:action="@{/edit-profile}" method="POST" th:object="${user}">
                     <div class="form-group">
-                        <div class="row">
-                            <div class="col-9" style="margin-left: 10%">
-                                <label class="col-form-label" for="firstName">First Name</label>
-                                <input type="text" class="form-control" id="firstName" th:field="*{firstName}" th:value="${user.firstName}" placeholder="First Name" pattern="([A-Z][a-z]*).{2,32}" required >
-                                <div class="alert alert-warning" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-9" style="margin-left: 10%">
-                                <label class="col-form-label" for="lastName">Last Name</label>
-                                <input type="text" class="form-control" id="lastName" th:field="*{lastName}" placeholder="Surname" pattern="(^[\\p{L}\\s.’\\-,]+$).{2,32}" required  th:value="${user.lastName}">
-                                <div class="alert alert-warning" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-9" style="margin-left: 10%">
-                                <label class="col-form-label" for="phoneNumber">Phone Number</label>
-                                <input type="tel" class="form-control" id="phoneNumber" th:field="*{phoneNumber}" placeholder="Phone Number" pattern="^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$" required th:value="${user.phoneNumber}">
-                                <div class="alert alert-warning" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-9" style="margin-left: 10%">
-                                <label class="col-form-label" for="address">Address</label>
-                                <input type="text" class="form-control" id="address" th:field="*{address}" placeholder="Address" pattern="^[#.0-9a-zA-Z\s,-]+$" required th:value="${user.address}">
-                                <div class="alert alert-warning" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-9" style="margin-left: 10%">
-                                <label class="col-form-label" for="email">Email</label>
-                                <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="Enter your email address" autocomplete="off" pattern=".{1,}" required th:value="${user.email}">
-                                <div class="alert alert-warning" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
-                            </div>
-                        </div>
+                        <span th:replace="commons/user_form_common"></span>
                         <div class="row text-center">
                             <div class="col-10"></div>
                             <div class="col" style="margin-top: 5%">

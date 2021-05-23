@@ -40,7 +40,6 @@ public class CreditCardController {
         User user = userService.findByUsername(principal.getName());
         if(user != null){
             creditCard.setUser(user);
-            System.out.println(creditCard);
             creditCardValidator.validate(creditCard, bindingResult);
             if (bindingResult.hasErrors()){
                 return "redirect:/";
