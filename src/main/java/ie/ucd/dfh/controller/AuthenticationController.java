@@ -38,9 +38,13 @@ public class AuthenticationController {
 
     @PreAuthorize("permitAll()")
     @GetMapping("/login")
-    public String login( Model model) {
+    public String login(@RequestParam(value = "error", required = false) Boolean error, Model model) {
+        if(error != null && error){
+            model.addAttribute("error", "Invalid Username or Password!");
+        }
         return "login";
     }
+
 
     @PreAuthorize("permitAll()")
     @GetMapping("/registration")

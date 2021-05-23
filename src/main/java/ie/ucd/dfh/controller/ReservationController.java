@@ -59,7 +59,7 @@ public class ReservationController {
      */
     @PreAuthorize("permitAll()")
     @PostMapping(value="/book-flight")
-    public String bookFlight(@ModelAttribute("guestBookFlight") GuestBookFlight guestBookFlight, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+    public String bookFlight(@ModelAttribute("guestBookFlight") GuestBookFlight guestBookFlight, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         Optional<Flight> flight = flightrepository.findFlightById(guestBookFlight.getFlightId());
 
         if (flight.isPresent()) {
@@ -71,6 +71,7 @@ public class ReservationController {
             creditCardValidator.validate(creditCard, bindingResult);
 
             if(bindingResult.hasErrors()){
+                redirectAttributes.addFlashAttribute("error", "Booking was unsuccessful! Make sure you enter all details correctly!");
                 return "redirect:/show-all-flights";
             }
 

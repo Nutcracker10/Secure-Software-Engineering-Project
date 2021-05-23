@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -57,7 +58,7 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     @PostMapping("/edit-profile")
-    public String editProfile(Principal principal, @ModelAttribute("user") User user, BindingResult bindingResult) {
+    public String editProfile(Principal principal, @ModelAttribute("user") User user, RedirectAttributes redirectAttributes, BindingResult bindingResult) {
         User existingUser = userService.findByUsername(principal.getName());
         if(existingUser != null) {
             existingUser.setFirstName(user.getFirstName());
@@ -72,6 +73,7 @@ public class UserController {
 
             userValidator.validate(existingUser, bindingResult);
             if (bindingResult.hasErrors()){
+                redirectAttributes.addFlashAttribute("error", "Information Invalid! Make sure you enter all details correctly!");
                 return "redirect:/profile/"+existingUser.getUsername();
             }
 

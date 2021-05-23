@@ -61,8 +61,11 @@
 
                     </div>
                 </div>
-
+                <span th:if="${error}">
+                    <label style="color:red;" th:text="${error}"></label>
+                </span>
             </div>
+
         </div>
 
     </div>

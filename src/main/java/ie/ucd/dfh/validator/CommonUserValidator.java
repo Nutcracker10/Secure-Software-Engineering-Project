@@ -30,7 +30,7 @@ public class CommonUserValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         User user = (User) o;
-        System.out.println("guest " + user);
+
         if(!isValid(user.getFirstName(), NAME_REGEX))
             errors.rejectValue("firstName", "InvalidFirstName");
         if(!isValid(user.getLastName(), NAME_REGEX))

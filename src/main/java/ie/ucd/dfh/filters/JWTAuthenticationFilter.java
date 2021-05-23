@@ -83,7 +83,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        super.unsuccessfulAuthentication(request, response, failed);
+        //super.unsuccessfulAuthentication(request, response, failed);
 
         String username = request.getParameter("username");
         Attempts userAttempts = userService.findAttemptsByUsername(username);
@@ -122,8 +122,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         log.warn(String.format("Unsuccessful Login: [username: %s, password: %s]",
                 request.getParameter("username"),
                 request.getParameter("password")));
-
-
+        response.sendRedirect(request.getContextPath() + "/login?error=true");
     }
 
     private void addCookie(String token, HttpServletResponse response){

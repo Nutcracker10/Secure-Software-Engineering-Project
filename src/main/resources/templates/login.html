@@ -19,6 +19,9 @@
                             <label for="password-login">Password:</label>
                             <input type="password" class="form-control" id="password-login" name="password" placeholder="Password" autocomplete="off" required>
                         </div>
+                        <span th:if="${error}">
+                            <label style="color:red;" th:text="${error}"></label>
+                        </span>
                         <div class="form-check">
                             <input type="checkbox" class="form-check-input" id="remember-me" name="remember-me">
                             <label class="form-check-label" for="remember-me">Remember me</label>

@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -36,13 +37,14 @@ public class CreditCardController {
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/add-credit-card")
-    public String addCreditCard(Principal principal, @ModelAttribute("creditCard") @Valid CreditCard creditCard, BindingResult bindingResult) {
+    public String addCreditCard(Principal principal, @ModelAttribute("creditCard") @Valid CreditCard creditCard, RedirectAttributes redirectAttributes, BindingResult bindingResult) {
         User user = userService.findByUsername(principal.getName());
         if(user != null){
             creditCard.setUser(user);
             creditCardValidator.validate(creditCard, bindingResult);
             if (bindingResult.hasErrors()){
-                return "redirect:/";
+                redirectAttributes.addFlashAttribute("error", "Adding Credit Card was unsuccessful! Make sure you enter all details correctly!");
+                return "redirect:/profile/"+principal.getName();
             }
 
             creditCardRepository.save(creditCard);
@@ -74,7 +76,7 @@ public class CreditCardController {
 
     @PreAuthorize("hasAuthority('USER')")
     @PutMapping("credit-card/update")
-    public String updateCreditCard(Principal principal, @ModelAttribute("creditCard") @Valid CreditCard creditCard, BindingResult bindingResult) {
+    public String updateCreditCard(Principal principal, @ModelAttribute("creditCard") @Valid CreditCard creditCard, RedirectAttributes redirectAttributes, BindingResult bindingResult) {
         CreditCard existingCreditCard = creditCardRepository.findById(creditCard.getCreditCardId()).orElse(null);
         User user = userService.findByUsername(principal.getName());
         if(existingCreditCard != null && user != null && existingCreditCard.getUser().getId().equals(user.getId())){
@@ -86,6 +88,7 @@ public class CreditCardController {
 
             creditCardValidator.validate(existingCreditCard, bindingResult);
             if(bindingResult.hasErrors()){
+                redirectAttributes.addFlashAttribute("error", "Modification of Credit Card was unsuccessful! Make sure you enter all details correctly!");
                 return "redirect:/profile/" + principal.getName();
             }
 

@@ -4,6 +4,9 @@
 <body>
 <nav th:replace="common_navbar.html"></nav>
 <div class="container">
+    <span th:if="${error}">
+    <label style="color:red;" th:text="${error}"></label>
+</span>
 <table class="table table-hover" style="margin-top: 10%">
     <thead>
         <th>Departure Time</th>
