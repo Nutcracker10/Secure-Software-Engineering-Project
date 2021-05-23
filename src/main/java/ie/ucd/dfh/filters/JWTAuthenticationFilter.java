@@ -72,7 +72,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     }
 
-
     private void addCookie(String token, HttpServletResponse response){
         Cookie cookie = new Cookie(COOKIE_NAME, token);
 

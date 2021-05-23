@@ -69,6 +69,15 @@ public class Flight {
         this.arr_airport = arr_airport;
         this.price = price;
     }
+
+    public Flight(Calendar departure, Calendar arrival, @NotBlank String dep_airport, @NotBlank String arr_airport, double price, int capacity) {
+        this.departure = departure;
+        this.arrival = arrival;
+        this.dep_airport = dep_airport;
+        this.arr_airport = arr_airport;
+        this.price = price;
+        this.capacity = capacity;
+    }
     public Long getId() {
         return id;
     }

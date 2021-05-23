@@ -1,5 +1,5 @@
 <button class="btn btn-primary" data-target="#addNewFlight" data-toggle="modal" type="button" >Add New Flight</button>
-<div class="modal">
+<div class="modal"  id="addNewFlight">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -12,15 +12,65 @@
                 <form action="/add-flight" method="POST">
                     <div class="form-group">
                         <div class="row">
-                            <label>Departure date and time</label>
-                            <input type="date" id="departure" name="departure">
+                            <div class="col-6">
+                                <label>Departure date and time</label>
+                            </div>
+                           <div class="col-3">
+                               <input type="date" id="departure_date" name="departure_date">
+                           </div>
+                            <div class="col-3">
+                                <input type="time" id="departure_time" name="departure_time">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label>Departure Airport</label>
+                            </div>
+                            <div class="col-6">
+                                <input type="text" id="dep-airport" name="dep_airport">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label>Arrival date and time</label>
+                            </div>
+                            <div class="col-3">
+                                <input type="date" id="arrival_date" name="arrival_date">
+                            </div>
+                            <div class="col-3">
+                                <input type="time" id="arrival_time" name="arrival_time">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label>Arrival Airport</label>
+                            </div>
+                            <div class="col-6">
+                                <input type="text" id="arr-airport" name="arr_airport">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label>price</label>
+                            </div>
+                            <div class="col-6">
+                                <input type="number" id="price" name="price">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label>capacity</label>
+                            </div>
+                            <div class="col-6">
+                                <input type="number" id="capacity" name="capacity">
+                            </div>
                         </div>
                     </div>
+                    <button type="submit" class="btn btn-primary" >Save changes</button>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Save changes</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
