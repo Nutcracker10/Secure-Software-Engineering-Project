@@ -1,10 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<div class="form-group">
+    <div class="row">
+        <div class="col-6">
+            <label>Departure date and time</label>
+        </div>
+        <div class="col-3">
+            <input type="date" id="departure" name="departure" th:field="*{departure}">
+        </div>
+        <div class="col-3">
+            <input type="time" id="departure_time" name="departure_time" >
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <label>Departure Airport</label>
+        </div>
+        <div class="col-6">
+            <input type="text" id="dep_airport" name="dep_airport" th:field="*{dep_airport}">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <label>Arrival date and time</label>
+        </div>
+        <div class="col-3">
+            <input type="date" id="arrival" name="arrival" th:field="*{arrival}">
+        </div>
+        <div class="col-3">
+            <input type="time" id="arrival_time" name="arrival_time">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <label>Arrival Airport</label>
+        </div>
+        <div class="col-6">
+            <input type="text" id="arr_airport" name="arr_airport" th:field="*{arr_airport}">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <label>price</label>
+        </div>
+        <div class="col-6">
+            <input type="number" id="price" name="price" th:field="*{price}">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <label>capacity</label>
+        </div>
+        <div class="col-6">
+            <input type="number" id="capacity" name="capacity" th:field="*{capacity}">
+        </div>
+    </div>
+</div>

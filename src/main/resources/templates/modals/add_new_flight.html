@@ -10,16 +10,17 @@
             </div>
             <div class="modal-body">
                 <form action="/add-flight" method="POST">
+<!--                    <span th:replace="commons/flight_form"></span>-->
                     <div class="form-group">
                         <div class="row">
                             <div class="col-6">
                                 <label>Departure date and time</label>
                             </div>
-                           <div class="col-3">
-                               <input type="date" id="departure_date" name="departure_date">
-                           </div>
                             <div class="col-3">
-                                <input type="time" id="departure_time" name="departure_time">
+                                <input type="date" id="departure" name="departure" >
+                            </div>
+                            <div class="col-3">
+                                <input type="time" id="departure_time" name="departure_time" >
                             </div>
                         </div>
                         <div class="row">
@@ -27,7 +28,7 @@
                                 <label>Departure Airport</label>
                             </div>
                             <div class="col-6">
-                                <input type="text" id="dep-airport" name="dep_airport">
+                                <input type="text" id="dep_airport" name="dep_airport">
                             </div>
                         </div>
                         <div class="row">
@@ -35,7 +36,7 @@
                                 <label>Arrival date and time</label>
                             </div>
                             <div class="col-3">
-                                <input type="date" id="arrival_date" name="arrival_date">
+                                <input type="date" id="arrival" name="arrival" >
                             </div>
                             <div class="col-3">
                                 <input type="time" id="arrival_time" name="arrival_time">
@@ -46,7 +47,7 @@
                                 <label>Arrival Airport</label>
                             </div>
                             <div class="col-6">
-                                <input type="text" id="arr-airport" name="arr_airport">
+                                <input type="text" id="arr_airport" name="arr_airport">
                             </div>
                         </div>
                         <div class="row">
