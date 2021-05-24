@@ -22,7 +22,6 @@ public class CommonUserValidator implements Validator {
         return User.class.equals(clazz);
     }
 
-
     /**
      * Validation common to all Users such as guests and registering users
      */
@@ -42,7 +41,7 @@ public class CommonUserValidator implements Validator {
             errors.rejectValue("address", "InvalidAddress");
     }
 
-    private boolean isValid(String toValidate, String regex){
+    protected boolean isValid(String toValidate, String regex){
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(toValidate);
         return matcher.matches();

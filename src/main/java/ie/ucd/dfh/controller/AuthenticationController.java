@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -57,8 +58,6 @@ public class AuthenticationController {
     @PostMapping( "/registration")
     public String addUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
         userValidator.validate(user, bindingResult);
-        userValidator.validateUsernameAndEmail(user, bindingResult);
-
         if(bindingResult.hasErrors()){
             return "registration";
         }
@@ -70,12 +69,14 @@ public class AuthenticationController {
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/change-password")
-    public String changePassword(Principal principal, String currentPassword, String newPassword, String confirmPassword){
+    public String changePassword(Principal principal, String currentPassword, String newPassword, String confirmPassword, RedirectAttributes redirectAttributes){
         User user = userService.findByUsername(principal.getName());
-        if(encoder.matches(currentPassword, user.getPassword()) && confirmPassword.equals(newPassword)){
+        if(encoder.matches(currentPassword, user.getPassword()) && userValidator.isValidPassword(newPassword) && confirmPassword.equals(newPassword)){
             user.setPassword(encoder.encode(confirmPassword));
             userService.save(user);
             log.info("Password successfully changed for user with ID "+user.getId());
+        }else{
+            redirectAttributes.addFlashAttribute("error", "Changing password unsuccessful. Please try again.");
         }
         return "redirect:/profile/"+user.getUsername();
     }
@@ -96,43 +97,4 @@ public class AuthenticationController {
         model.addAttribute("message", "Message sent to the email address provided");*/
         return "redirect:/login";
     }
-    private boolean strongPass(String password) {
-        boolean flag = false;
-        if ( password.length() < 8) {
-            return false;
-        }
-        //Check for at least one upper case character
-        for (int i=0; i<password.length(); i++){
-            flag = Character.isUpperCase(password.charAt(i));
-
-            if (flag == true )
-                break;
-        }
-        if (flag != true) {
-            return  false;
-        }
-        flag = false;
-        //check for number in password
-        for (int i=0; i<password.length(); i++) {
-            flag = Character.isDigit(password.charAt(i));
-
-            if ( flag == true )
-                break;
-        }
-        if (flag != true) {
-            return false;
-        }
-        flag = false;
-        //check for special char in password
-        for (int i=0; i<password.length(); i++ ) {
-            flag = (String.valueOf(password.charAt(i)).matches("[^a-zA-Z0-9]") );
-
-            if (flag == true) {
-                break;
-            }
-        }
-        return true;
-    }
-
-
 }

@@ -4,6 +4,7 @@ import ie.ucd.dfh.model.*;
 import ie.ucd.dfh.repository.ReservationRepository;
 import ie.ucd.dfh.repository.UserRepository;
 import ie.ucd.dfh.service.UserService;
+import ie.ucd.dfh.validator.CommonUserValidator;
 import ie.ucd.dfh.validator.UserValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +45,9 @@ public class UserController {
     @Autowired
     private UserValidator userValidator;
 
+    @Autowired
+    private CommonUserValidator commonUserValidator;
+
     @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")
     @GetMapping("/profile/{username}")
     public String profile(@PathVariable String username, Model model) {
@@ -60,6 +64,7 @@ public class UserController {
     @PostMapping("/edit-profile")
     public String editProfile(Principal principal, @ModelAttribute("user") User user, RedirectAttributes redirectAttributes, BindingResult bindingResult) {
         User existingUser = userService.findByUsername(principal.getName());
+
         if(existingUser != null) {
             existingUser.setFirstName(user.getFirstName());
             existingUser.setLastName(user.getLastName());
@@ -71,7 +76,7 @@ public class UserController {
             existingUser.setEmail(user.getEmail());
             existingUser.setPhoneNumber(user.getPhoneNumber());
 
-            userValidator.validate(existingUser, bindingResult);
+            commonUserValidator.validate(existingUser, bindingResult);
             if (bindingResult.hasErrors()){
                 redirectAttributes.addFlashAttribute("error", "Information Invalid! Make sure you enter all details correctly!");
                 return "redirect:/profile/"+existingUser.getUsername();

@@ -20,7 +20,7 @@
                     <span th:replace="commons/user_form_common.html" ></span>
                     <div class="form-group">
                         <label for="password">Password:</label>
-                        <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="Password" autocomplete="off" required>
+                        <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="Password (8 to 32 chars, 1 upper and lower and symbol)" autocomplete="off" pattern="((?=.*[a-z])(?=.*\d)(?=.*[A-Z])(?=.*[@#$%!]).{8,32})" required>
                         <!--<div class="alert alert-warning" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>-->
                     </div>
                     <div class="alert alert-warning" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}"></div>
