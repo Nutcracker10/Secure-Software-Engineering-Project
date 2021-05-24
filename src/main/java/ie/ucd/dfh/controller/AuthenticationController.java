@@ -39,9 +39,12 @@ public class AuthenticationController {
 
     @PreAuthorize("permitAll()")
     @GetMapping("/login")
-    public String login(@RequestParam(value = "error", required = false) Boolean error, Model model) {
-        if(error != null && error){
+    public String login(@RequestParam(value = "error", required = false) String error, @RequestParam(value = "locked", required = false) String locked, Model model) {
+        if(error != null ){
             model.addAttribute("error", "Invalid Username or Password!");
+        }
+        if(locked != null){
+            model.addAttribute("error", "To many invalid attempts. Account locked. Please email us to get it unlocked!");
         }
         return "login";
     }

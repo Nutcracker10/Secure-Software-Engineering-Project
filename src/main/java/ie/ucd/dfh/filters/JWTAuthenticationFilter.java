@@ -85,6 +85,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         //super.unsuccessfulAuthentication(request, response, failed);
 
+        String target = "error";
         String username = request.getParameter("username");
         Attempts userAttempts = userService.findAttemptsByUsername(username);
         User user = userService.findByUsername(username);
@@ -100,21 +101,17 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                userAttempts.setAttempts(userAttempts.getAttempts() + 1);
                userService.save(userAttempts);
 
-               if (userAttempts.getAttempts() + 1 >
-                       SecurityConstant.LOGIN_ATTEMPT_LIMIT) {
+               if (userAttempts.getAttempts() + 1 > SecurityConstant.LOGIN_ATTEMPT_LIMIT) {
                    System.out.println("ATTEMPTS GREATER THAN LIMIT");
-                   if (user != null) {
-                       user.setAccountNonLocked(false);
-                       userService.save(user);
+                   user.setAccountNonLocked(false);
+                   userService.save(user);
 
-                       log.warn(String.format("Account Locked: [ID: %s, username: %s, password: %s]",
-                               user.getId(),
-                               request.getParameter("username"),
-                               request.getParameter("password")));
-
-                       throw new LockedException("Too many invalid attempts. Account is locked!!");
-
-                   }
+                   log.warn(String.format("Account Locked: [ID: %s, username: %s, password: %s]",
+                           user.getId(),
+                           request.getParameter("username"),
+                           request.getParameter("password")));
+                   target = "locked";
+                   //throw new LockedException("Too many invalid attempts. Account is locked!!");
                }
            }
        }
@@ -122,7 +119,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         log.warn(String.format("Unsuccessful Login: [username: %s, password: %s]",
                 request.getParameter("username"),
                 request.getParameter("password")));
-        response.sendRedirect(request.getContextPath() + "/login?error=true");
+        response.sendRedirect(request.getContextPath() + "/login?"+target);
     }
 
     private void addCookie(String token, HttpServletResponse response){
