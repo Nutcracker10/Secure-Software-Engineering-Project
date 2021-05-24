@@ -1,6 +1,8 @@
 package ie.ucd.dfh.controller;
 
+import ie.ucd.dfh.model.User;
 import ie.ucd.dfh.model.wrapper.GuestBookFlight;
+import ie.ucd.dfh.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ie.ucd.dfh.model.Flight;
@@ -9,13 +11,16 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.*;
 
 import ie.ucd.dfh.repository.FlightRepository;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -29,11 +34,15 @@ public class FlightController {
     @Autowired
     private FlightRepository flightRepository;
 
+    @Autowired
+    private UserService userService;
+
     @PreAuthorize("permitAll()")
     @GetMapping("/show-all-flights")
     public String showAllFlights(Model model) {
         model.addAttribute("guestBookFlight", new GuestBookFlight());
         model.addAttribute("flights", flightRepository.findAll() );
+        model.addAttribute("flight",new Flight());
 
         return "search_flights_results.html";
     }
@@ -50,6 +59,41 @@ public class FlightController {
         flightRepository.save(flight);
 
         response.sendRedirect("/show-all-flights");
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/edit-flight")
+    public String editFlight(Principal principal, @ModelAttribute("flight") Flight flight, BindingResult bindingResult, RedirectAttributes redirectAttributes,
+                           String departure, String arrival, String departure_time, String arrival_time) throws ParseException, IOException {
+        Flight exsistingFlight = flightRepository.findFlightById(flight.getId()).orElse(null);
+        User user = userService.findByUsername(principal.getName());
+
+        Calendar[] departureAndArrival = stringsToDates(departure,departure_time,arrival,arrival_time);
+//        SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm");
+//        dateFormatter.setTimeZone(TimeZone.getDefault());
+//        flight.getDeparture().setTime(dateFormatter.parse(departure_time));
+//        flight.getArrival().setTime(dateFormatter.parse(arrival_time));
+        if(exsistingFlight != null){
+            exsistingFlight.setArr_airport(flight.getArr_airport());
+            exsistingFlight.setArrival(departureAndArrival[1]);
+            exsistingFlight.setCapacity(flight.getCapacity());
+            exsistingFlight.setDep_airport(flight.getDep_airport());
+            exsistingFlight.setDeparture(departureAndArrival[0]);
+            exsistingFlight.setPrice(flight.getPrice());
+
+            if(bindingResult.hasErrors()){
+                for(ObjectError error : bindingResult.getAllErrors()){
+                    System.out.println("ERROR : " + error);
+                }
+                redirectAttributes.addFlashAttribute("error", "Modification of Flight was unsuccessful! Make sure you enter all details correctly!");
+                return "redirect:/show-all-flights";
+            }
+
+            flightRepository.save(exsistingFlight);
+            log.info(String.format("Flight Modified: [User ID: %s, username: %s, Flight ID: %s]",
+                    user.getId(), principal.getName(), exsistingFlight.getId()));
+        }
+        return "redirect:/show-all-flights";
     }
 
     private Calendar[] stringsToDates(String departure_date, String departure_time, String arrival_date,

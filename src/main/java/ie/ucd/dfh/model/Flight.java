@@ -2,6 +2,7 @@ package ie.ucd.dfh.model;
 
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -21,6 +22,7 @@ public class Flight {
     @Field
     @Basic
     @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name="departure")
     private Calendar departure;
 
@@ -28,6 +30,7 @@ public class Flight {
     @Field
     @Basic
     @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name="arrival")
     private Calendar arrival;
 

@@ -1,15 +1,16 @@
-<button class="btn btn-primary" data-target="#addNewFlight" data-toggle="modal" type="button" >Add New Flight</button>
-<div class="modal"  id="addNewFlight">
+<button class="btn btn-warning" data-target="#editFlight" data-toggle="modal" type="button" >edit Flight</button>
+<div class="modal"  id="editFlight">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add New Flight</h5>
+                <h5 class="modal-title">Edit Flight</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true"></span>
                 </button>
             </div>
             <div class="modal-body">
-                <form action="/add-flight" method="POST">
+                <form action="#" th:action="@{/edit-flight}"  th:object="${flight}" th:method="POST" >
+                    <input type="hidden" th:attr="name='id'" th:value="${flight.id}">
 <!--                    <span th:replace="commons/flight_form"></span>-->
                     <div class="form-group">
                         <div class="row">
@@ -17,7 +18,7 @@
                                 <label>Departure date and time</label>
                             </div>
                             <div class="col-3">
-                                <input type="date" id="departure" name="departure" >
+                                <input type="date" id="departure" name="departure" th:field="*{departure}">
                             </div>
                             <div class="col-3">
                                 <input type="time" id="departure_time" name="departure_time" >
@@ -28,7 +29,7 @@
                                 <label>Departure Airport</label>
                             </div>
                             <div class="col-6">
-                                <input type="text" id="dep_airport" name="dep_airport">
+                                <input type="text" id="dep_airport" name="dep_airport" th:field="*{dep_airport}">
                             </div>
                         </div>
                         <div class="row">
@@ -36,7 +37,7 @@
                                 <label>Arrival date and time</label>
                             </div>
                             <div class="col-3">
-                                <input type="date" id="arrival" name="arrival" >
+                                <input type="date" id="arrival" name="arrival" th:field="*{arrival}">
                             </div>
                             <div class="col-3">
                                 <input type="time" id="arrival_time" name="arrival_time">
@@ -47,7 +48,7 @@
                                 <label>Arrival Airport</label>
                             </div>
                             <div class="col-6">
-                                <input type="text" id="arr_airport" name="arr_airport">
+                                <input type="text" id="arr_airport" name="arr_airport" th:field="*{arr_airport}">
                             </div>
                         </div>
                         <div class="row">
@@ -55,7 +56,7 @@
                                 <label>price</label>
                             </div>
                             <div class="col-6">
-                                <input type="number" id="price" name="price">
+                                <input type="number" id="price" name="price" th:field="*{price}">
                             </div>
                         </div>
                         <div class="row">
@@ -63,7 +64,7 @@
                                 <label>capacity</label>
                             </div>
                             <div class="col-6">
-                                <input type="number" id="capacity" name="capacity">
+                                <input type="number" id="capacity" name="capacity" th:field="*{capacity}">
                             </div>
                         </div>
                     </div>
@@ -76,4 +77,3 @@
         </div>
     </div>
 </div>
-
