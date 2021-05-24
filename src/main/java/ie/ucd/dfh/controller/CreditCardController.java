@@ -87,6 +87,7 @@ public class CreditCardController {
 
             creditCardValidator.validate(existingCreditCard, bindingResult);
             if(bindingResult.hasErrors()){
+
                 redirectAttributes.addFlashAttribute("error", "Modification of Credit Card was unsuccessful! Make sure you enter all details correctly!");
                 return "redirect:/profile/" + principal.getName();
             }
