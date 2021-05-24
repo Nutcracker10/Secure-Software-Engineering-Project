@@ -1,23 +1,19 @@
 package ie.ucd.dfh.service;
 
-import ie.ucd.dfh.model.Attempts;
-import ie.ucd.dfh.model.ConfirmationToken;
-import ie.ucd.dfh.model.Role;
-import ie.ucd.dfh.model.User;
-import ie.ucd.dfh.repository.AttemptsRepository;
-import ie.ucd.dfh.repository.ConfirmationTokenRepository;
-import ie.ucd.dfh.repository.RoleRepository;
-import ie.ucd.dfh.repository.UserRepository;
+import ie.ucd.dfh.model.*;
+import ie.ucd.dfh.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.encrypt.Encryptors;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
+import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.stereotype.Service;
-
 import java.util.HashSet;
 import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
+
     @Autowired
     private UserRepository userRepository;
 
@@ -31,8 +27,13 @@ public class UserServiceImpl implements UserService {
     private ConfirmationTokenRepository confirmationTokenRepository;
 
     @Autowired
+    private CreditCardRepository creditCardRepository;
+
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    private TextEncryptor encryptor;
 
     @Override
     public void save(User user) {
@@ -42,6 +43,14 @@ public class UserServiceImpl implements UserService {
         roleSet.add(userRole);
         user.setRoles(roleSet);
         userRepository.save(user);
+    }
+
+    @Override
+    public void save(CreditCard creditCard) {
+        String cardNumber = creditCard.getCardNumber();
+        creditCard.setCardNumber(encryptor.encrypt(cardNumber)+cardNumber.substring(cardNumber.length()-4));
+        creditCard.setSecurityCode(encryptor.encrypt(creditCard.getSecurityCode()));
+        creditCardRepository.save(creditCard);
     }
 
     @Override

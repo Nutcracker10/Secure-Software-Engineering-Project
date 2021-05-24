@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import javax.validation.Valid;
 import java.security.Principal;
 
@@ -39,6 +38,7 @@ public class CreditCardController {
     @PostMapping("/add-credit-card")
     public String addCreditCard(Principal principal, @ModelAttribute("creditCard") @Valid CreditCard creditCard, RedirectAttributes redirectAttributes, BindingResult bindingResult) {
         User user = userService.findByUsername(principal.getName());
+
         if(user != null){
             creditCard.setUser(user);
             creditCardValidator.validate(creditCard, bindingResult);
@@ -46,8 +46,7 @@ public class CreditCardController {
                 redirectAttributes.addFlashAttribute("error", "Adding Credit Card was unsuccessful! Make sure you enter all details correctly!");
                 return "redirect:/profile/"+principal.getName();
             }
-
-            creditCardRepository.save(creditCard);
+            userService.save(creditCard);
             userRepository.save(user);
             log.info(String.format("Credit Card Added: [User ID: %s, username: %s, Credit Card ID: %s]",
                     user.getId(), principal.getName(), creditCard.getCreditCardId()));
@@ -92,7 +91,7 @@ public class CreditCardController {
                 return "redirect:/profile/" + principal.getName();
             }
 
-            creditCardRepository.save(existingCreditCard);
+            userService.save(existingCreditCard);
             log.info(String.format("Credit Card Modified: [User ID: %s, username: %s, Credit Card ID: %s]",
                     user.getId(), principal.getName(), existingCreditCard.getCreditCardId()));
             return "redirect:/profile/" + principal.getName();

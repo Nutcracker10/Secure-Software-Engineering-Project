@@ -1,5 +1,8 @@
 package ie.ucd.dfh.model;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -29,7 +32,6 @@ public class CreditCard {
     private String expiryYear;
 
     @NotBlank
-    @Size(min = 3, max = 4)
     @Column(name = "security_code")
     private String securityCode;
 
