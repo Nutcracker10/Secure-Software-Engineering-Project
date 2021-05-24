@@ -1,16 +1,16 @@
 <div class="form-group">
     <label for="firstName">First Name:</label>
-    <input type="text" class="form-control" id="firstName" name="firstName" th:field="*{firstName}" placeholder="First Name" pattern="([A-Z][a-z]*).{2,32}" required >
+    <input type="text" class="form-control" id="firstName" name="firstName" th:field="*{firstName}" placeholder="First Name (e.g. John)" pattern="([A-Z][a-z]*).{2,32}" required >
     <div class="alert alert-warning" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
 </div>
 <div class="form-group">
     <label for="lastName">Surname:</label>
-    <input type="text" class="form-control" id="lastName" name="lastName" th:field="*{lastName}" placeholder="Surname" pattern="(^[\\p{L}\\s.’\\-,]+$).{2,32}" required >
+    <input type="text" class="form-control" id="lastName" name="lastName" th:field="*{lastName}" placeholder="Surname (e.g. Doe)" pattern="([A-Z][a-z]*).{2,32}"  required >
     <div class="alert alert-warning" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
 </div>
 <div class="form-group">
     <label for="phoneNumber">Phone Number:</label>
-    <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" th:field="*{phoneNumber}" placeholder="Phone Number" pattern="^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$" required>
+    <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" th:field="*{phoneNumber}" placeholder="Phone Number (e.g 0831112222)" pattern="^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$" required>
     <div class="alert alert-warning" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
 </div>
 <div class="form-group">
@@ -20,6 +20,6 @@
 </div>
 <div class="form-group">
     <label for="email">Email Address:</label>
-    <input type="email" class="form-control" id="email" name="email" th:field="*{email}" placeholder="Enter your email address" autocomplete="off" pattern=".{1,}" required>
+    <input type="email" class="form-control" id="email" name="email" th:field="*{email}" placeholder="Enter your email address (e.g. JohnDoe@gmail.com)" autocomplete="off" pattern="^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$" required>
     <div class="alert alert-warning" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
 </div>

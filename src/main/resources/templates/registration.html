@@ -14,7 +14,7 @@
                     <p class="text-uppercase pull-center">Create an Account</p>
                     <div class="form-group">
                         <label for="username">Username:</label>
-                        <input type="text" class="form-control" id="username" th:field="*{username}" placeholder="Username" required>
+                        <input type="text" class="form-control" id="username" th:field="*{username}" placeholder="Username (e.g. JohnDoe123)" pattern="^[a-zA-Z0-9_-]{5,32}$" required>
                         <!--<div class="alert alert-warning" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>-->
                     </div>
                     <span th:replace="commons/user_form_common.html" ></span>

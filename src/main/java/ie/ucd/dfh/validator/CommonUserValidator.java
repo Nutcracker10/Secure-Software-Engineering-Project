@@ -13,7 +13,6 @@ import java.util.regex.Pattern;
 @Component
 public class CommonUserValidator implements Validator {
     private final String NAME_REGEX = "([A-Z][a-z]*).{2,32}";
-    private final String LAST_NAME_REGEX = "(^[\\p{L}\\s.’\\-,]+$).{2,32}";
     private final String EMAIL_PATTERN = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
     private final String PHONE_NUMBER_PATTERN = "^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$";
     private final String ADDRESS_PATTERN = "^[#.0-9a-zA-Z\\s,-]+$";
