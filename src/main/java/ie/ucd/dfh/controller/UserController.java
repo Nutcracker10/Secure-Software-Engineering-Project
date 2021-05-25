@@ -1,6 +1,7 @@
 package ie.ucd.dfh.controller;
 
 import ie.ucd.dfh.model.*;
+import ie.ucd.dfh.model.wrapper.GuestBookFlight;
 import ie.ucd.dfh.repository.ReservationRepository;
 import ie.ucd.dfh.repository.UserRepository;
 import ie.ucd.dfh.service.UserService;
@@ -104,6 +105,9 @@ public class UserController {
 
     @GetMapping("/search_flights")
     public String displayFlights(@RequestParam(value="search",required = false)String query, Model model){
+        model.addAttribute("guestBookFlight", new GuestBookFlight());
+        model.addAttribute("flight", new Flight());
+
         if(query.isEmpty()){
             return "search_flights_results.html";
         }

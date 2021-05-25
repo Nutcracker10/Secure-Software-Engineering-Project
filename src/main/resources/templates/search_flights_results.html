@@ -30,12 +30,12 @@
                 </span>
             </td>
             <td>
-                <div sec:authorize="hasAnyAuthority('ADMIN')">
+                <div sec:authorize="hasAuthority('ADMIN')">
                     <div th:include="modals/edit_flight.html"></div>
                 </div>
             </td>
             <td>
-                <div  sec:authorize="hasAnyAuthority('ADMIN')">
+                <div  sec:authorize="hasAuthority('ADMIN')">
                     <form action="#" th:action="@{'/delete-flight/{id}'(id=${flight.id})}" th:method="delete">
                         <button class="btn btn-danger" type="submit">delete</button>
                     </form>

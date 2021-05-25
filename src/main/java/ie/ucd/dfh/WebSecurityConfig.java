@@ -87,7 +87,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .requiresChannel().anyRequest().requiresSecure().and()
                 .authorizeRequests()
                 .antMatchers(staticResources).permitAll()
-                .antMatchers( "/registration", "/login", "/", "/show-all-flights", "/book-flight", "/reservation").permitAll()
+                .antMatchers( "/registration", "/login", "/", "/show-all-flights", "/book-flight", "/reservation","/search_flights").permitAll()
                 .antMatchers("/profile", "/history", "/user/delete").access("hasAnyAuthority('ADMIN', 'USER')")
                 .anyRequest().authenticated()
                 .and()
