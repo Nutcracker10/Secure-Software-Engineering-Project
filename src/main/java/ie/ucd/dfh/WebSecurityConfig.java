@@ -1,5 +1,6 @@
 package ie.ucd.dfh;
 
+import ie.ucd.dfh.service.LoginAttemptService;
 import ie.ucd.dfh.service.UserDetailsServiceImpl;
 import ie.ucd.dfh.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private LoginAttemptService loginAttemptService;
 
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -103,7 +107,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .deleteCookies(COOKIE_NAME)
                 .permitAll()
                 .and()
-                .addFilter(new JWTAuthenticationFilter(authenticationManager(), userService))
+                .addFilter(new JWTAuthenticationFilter(authenticationManager(), userService, loginAttemptService))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
