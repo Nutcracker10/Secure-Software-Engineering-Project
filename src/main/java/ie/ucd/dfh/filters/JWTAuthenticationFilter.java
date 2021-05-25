@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import ie.ucd.dfh.model.Attempts;
 import ie.ucd.dfh.model.User;
 import ie.ucd.dfh.service.ACUserDetails;
+import ie.ucd.dfh.service.LoginAttemptService;
 import ie.ucd.dfh.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,9 +41,13 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Autowired
     private UserService userService;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, UserService userService){
+    @Autowired
+    private LoginAttemptService loginAttemptService;
+
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, UserService userService, LoginAttemptService loginAttemptService){
         this.authenticationManager = authenticationManager;
         this.userService = userService;
+        this.loginAttemptService = loginAttemptService;
     }
 
     @Override
@@ -67,6 +72,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         log.info(String.format("Successful Login: [username: %s]",
             request.getParameter("username")));
 
+        loginAttemptService.loginSucceeded(getClientIP(request));
         String token = JWT.create()
                 .withSubject(((ACUserDetails) auth.getPrincipal()).getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
@@ -92,6 +98,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         Attempts userAttempts = userService.findAttemptsByUsername(username);
         User user = userService.findByUsername(username);
 
+        loginAttemptService.loginFailed(getClientIP(request));
+        if(loginAttemptService.isBlocked(getClientIP(request))){
+            target = "blocked";
+            log.warn(String.format("IP Address: %s has been blocked for 3 unsuccessful login attempts", getClientIP(request)));
+        }
+
        if(user != null) {
            if (userAttempts == null) {
                Attempts attempts = new Attempts();
@@ -99,12 +111,10 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                attempts.setAttempts(1);
                userService.save(attempts);
            } else {
-               System.out.println("USER ATTEMPTS PRESENT");
                userAttempts.setAttempts(userAttempts.getAttempts() + 1);
                userService.save(userAttempts);
 
                if (userAttempts.getAttempts() + 1 > SecurityConstant.LOGIN_ATTEMPT_LIMIT) {
-                   System.out.println("ATTEMPTS GREATER THAN LIMIT");
                    user.setAccountNonLocked(false);
                    userService.save(user);
 
@@ -135,5 +145,13 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         cookie.setPath("/");
 
         response.addCookie(cookie);
+    }
+
+    private String getClientIP(HttpServletRequest request) {
+        String xfHeader = request.getHeader("X-Forwarded-For");
+        if(xfHeader == null) {
+            return request.getRemoteAddr();
+        }
+        return xfHeader.split(",")[0];
     }
 }

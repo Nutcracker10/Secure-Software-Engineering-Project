@@ -39,13 +39,20 @@ public class AuthenticationController {
 
     @PreAuthorize("permitAll()")
     @GetMapping("/login")
-    public String login(@RequestParam(value = "error", required = false) String error, @RequestParam(value = "locked", required = false) String locked, Model model) {
+    public String login(@RequestParam(value = "error", required = false) String error,
+                        @RequestParam(value = "locked", required = false) String locked,
+                        @RequestParam(value = "blocked", required = false) String blocked,
+                        Model model) {
         if(error != null ){
             model.addAttribute("error", "Invalid Username or Password!");
         }
         if(locked != null){
             model.addAttribute("error", "To many invalid attempts. Account locked. Please email us to get it unlocked!");
         }
+        if(blocked != null){
+            model.addAttribute("error", "IP Address blocked as too many unsuccessful attempts. Please wait 20 minutes and try again!");
+        }
+
         return "login";
     }
 
