@@ -19,6 +19,10 @@ public class AuthenticationFailureListener implements
 
     @Override
     public void onApplicationEvent(AuthenticationFailureBadCredentialsEvent e) {
+        final String xfHeader = request.getHeader("X-Forwarded-For");
 
+        if(xfHeader == null ) {
+
+        }
     }
 }
