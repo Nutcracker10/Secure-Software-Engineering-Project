@@ -5,6 +5,7 @@ import ie.ucd.dfh.repository.ReservationRepository;
 import ie.ucd.dfh.repository.UserRepository;
 import ie.ucd.dfh.service.UserService;
 import ie.ucd.dfh.validator.CommonUserValidator;
+import ie.ucd.dfh.validator.CreditCardValidator;
 import ie.ucd.dfh.validator.UserValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +19,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
@@ -49,6 +51,12 @@ public class UserController {
     @Autowired
     private CommonUserValidator commonUserValidator;
 
+    @Autowired
+    private CreditCardValidator creditCardValidator;
+
+    @Autowired
+    private TextEncryptor textEncryptor;
+
     @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")
     @GetMapping("/profile/{username}")
     public String profile(@PathVariable String username, Model model) {
@@ -61,7 +69,7 @@ public class UserController {
         return "redirect:/";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    @PreAuthorize("#user.username == authentication.name or hasAuthority('ADMIN')")
     @PostMapping("/edit-profile")
     public String editProfile(Principal principal, @ModelAttribute("user") User user, RedirectAttributes redirectAttributes, BindingResult bindingResult) {
         User existingUser = userService.findByUsername(principal.getName());
@@ -92,6 +100,7 @@ public class UserController {
     @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")
     @GetMapping("/history/{username}")
     public String displayHistory(@PathVariable String username, Model model) {
+        model.addAttribute("creditCard", new CreditCard());
         User user = userService.findByUsername(username);
         if(user != null){
             Set<Reservation> reservations =  user.getReservations();
@@ -119,15 +128,14 @@ public class UserController {
     }
 
 
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
-    @RequestMapping(value = "/user/delete/{id}", method = RequestMethod.DELETE)
-    public void deleteUser(@PathVariable Long id, Principal principal, HttpServletResponse response) throws IOException{
-        User user = userService.findByUsername(principal.getName());
+    @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")
+    @RequestMapping(value = "/user/delete/{username}", method = RequestMethod.DELETE)
+    public String deleteUser(@PathVariable String username, Principal principal, HttpServletRequest request) throws ServletException {
+        User user = userService.findByUsername(username);
         if(user != null ){
             User copyUser = new User();
             copyUser.setFirstName(user.getFirstName());
             copyUser.setLastName(user.getLastName());
-            copyUser.setUsername(user.getUsername());
             copyUser.setAddress(user.getAddress());
             copyUser.setPhoneNumber(user.getPhoneNumber());
             copyUser.setEmail(user.getEmail());
@@ -135,14 +143,16 @@ public class UserController {
             for(Reservation reservation : user.getReservations()){
                 reservation.setUser(copyUser);
             }
-            SecurityContextHolder.getContext().setAuthentication(null);
+
+            request.logout();
             userRepository.delete(user);
+
             log.info("User [ID:"+user.getId()+"] has been deleted.");
         }else{
-            log.warn("Unauthorized user attempted to delete user [ID:"+id+"]");
+            log.warn("Unauthorized user attempted to delete user [ID:"+username+"]");
         }
 
-        response.sendRedirect("/");
+        return "redirect:/";
     }
 
     @PreAuthorize("permitAll()")
@@ -166,19 +176,26 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     @DeleteMapping("/delete-reservation")
-    public String cancelReservations(Model model, String cardType, String cardNumber,
-                                     String expiryMonth, String expiryYear, String securityCode, @RequestParam Long id) {
+    public String cancelReservations(@ModelAttribute("creditCard") CreditCard creditCard, BindingResult bindingResult, RedirectAttributes redirectAttributes, @RequestParam Long id) {
         Reservation res = reservationRepository.findById(id).orElse(null);
-        Set<CreditCard> cards = res.getUser().getCreditCards();
-        System.out.println(cards.size());
-        for(CreditCard card : cards){
-            if( card.checkIfDetailsMatch(cardType,cardNumber,expiryMonth,expiryYear,securityCode)){
-                reservationRepository.delete(res);
+        User user = res.getUser();
+
+        if(user != null){
+            creditCardValidator.validate(creditCard, bindingResult);
+            if(bindingResult.hasErrors()){
+                redirectAttributes.addFlashAttribute("error", "Credit Card details incorrect.");
+                return "redirect:/history/"+user.getUsername();
             }
+            for(CreditCard card : user.getCreditCards()){
+                if(creditCardValidator.checkIfDetailsMatch(card, creditCard)){
+                    reservationRepository.delete(res);
+                    redirectAttributes.addFlashAttribute("error", "Successfully Cancelled.");
+                    return "redirect:/history/"+user.getUsername();
+                }
+            }
+            redirectAttributes.addFlashAttribute("error", "Details do not match. Please try again.");
+            return "redirect:/history/"+user.getUsername();
         }
-        return "index";
+        return "redirect:/";
     }
-
-
-
 }

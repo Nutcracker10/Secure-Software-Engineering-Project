@@ -11,6 +11,11 @@
             <div class="modal-body">
                 <form action="#" th:action="@{/edit-profile}" method="POST" th:object="${user}">
                     <div class="form-group">
+                        <div class="form-group">
+                            <label for="username">Username:</label>
+                            <input type="text" class="form-control" id="username" th:field="*{username}" readonly pattern="^[a-zA-Z0-9_-]{5,32}$" required>
+                            <!--<div class="alert alert-warning" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>-->
+                        </div>
                         <span th:replace="commons/user_form_common"></span>
                         <div class="row text-center">
                             <div class="col-10"></div>

@@ -1,7 +1,8 @@
 package ie.ucd.dfh.validator;
 
 import ie.ucd.dfh.model.CreditCard;
-import ie.ucd.dfh.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -20,6 +21,9 @@ public class CreditCardValidator implements Validator {
     private static final List<String> CARD_TYPES = Arrays.asList("Visa Credit", "Visa Debit", "Visa Electron", "Mastercard", "Maestro");
     private static final String SECURITY_CODE_PATTERN = "^[0-9]{3,4}$";
     private static final String CREDIT_CARD_NUMBER_PATTERN = "^[0-9]{8,19}$";
+
+    @Autowired
+    private TextEncryptor encryptor;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -46,6 +50,14 @@ public class CreditCardValidator implements Validator {
         if(!isValid(creditCard.getSecurityCode(), SECURITY_CODE_PATTERN)) {
             errors.rejectValue("securityCode", "InvalidCreditCardInfo");
         }
+    }
+
+    public boolean checkIfDetailsMatch(CreditCard original, CreditCard newCreditCard){
+        return (original.getCardType().matches(newCreditCard.getCardType())) &&
+                (encryptor.decrypt(original.getCardNumber().substring(0, original.getCardNumber().length()-4)).matches(newCreditCard.getCardNumber())) &&
+                (original.getExpiryMonth().matches(newCreditCard.getExpiryMonth())) &&
+                (original.getExpiryYear().matches(newCreditCard.getExpiryYear())) &&
+                (encryptor.decrypt(original.getSecurityCode()).matches(newCreditCard.getSecurityCode()));
     }
 
     private boolean isValid(String toValidate, String regex){

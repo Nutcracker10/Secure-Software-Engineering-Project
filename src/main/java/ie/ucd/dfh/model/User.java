@@ -47,7 +47,7 @@ public class User  {
 
     @NotEmpty
     @Email
-    @Column(unique = true)
+    @Column
     private String email;
 
     @OneToMany(mappedBy = "user")
