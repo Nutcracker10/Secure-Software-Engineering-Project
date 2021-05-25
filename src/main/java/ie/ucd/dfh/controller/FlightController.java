@@ -69,10 +69,6 @@ public class FlightController {
         User user = userService.findByUsername(principal.getName());
 
         Calendar[] departureAndArrival = stringsToDates(departure,departure_time,arrival,arrival_time);
-//        SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm");
-//        dateFormatter.setTimeZone(TimeZone.getDefault());
-//        flight.getDeparture().setTime(dateFormatter.parse(departure_time));
-//        flight.getArrival().setTime(dateFormatter.parse(arrival_time));
         if(exsistingFlight != null){
             exsistingFlight.setArr_airport(flight.getArr_airport());
             exsistingFlight.setArrival(departureAndArrival[1]);
@@ -82,15 +78,32 @@ public class FlightController {
             exsistingFlight.setPrice(flight.getPrice());
 
             if(bindingResult.hasErrors()){
-                for(ObjectError error : bindingResult.getAllErrors()){
-                    System.out.println("ERROR : " + error);
-                }
                 redirectAttributes.addFlashAttribute("error", "Modification of Flight was unsuccessful! Make sure you enter all details correctly!");
                 return "redirect:/show-all-flights";
             }
 
             flightRepository.save(exsistingFlight);
             log.info(String.format("Flight Modified: [User ID: %s, username: %s, Flight ID: %s]",
+                    user.getId(), principal.getName(), exsistingFlight.getId()));
+        }
+        return "redirect:/show-all-flights";
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @DeleteMapping("/delete-flight/{id}")
+    public String deleteFlight(@PathVariable Long id, Principal principal,
+                             RedirectAttributes redirectAttributes){
+        Flight exsistingFlight = flightRepository.findFlightById(id).orElse(null);
+        User user = userService.findByUsername(principal.getName());
+
+        if(exsistingFlight == null){
+            redirectAttributes.addFlashAttribute("error", "Deletion of Flight was unsuccessful!");
+            return "redirect:/show-all-flights";
+        }
+
+        if(exsistingFlight != null){
+            flightRepository.delete(exsistingFlight);
+            log.info(String.format("Flight Deleted: [User ID: %s, username: %s, Flight ID: %s]",
                     user.getId(), principal.getName(), exsistingFlight.getId()));
         }
         return "redirect:/show-all-flights";

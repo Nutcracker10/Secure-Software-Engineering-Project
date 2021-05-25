@@ -51,7 +51,7 @@ public class Flight {
     @Column(name="price")
     private double price;
 
-    @OneToMany(mappedBy = "flight")
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Reservation> reservations;
 
     public Flight(){}
