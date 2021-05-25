@@ -2,7 +2,6 @@ package ie.ucd.dfh.service;
 
 import ie.ucd.dfh.model.User;
 import ie.ucd.dfh.repository.UserRepository;
-import jdk.internal.net.http.common.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
