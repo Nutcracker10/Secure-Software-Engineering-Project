@@ -20,8 +20,10 @@ public class AuthenticationSuccessEventListener implements ApplicationListener<A
     public void onApplicationEvent(final AuthenticationSuccessEvent e) {
         final String xfHeader = request.getHeader("X-Forwarded-For");
 
-        if(xfHeader == null) {
-            loginAttemptService
+        if (xfHeader == null) {
+            loginAttemptService.loginSucceeded(request.getRemoteAddr());
+        } else {
+            loginAttemptService.loginSucceeded(xfHeader.split(",")[0]);
         }
     }
 }
