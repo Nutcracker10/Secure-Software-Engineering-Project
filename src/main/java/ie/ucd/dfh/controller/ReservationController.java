@@ -87,6 +87,9 @@ public class ReservationController {
     @GetMapping("/show-passengers")
     public void getPassengers(@RequestParam Long id, Model model){
         Reservation reservation = reservationRepository.findById(id).orElse(null);
+        model.addAttribute("passenger_firstname",reservation.getUser().getFirstName());
+        model.addAttribute("passenger_lastname",reservation.getUser().getLastName());
+
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
