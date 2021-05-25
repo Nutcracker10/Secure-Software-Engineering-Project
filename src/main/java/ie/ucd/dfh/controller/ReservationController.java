@@ -89,6 +89,31 @@ public class ReservationController {
         Reservation reservation = reservationRepository.findById(id).orElse(null);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping(value="/edit-reservation")
+    public String editReservation(@ModelAttribute("reservation") Reservation reservation, BindingResult bindingResult,
+                                  RedirectAttributes redirectAttributes, Principal principal,String status, String flight_id, String email){
+       Reservation exsistingRes = reservationRepository.findById(reservation.getReservationId()).orElse(null);
+        Flight flight = flightrepository.findFlightById(Long.parseLong(flight_id)).orElse(null);
+        User user = userRepository.findByEmail(email).orElse(null);
+        User editor = userService.findByUsername(principal.getName());
+       if(exsistingRes != null && flight != null && user != null){
+           exsistingRes.setStatus(Status.valueOf(status));
+           exsistingRes.setUser(user);
+           exsistingRes.setFlight(flight);
+
+           if (bindingResult.hasErrors()){
+               redirectAttributes.addFlashAttribute("error", "Information Invalid! Make sure you enter all details correctly!");
+               return "redirect:/";
+           }
+
+           reservationRepository.save(exsistingRes);
+           log.info(String.format("Reservation Edited: [User ID: %s, username: %s, Reservation ID: %s]",
+                   editor.getId(), principal.getName(), exsistingRes.getReservationId()));
+       }
+       return "redirect:/";
+    }
+
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @RequestMapping(value = "/member-book-flight")
     public String memberBookFlight(@RequestParam("flightId") Long flightId, Principal principal){

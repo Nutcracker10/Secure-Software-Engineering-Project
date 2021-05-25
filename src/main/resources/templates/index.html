@@ -26,7 +26,7 @@
                         <p class="lead">
                             <a class="btn btn-primary btn-lg" href="/show-all-flights" role="button">Book Flight</a>
                         </p>
-                        <div sec:authorize="!isAuthenticated()">
+                        <div sec:authorize="!isAuthenticated() || hasAuthority('ADMIN')">
                             <p>Retrieve your past reservation</p>
                             <p class="lead">
                                 <form class="form-inline my-2 my-lg-0" action="/reservation" method="GET">
@@ -36,7 +36,7 @@
                             </p>
                         </div>
                     </div>
-                    <div sec:authorize="!isAuthenticated()">
+                    <div sec:authorize="!isAuthenticated() || hasAuthority('ADMIN')">
                         <span th:if="${retrievedReservation != null}">
                             <table class= "table table-hover">
                                 <thead>
@@ -57,6 +57,11 @@
                                         <span th:include="modals/delete_reservation_check.html"></span>
                                     </td>
                                     <td><span th:include="modals/view_passengers.html"></span></td>
+                                    <td>
+                                        <div  sec:authorize="hasAnyAuthority('ADMIN')">
+                                                <div th:include="modals/edit_reservation.html"></div>
+                                        </div>
+                                    </td>
                                 </tbody>
                             </table>
                         </span>
