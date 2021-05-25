@@ -72,7 +72,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .sign(HMAC512(SECRET.getBytes()));
         //res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
-
+        Attempts userAttempts = userService.findAttemptsByUsername(request.getParameter("username"));
+        userAttempts.setAttempts(0);
+        userService.save(userAttempts);
         addCookie(token, response);
 
         new DefaultRedirectStrategy().sendRedirect(request, response, "/");

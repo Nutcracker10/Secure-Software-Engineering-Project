@@ -172,6 +172,7 @@ public class UserController {
         return "index";
     }
 
+
     @GetMapping("/cancel-res-prompt")
     public String promptReservationCancel(@RequestParam("id") Long reservationId, Model model ){
         model.addAttribute("resId", reservationId);
