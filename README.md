@@ -2,9 +2,9 @@
 
 |Member Name | Student # | % worked |
 |------------|:---------:|---------:|
-|James Kirwan| 17402782 | 33% |
-|Caoimhe Tiernan| 17336331 | 33%|
-| Martynas Jagutis| 17424866 | 33% |
+|James Kirwan| ------- | 33% |
+|Caoimhe Tiernan| ----- | 33%|
+| Martynas Jagutis| ----- | 33% |
 ## SQL Setup
 
 1. In your MySQL server,  create a database for this project ( the one we used was called 'sse')
